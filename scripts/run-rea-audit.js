@@ -8,6 +8,7 @@ const rootDir = path.resolve(__dirname, "..");
 
 const sourcePaths = [
   "src/app.js",
+  "public/app.js",
   "src/server.js",
   "src/parsers/ylnimeParser.js",
   "src/scrapers/ylnimeClient.js",
