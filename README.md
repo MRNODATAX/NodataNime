@@ -51,7 +51,7 @@
 ## 📱 Progressive Web App (PWA) & Deploy Produksi
 
 - **PWA Installable**: Mendukung pemasangan aplikasi mandiri di Android, iOS, Windows, & macOS (`/manifest.webmanifest`, ikon `192/512/maskable/apple-touch-icon`, Service Worker `/sw.js`, dan `/offline.html`).
-- **Siap Deploy**: Dilengkapi `vercel.json` + `api/index.js` (khusus deploy GitHub → Vercel Serverless), `Dockerfile`, `docker-compose.yml`, `render.yaml`, `railway.json`, dan `.env.example`.
+- **Siap Deploy**: Dilengkapi `vercel.json` + default export `src/app.js` (khusus runtime native `@vercel/express` untuk deploy GitHub → Vercel), `Dockerfile`, `docker-compose.yml`, `render.yaml`, `railway.json`, dan `.env.example`.
 - Panduan lengkap tersedia di [`docs/PANDUAN_DEPLOY_DAN_PWA.md`](docs/PANDUAN_DEPLOY_DAN_PWA.md) serta analisis arsitektur Admin di [`docs/ADMIN_DAN_STRATEGI_JANGKA_PANJANG.md`](docs/ADMIN_DAN_STRATEGI_JANGKA_PANJANG.md).
 
 ---

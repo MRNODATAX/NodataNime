@@ -234,15 +234,14 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
     assert.equal(blockedRes.status, 403);
   });
 
-  it("validates Vercel Serverless entrypoint, vercel.json contract, 3.5MB Range clamping, and stateless cold-start Admin tokens", async () => {
+  it("validates Vercel Express Serverless entrypoint, vercel.json contract, 3.5MB Range clamping, and stateless cold-start Admin tokens", async () => {
     const vercelCfg = JSON.parse(fs.readFileSync(path.join(rootDir, "vercel.json"), "utf8"));
-    assert.equal(vercelCfg.version, 2);
-    assert.equal(vercelCfg.outputDirectory, "public");
-    assert.match(vercelCfg.functions["api/index.js"].includeFiles, /data\/\*\*/);
-    assert.ok(vercelCfg.rewrites.some((r) => r.destination.startsWith("/api?__vpath=")));
+    assert.equal(vercelCfg.framework, "express");
+    assert.equal(vercelCfg.outputDirectory, undefined);
+    assert.match(vercelCfg.functions["src/app.js"].includeFiles, /data\/\*\*/);
 
-    const { default: vercelHandler, normalizeVercelRequestUrl } = await import("../api/index.js");
-    assert.equal(typeof vercelHandler, "function");
+    const { default: vercelExpressApp, normalizeVercelRequestUrl } = await import("../src/app.js");
+    assert.equal(typeof vercelExpressApp, "function");
     assert.equal(
       normalizeVercelRequestUrl("/api?__vpath=anime/list&type=ongoing&page=2"),
       "/api/anime/list?type=ongoing&page=2"

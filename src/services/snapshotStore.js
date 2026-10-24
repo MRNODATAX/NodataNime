@@ -9,13 +9,9 @@ import {
 } from "../parsers/ylnimeParser.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const snapshotCandidates = [
-  path.resolve(__dirname, "../../data/ylnime-snapshot.json"),
-  path.resolve(process.cwd(), "data/ylnime-snapshot.json"),
-];
-const snapshotPath =
-  snapshotCandidates.find((candidate) => fs.existsSync(candidate)) ||
-  snapshotCandidates[0];
+const defaultSnapshotPath = path.join(__dirname, "../../data/ylnime-snapshot.json");
+const cwdSnapshotPath = path.join(process.cwd(), "data/ylnime-snapshot.json");
+const snapshotPath = fs.existsSync(defaultSnapshotPath) ? defaultSnapshotPath : cwdSnapshotPath;
 
 const rawSnapshot = JSON.parse(fs.readFileSync(snapshotPath, "utf8"));
 
