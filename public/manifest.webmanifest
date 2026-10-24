@@ -1,0 +1,65 @@
+{
+  "id": "/",
+  "name": "NodataNime — Streaming Anime Sub Indo",
+  "short_name": "NodataNime",
+  "description": "Platform streaming anime Subtitle Indonesia bebas iklan dengan jadwal rilis harian, obrolan komunitas real-time, resolusi hingga 1080p, dan katalog lengkap.",
+  "lang": "id-ID",
+  "dir": "ltr",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#03050c",
+  "theme_color": "#03050c",
+  "categories": ["entertainment", "video"],
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Sedang Tayang",
+      "short_name": "Ongoing",
+      "description": "Daftar anime ongoing terbaru musim ini",
+      "url": "/ongoing",
+      "icons": [{ "src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Jadwal Rilis",
+      "short_name": "Jadwal",
+      "description": "Jadwal tayang anime mingguan WIB",
+      "url": "/jadwal",
+      "icons": [{ "src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Watchlist Saya",
+      "short_name": "Watchlist",
+      "description": "Koleksi anime tersimpan dan riwayat tontonan",
+      "url": "/watchlist",
+      "icons": [{ "src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "nodatanime",
+  "version": "1.2.0",
+  "description": "NodataNime — Platform Streaming Anime Sub Indo HD, PWA, & REST Scraper API berbasis Reverse-Engineering YLnime (REA Methodology)",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "build:snapshot": "node scripts/build-snapshot.js",
+    "build:icons": "node scripts/generate-pwa-icons.js",
+    "test": "node --test test/*.test.js",
+    "rea:analyze": "node scripts/run-rea-audit.js"
+  },
+  "keywords": [
+    "anime",
+    "streaming",
+    "nodatanime",
+    "pwa",
+    "ylnime",
+    "scraper",
+    "sub-indo",
+    "rea"
+  ],
+  "author": "MRNODATAX",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "compression": "^1.7.5",
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}

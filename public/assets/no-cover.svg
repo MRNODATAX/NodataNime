@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 580" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="400" y2="580" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#191B24"/>
+      <stop offset="100%" stop-color="#0B0C10"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="120" y1="180" x2="280" y2="340" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF2A4B"/>
+      <stop offset="100%" stop-color="#B20710"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="580" fill="url(#bg)"/>
+  <circle cx="200" cy="250" r="74" fill="#14161F" stroke="#2A2D3D" stroke-width="2"/>
+  <polygon points="184,218 238,250 184,282" fill="url(#acc)"/>
+  <text x="200" y="368" text-anchor="middle" fill="#EAECEF" font-family="sans-serif" font-weight="800" font-size="24" letter-spacing="1">NODATANIME</text>
+  <text x="200" y="398" text-anchor="middle" fill="#8A90A2" font-family="sans-serif" font-weight="500" font-size="14">SUBTITLE INDONESIA HD</text>
+</svg>
