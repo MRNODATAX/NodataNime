@@ -1,10 +1,11 @@
 {
   "analyzer": "rea-agents analyze-javascript-application",
   "reaVersion": "6.7.0",
-  "verifiedAt": "2026-10-24T14:55:32.015Z",
+  "verifiedAt": "2026-10-24T15:12:39.679Z",
   "targetAudited": "NodataNime (/home/user/NodataNime)",
   "inventoriedSourcePaths": [
     "src/app.js",
+    "public/app.js",
     "src/server.js",
     "src/parsers/ylnimeParser.js",
     "src/scrapers/ylnimeClient.js",
@@ -19,7 +20,7 @@
     "public/js/app.js",
     "public/sw.js"
   ],
-  "fileCount": 14,
+  "fileCount": 15,
   "topLevelEvidenceKeys": [
     "evidence_id",
     "subject",

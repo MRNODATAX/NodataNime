@@ -237,11 +237,14 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
   it("validates Vercel Express Serverless entrypoint, vercel.json contract, 3.5MB Range clamping, and stateless cold-start Admin tokens", async () => {
     const vercelCfg = JSON.parse(fs.readFileSync(path.join(rootDir, "vercel.json"), "utf8"));
     assert.equal(vercelCfg.framework, "express");
-    assert.equal(vercelCfg.outputDirectory, undefined);
+    assert.equal(vercelCfg.outputDirectory, null);
     assert.match(vercelCfg.functions["src/app.js"].includeFiles, /data\/\*\*/);
+    assert.match(vercelCfg.functions["public/app.js"].includeFiles, /data\/\*\*/);
 
     const { default: vercelExpressApp, normalizeVercelRequestUrl } = await import("../src/app.js");
+    const { default: vercelPublicFallbackApp } = await import("../public/app.js");
     assert.equal(typeof vercelExpressApp, "function");
+    assert.equal(vercelPublicFallbackApp, vercelExpressApp);
     assert.equal(
       normalizeVercelRequestUrl("/api?__vpath=anime/list&type=ongoing&page=2"),
       "/api/anime/list?type=ongoing&page=2"

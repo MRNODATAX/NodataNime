@@ -2,8 +2,12 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "express",
   "buildCommand": "npm run build:icons",
+  "outputDirectory": null,
   "functions": {
     "src/app.js": {
+      "includeFiles": "{data/**,public/**}"
+    },
+    "public/app.js": {
       "includeFiles": "{data/**,public/**}"
     }
   },
