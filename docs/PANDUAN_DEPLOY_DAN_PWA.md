@@ -6,11 +6,11 @@ Dokumen ini menjelaskan langkah demi langkah men-deploy **NodataNime** dari **Gi
 
 ## 1. Apa Saja yang Sudah Disiapkan Khusus untuk Vercel?
 
-Repositori ini telah dilengkapi arsitektur kompatibel **Vercel Serverless (`@vercel/node`)**:
-- **`api/index.js`**: Entrypoint Serverless Express otomatis untuk seluruh endpoint `/api/*`.
-- **`vercel.json`**:
-  - Menyajikan seluruh aset frontend (`public/`) langsung dari **Global Edge CDN Vercel** secara instan.
-  - Menyertakan bundel katalog `data/**` (`includeFiles: "data/**"`) agar `ylnime-snapshot.json` selalu terbaca saat *cold-start*.
+Repositori ini telah dilengkapi arsitektur kompatibel **Vercel Native Express (`@vercel/express`)**:
+- **`src/app.js` (`export default app`)**: Entrypoint resmi `@vercel/express` untuk seluruh endpoint `/api/*` dan fallback SPA tanpa bentrok `outputDirectory`.
+- **`vercel.json` (`"framework": "express"`)**:
+  - Otomatis menyajikan seluruh aset frontend (`public/**/*`) langsung dari **Global Edge CDN Vercel (`@vercel/static`)** tanpa menimpa pencarian entrypoint Express.
+  - Menyertakan bundel katalog `data/**` (`functions["src/app.js"].includeFiles`) agar `ylnime-snapshot.json` selalu terbaca saat *cold-start*.
   - Mengatur header wajib PWA (`Content-Type: application/manifest+json` untuk `/manifest.webmanifest` dan `Service-Worker-Allowed: /` untuk `/sw.js`).
   - Mengarahkan rute SPA (`/admin`, `/ongoing`, `/jadwal`, `/watchlist`) ke `/index.html`.
 - **Stateless HMAC Admin Session (`nd1.*`)**: Token login Admin tetap bertahan meskipun fungsi Serverless Vercel mengalami *cold-start* atau berpindah instance.
@@ -23,7 +23,7 @@ Repositori ini telah dilengkapi arsitektur kompatibel **Vercel Serverless (`@ver
 
 ### Langkah 1 — Pastikan Kode Sudah Ter-Push & Merge di GitHub
 1. Pastikan branch kerja di repositori GitHub `MRNODATAX/NodataNime` sudah di-*push* (atau digabung/*merge* ke branch `main` melalui Pull Request).
-2. Pastikan file `vercel.json`, folder `api/index.js`, `public/`, `src/`, dan `data/ylnime-snapshot.json` ada di repositori GitHub kamu.
+2. Pastikan file `vercel.json`, folder `public/`, `src/app.js`, dan `data/ylnime-snapshot.json` ada di repositori GitHub kamu.
 
 ### Langkah 2 — Hubungkan GitHub ke Vercel
 1. Buka **[https://vercel.com/new](https://vercel.com/new)** lalu login menggunakan akun **GitHub** kamu.
@@ -33,10 +33,10 @@ Repositori ini telah dilengkapi arsitektur kompatibel **Vercel Serverless (`@ver
 ### Langkah 3 — Atur Konfigurasi Project di Halaman Vercel
 Pada halaman **Configure Project**, pastikan pengaturannya seperti berikut:
 - **Project Name**: `nodatanime` *(atau nama sesuai keinginanmu)*
-- **Framework Preset**: **Other** *(biarkan default — Vercel otomatis membaca `vercel.json` dan folder `public/`)*
+- **Framework Preset**: **Express** *(otomatis terdeteksi dari `vercel.json` & `package.json`)*
 - **Root Directory**: `./` *(biarkan kosong / root)*
-- **Build Command**: *(biarkan kosong / default, tidak perlu build bundel tambahan)*
-- **Output Directory**: *(biarkan default — folder `public` otomatis terdeteksi)*
+- **Build Command**: *(biarkan default — `npm run build:icons` otomatis dibaca dari `vercel.json`)*
+- **Output Directory**: *(biarkan kosong / `N/A` — jangan diisi `public` pada preset Express karena `@vercel/express` otomatis melayani `public/` ke CDN)*
 
 ### Langkah 4 — Isi Environment Variables (Wajib!)
 Klik bagian **Environment Variables**, lalu tambahkan variabel berikut satu per satu:

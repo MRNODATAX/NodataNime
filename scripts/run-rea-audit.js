@@ -7,7 +7,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
 
 const sourcePaths = [
-  "api/index.js",
   "src/app.js",
   "src/server.js",
   "src/parsers/ylnimeParser.js",
