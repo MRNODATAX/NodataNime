@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "rea-obligation-ledger/1.0",
+  "project": "NodataNime",
+  "target": "https://ylnime.com",
+  "analyzedAt": "2026-10-24T00:00:00Z",
+  "methodology": "https://github.com/morluto/rea (reverse-engineer-anything v46 + rea-agents v6.7.0)",
+  "obligations": [
+    {
+      "id": "OBL-01",
+      "category": "token-safety",
+      "title": "Reversible Series & Episode Slug Tokenization",
+      "evidenceRef": "EV-12, EV-13",
+      "implementation": "src/parsers/ylnimeParser.js",
+      "verification": "test/parser.test.js",
+      "status": "verified"
+    },
+    {
+      "id": "OBL-02",
+      "category": "scraper-parser",
+      "title": "Card Grid, Pagination, Genre, Schedule & Detail HTML Parsers",
+      "evidenceRef": "EV-01..EV-12",
+      "implementation": "src/parsers/ylnimeParser.js",
+      "verification": "test/parser.test.js",
+      "status": "verified"
+    },
+    {
+      "id": "OBL-03",
+      "category": "stream-extractor",
+      "title": "YLnime JSON Player API (yl_ep_json=1) + Inline Script Stream Extractor",
+      "evidenceRef": "EV-13, EV-14",
+      "implementation": "src/parsers/ylnimeParser.js, src/scrapers/ylnimeClient.js",
+      "verification": "test/parser.test.js",
+      "status": "verified"
+    },
+    {
+      "id": "OBL-04",
+      "category": "multi-tier-resilience",
+      "title": "3-Tier Data Engine (YLnime Live Session -> AnimeKita v1.2.5 -> Verified Snapshot)",
+      "evidenceRef": "EV-01..EV-15",
+      "implementation": "src/services/animeService.js, src/scrapers/ylnimeClient.js, src/scrapers/animekitaClient.js, src/services/snapshotStore.js",
+      "verification": "test/api.test.js",
+      "status": "verified"
+    },
+    {
+      "id": "OBL-05",
+      "category": "video-delivery",
+      "title": "HTTP 206 Range Stream Proxy with Host-Aware Referer & SSRF Allowlist",
+      "evidenceRef": "EV-14",
+      "implementation": "src/routes/streamProxy.js",
+      "verification": "test/api.test.js",
+      "status": "verified"
+    },
+    {
+      "id": "OBL-06",
+      "category": "rest-api",
+      "title": "Complete Public REST API (/home, /list, /az, /search, /genres, /genre, /jadwal, /detail, /episode, /rea/evidence)",
+      "evidenceRef": "EV-01..EV-15",
+      "implementation": "src/routes/animeRoutes.js",
+      "verification": "test/api.test.js",
+      "status": "verified"
+    },
+    {
+      "id": "OBL-07",
+      "category": "frontend-streaming-ux",
+      "title": "NodataNime SPA Streaming Platform (Zero Localhost, Relative /api/*, HTML5 Player, Resume, Bookmarks, History, API/REA Inspector)",
+      "evidenceRef": "EV-01..EV-15",
+      "implementation": "public/index.html, public/css/styles.css, public/js/app.js",
+      "verification": "test/api.test.js",
+      "status": "verified"
+    }
+  ]
+}

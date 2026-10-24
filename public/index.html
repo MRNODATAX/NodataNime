@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#03050c" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="NodataNime" />
+  <meta name="application-name" content="NodataNime" />
+  <title>NodataNime — Nonton &amp; Streaming Anime Sub Indo HD</title>
+  <meta name="description" content="NodataNime — Portal streaming anime Sub Indo cepat, tanpa iklan mengganggu, multi-resolusi 360p–1080p, jadwal rilis mingguan, obrolan komunitas, dan katalog lengkap." />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css?v=5.0" />
+</head>
+<body>
+  <!-- Animasi Pembuka Logo & Nama Brand NodataNime -->
+  <div id="introSplash" class="nd-intro-splash" role="status" aria-live="polite" aria-label="Memuat NodataNime">
+    <div class="nd-intro-inner">
+      <div class="nd-intro-logo-stage">
+        <span class="nd-intro-orbit" aria-hidden="true"></span>
+        <span class="nd-intro-orbit nd-intro-orbit-alt" aria-hidden="true"></span>
+        <img src="/assets/favicon.svg" alt="Logo NodataNime" width="76" height="76" class="nd-intro-logo" />
+      </div>
+      <div class="nd-intro-wordmark">
+        <span class="nd-intro-name">Nodata<span>Nime</span></span>
+        <span class="nd-intro-tagline">STREAMING ANIME SUB INDO</span>
+      </div>
+      <div class="nd-intro-progress" aria-hidden="true">
+        <span class="nd-intro-progress-bar" id="introSplashBar"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Starry Night Sky Background (Cahaya Putih Bintang di Malam Hari) -->
+  <canvas id="starfieldCanvas" class="nd-starfield" aria-hidden="true"></canvas>
+
+  <!-- Banner Pengumuman Admin (Hanya tampil bila diaktifkan dari Admin Panel) -->
+  <div id="studioNoticeBar" class="nd-notice-bar" hidden>
+    <div class="nd-container nd-notice-inner">
+      <span class="nd-pill-crimson" id="studioNoticeBadge">INFO</span>
+      <span class="nd-notice-text" id="studioNoticeText"></span>
+      <button type="button" class="nd-link-more" id="studioNoticeAction" hidden>Buka</button>
+    </div>
+  </div>
+
+  <!-- Minimal Top Header (Brand + Search + Install PWA + Obrolan & Info Komunitas) -->
+  <header class="nd-topbar" id="navbar">
+    <div class="nd-container nd-topbar-inner">
+      <a href="/" class="nd-brand" data-nav="home" aria-label="NodataNime Beranda">
+        <img src="/assets/favicon.svg" alt="" width="34" height="34" class="nd-brand-logo" />
+        <span class="nd-brand-text">Nodata<span>Nime</span></span>
+      </a>
+
+      <div class="nd-topbar-actions">
+        <form id="navSearchForm" class="nd-search-wrap" role="search">
+          <svg class="nd-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="search"
+            id="navSearchInput"
+            class="nd-search-input"
+            placeholder="Cari anime... (tekan /)"
+            autocomplete="off"
+          />
+          <div id="searchDropdown" class="nd-search-dropdown" hidden></div>
+        </form>
+
+        <!-- Tombol Install Aplikasi PWA -->
+        <button type="button" id="pwaInstallBtn" class="nd-pwa-btn" title="Install Aplikasi NodataNime" aria-label="Install Aplikasi NodataNime">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="6" y="2" width="12" height="20" rx="2.5"></rect>
+            <path d="M12 7v7"></path>
+            <path d="m9.2 11.5 2.8 2.8 2.8-2.8"></path>
+            <line x1="10" y1="18" x2="14" y2="18"></line>
+          </svg>
+          <span class="nd-pwa-btn-label">Aplikasi</span>
+        </button>
+
+        <!-- Panel Obrolan & Info Komunitas Interaktif -->
+        <div class="nd-notif-wrap" id="notifWrap">
+          <button type="button" id="notifBtn" class="nd-icon-btn" title="Obrolan &amp; Info Komunitas" aria-label="Obrolan dan Info Komunitas" aria-expanded="false">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+            <span class="nd-notif-dot" id="notifDot"></span>
+          </button>
+
+          <div id="notifPanel" class="nd-notif-panel" hidden>
+            <div class="nd-notif-header">
+              <div class="nd-notif-title-group">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>Obrolan &amp; Info Komunitas</span>
+              </div>
+              <div class="nd-notif-head-actions">
+                <span class="nd-live-pill">LIVE</span>
+                <button type="button" id="communityRefreshBtn" class="nd-mini-icon-btn" title="Muat ulang komunitas" aria-label="Muat ulang komunitas">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 1 1-2.64-6.36"></path>
+                    <polyline points="21 3 21 9 15 9"></polyline>
+                  </svg>
+                </button>
+                <button type="button" id="communityCloseBtn" class="nd-mini-icon-btn" title="Tutup panel" aria-label="Tutup panel">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="nd-comm-tabs" role="tablist">
+              <button type="button" class="nd-comm-tab active" data-comm-tab="chat" role="tab" aria-selected="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Obrolan</span>
+                <small id="commChatCount">0</small>
+              </button>
+              <button type="button" class="nd-comm-tab" data-comm-tab="info" role="tab" aria-selected="false">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <span>Info Komunitas</span>
+                <small id="commInfoCount">0</small>
+              </button>
+            </div>
+
+            <!-- Konten Tab Obrolan -->
+            <div id="commChatPane" class="nd-comm-pane">
+              <div id="notifList" class="nd-notif-list">
+                <div class="nd-muted-center">Memuat obrolan komunitas...</div>
+              </div>
+
+              <form id="commChatForm" class="nd-comm-composer">
+                <div id="commReplyPreview" class="nd-comm-reply-bar" hidden>
+                  <span id="commReplyText">Membalas...</span>
+                  <button type="button" id="commCancelReplyBtn" aria-label="Batal balas">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+                <div class="nd-comm-inputs">
+                  <input
+                    type="text"
+                    id="commNicknameInput"
+                    class="nd-comm-nick"
+                    placeholder="Nama panggilan"
+                    maxlength="28"
+                    required
+                  />
+                  <div class="nd-comm-msg-row">
+                    <input
+                      type="text"
+                      id="commMessageInput"
+                      class="nd-comm-msg-input"
+                      placeholder="Tulis obrolan sopan..."
+                      maxlength="280"
+                      required
+                    />
+                    <button type="submit" id="commSendBtn" class="nd-comm-send-btn" title="Kirim pesan" aria-label="Kirim pesan">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <!-- Konten Tab Info Komunitas -->
+            <div id="commInfoPane" class="nd-comm-pane" hidden>
+              <div id="commInfoList" class="nd-notif-list">
+                <div class="nd-muted-center">Memuat info komunitas...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Cinema Dimmer Overlay -->
+  <div id="cinemaOverlay" class="nd-cinema-overlay" hidden></div>
+
+  <!-- Main Dynamic View Root -->
+  <main id="appRoot" class="nd-main" aria-live="polite"></main>
+
+  <!-- Floating Bottom Navigation Bar (100% Ikon Vektor SVG — Tanpa Stiker/Emoji) -->
+  <div class="nd-bottom-dock-wrap" id="bottomDockWrap">
+    <!-- Pop-up Sheet Menu "Lainnya" -->
+    <div id="bottomMoreSheet" class="nd-bottom-sheet" hidden>
+      <div class="nd-sheet-head">
+        <span>Jelajahi Kategori &amp; Utilitas</span>
+        <button type="button" id="closeMoreSheetBtn" class="nd-sheet-close" aria-label="Tutup menu">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="nd-sheet-grid">
+        <button type="button" class="nd-sheet-item" data-view="catalog" data-type="completed">
+          <span class="nd-sheet-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </span>
+          <div>
+            <strong>Anime Tamat</strong>
+            <small>Seri selesai tayang</small>
+          </div>
+        </button>
+
+        <button type="button" class="nd-sheet-item" data-view="catalog" data-type="movie">
+          <span class="nd-sheet-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="2.5"></rect>
+              <line x1="7" y1="2" x2="7" y2="22"></line>
+              <line x1="17" y1="2" x2="17" y2="22"></line>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <line x1="2" y1="7" x2="7" y2="7"></line>
+              <line x1="2" y1="17" x2="7" y2="17"></line>
+              <line x1="17" y1="17" x2="22" y2="17"></line>
+              <line x1="17" y1="7" x2="22" y2="7"></line>
+            </svg>
+          </span>
+          <div>
+            <strong>Movie Anime</strong>
+            <small>Film layar lebar &amp; OVA</small>
+          </div>
+        </button>
+
+        <button type="button" class="nd-sheet-item" data-view="catalog" data-type="baru">
+          <span class="nd-sheet-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </span>
+          <div>
+            <strong>Baru Upload</strong>
+            <small>Episode rilis terbaru</small>
+          </div>
+        </button>
+
+        <button type="button" class="nd-sheet-item" data-view="catalog" data-type="rekomendasi">
+          <span class="nd-sheet-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </span>
+          <div>
+            <strong>Rekomendasi</strong>
+            <small>Pilihan kurasi terbaik</small>
+          </div>
+        </button>
+
+        <button type="button" class="nd-sheet-item" data-view="catalog" data-type="hyper">
+          <span class="nd-sheet-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+              <polyline points="17 6 23 6 23 12"></polyline>
+            </svg>
+          </span>
+          <div>
+            <strong>Top TerHype</strong>
+            <small>Terpopuler bulan ini</small>
+          </div>
+        </button>
+
+        <button type="button" class="nd-sheet-item" data-view="az">
+          <span class="nd-sheet-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+          </span>
+          <div>
+            <strong>Daftar A–Z</strong>
+            <small>Indeks abjad lengkap</small>
+          </div>
+        </button>
+
+        <button type="button" class="nd-sheet-item" id="sheetOpenCommunityBtn">
+          <span class="nd-sheet-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </span>
+          <div>
+            <strong>Komunitas</strong>
+            <small>Obrolan &amp; Info resmi</small>
+          </div>
+        </button>
+
+        <button type="button" class="nd-sheet-item" id="sheetInstallPwaBtn">
+          <span class="nd-sheet-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </span>
+          <div>
+            <strong>Install Aplikasi</strong>
+            <small>Pasang versi PWA</small>
+          </div>
+        </button>
+
+        <button type="button" class="nd-sheet-item" data-view="api">
+          <span class="nd-sheet-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </span>
+          <div>
+            <strong>API &amp; REA</strong>
+            <small>Inspector &amp; verifikasi</small>
+          </div>
+        </button>
+
+        <button type="button" class="nd-sheet-item" data-view="admin">
+          <span class="nd-sheet-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </span>
+          <div>
+            <strong>Admin Panel</strong>
+            <small>Kontrol Hybrid &amp; Mirror</small>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Bar Navigasi Bawah -->
+    <nav class="nd-bottom-bar" id="bottomNavBar" aria-label="Navigasi Utama Bawah">
+      <button type="button" class="nd-bnav-item active" data-view="home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 10.5 12 3l9 7.5"></path>
+          <path d="M5 9.8V21h14V9.8"></path>
+        </svg>
+        <span>Beranda</span>
+      </button>
+
+      <button type="button" class="nd-bnav-item" data-view="catalog" data-type="ongoing">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polygon points="10 8 16 12 10 16 10 8"></polygon>
+        </svg>
+        <span>Ongoing</span>
+      </button>
+
+      <button type="button" class="nd-bnav-item" data-view="genres">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+        </svg>
+        <span>Genre</span>
+      </button>
+
+      <button type="button" class="nd-bnav-item" data-view="schedule">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span>Jadwal</span>
+      </button>
+
+      <button type="button" class="nd-bnav-item" data-view="library">
+        <div class="nd-bnav-icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span id="watchlistBadge" class="nd-bnav-badge" hidden>0</span>
+        </div>
+        <span>Koleksi</span>
+      </button>
+
+      <button type="button" class="nd-bnav-item" id="bottomMoreBtn" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="18" x2="20" y2="18"></line>
+        </svg>
+        <span>Lainnya</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Footer -->
+  <footer class="nd-footer">
+    <div class="nd-container nd-footer-inner">
+      <div class="nd-footer-col">
+        <div class="nd-brand nd-footer-brand">
+          <img src="/assets/favicon.svg" alt="" width="28" height="28" />
+          <span class="nd-brand-text">Nodata<span>Nime</span></span>
+        </div>
+        <p class="nd-footer-desc">
+          Dibangun dari nol dengan arsitektur modern, dukungan <strong>Progressive Web App (PWA)</strong>, dan metodologi <strong>REA (Reverse-Engineer-Anything)</strong> untuk streaming anime Sub Indo yang cepat, rapi, dan bebas gangguan iklan pop-up.
+        </p>
+      </div>
+      <div class="nd-footer-meta">
+        <span class="nd-tech-pill">REA v6.7.0 Verified</span>
+        <span class="nd-tech-pill" id="footerSourceBadge">Engine: Ready</span>
+        <span class="nd-tech-pill" id="pwaStatusBadge">PWA Ready</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div id="toastRoot" class="nd-toast-root" aria-live="polite"></div>
+
+  <script type="module" src="/js/app.js?v=5.0"></script>
+</body>
+</html>

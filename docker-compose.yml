@@ -1,0 +1,21 @@
+services:
+  nodatanime:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nodatanime-web
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 3000
+      DATA_DIR: /var/data
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-nodata2026}
+    volumes:
+      - nodatanime_data:/var/data
+
+volumes:
+  nodatanime_data:

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "buildCommand": "npm run build:icons",
+  "outputDirectory": "public",
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "{data/**,public/**}"
+    }
+  },
+  "headers": [
+    {
+      "source": "/manifest.webmanifest",
+      "headers": [
+        { "key": "Content-Type", "value": "application/manifest+json; charset=UTF-8" },
+        { "key": "Cache-Control", "value": "no-cache, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/sw.js",
+      "headers": [
+        { "key": "Service-Worker-Allowed", "value": "/" },
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "no-referrer" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api?__vpath=$1" },
+    { "source": "/admin", "destination": "/index.html" },
+    { "source": "/ongoing", "destination": "/index.html" },
+    { "source": "/jadwal", "destination": "/index.html" },
+    { "source": "/watchlist", "destination": "/index.html" }
+  ]
+}
