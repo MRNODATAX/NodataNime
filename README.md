@@ -44,15 +44,14 @@
 | `GET` | `/api/community` | Obrolan komunitas live + kartu Info Komunitas resmi |
 | `POST` | `/api/community/messages` | Kirim obrolan komunitas (dengan proteksi rate-limit & balasan) |
 | `GET` | `/api/rea/evidence` | Laporan Reverse-Engineering & *Obligation Ledger* REA |
-| `POST` | `/api/admin/*` | Studio Admin Hybrid Override, Custom Mirror, & Moderasi Komunitas |
 
 ---
 
 ## 📱 Progressive Web App (PWA) & Deploy Produksi
 
 - **PWA Installable**: Mendukung pemasangan aplikasi mandiri di Android, iOS, Windows, & macOS (`/manifest.webmanifest`, ikon `192/512/maskable/apple-touch-icon`, Service Worker `/sw.js`, dan `/offline.html`).
-- **Siap Deploy**: Dilengkapi `vercel.json` + default export `src/app.js` (khusus runtime native `@vercel/express` untuk deploy GitHub → Vercel), `Dockerfile`, `docker-compose.yml`, `render.yaml`, `railway.json`, dan `.env.example`.
-- Panduan lengkap tersedia di [`docs/PANDUAN_DEPLOY_DAN_PWA.md`](docs/PANDUAN_DEPLOY_DAN_PWA.md) serta analisis arsitektur Admin di [`docs/ADMIN_DAN_STRATEGI_JANGKA_PANJANG.md`](docs/ADMIN_DAN_STRATEGI_JANGKA_PANJANG.md).
+- **Siap Deploy (Zero-Config & Zero-Env)**: Dilengkapi `vercel.json` + `src/app.js` + `views/index.html` (khusus runtime native `@vercel/express` untuk deploy GitHub → Vercel tanpa perlu isi Environment Variable apa pun), `Dockerfile`, `docker-compose.yml`, `render.yaml`, `railway.json`, dan `.env.example`.
+- Panduan lengkap tersedia di [`docs/PANDUAN_DEPLOY_DAN_PWA.md`](docs/PANDUAN_DEPLOY_DAN_PWA.md).
 
 ---
 

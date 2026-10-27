@@ -245,31 +245,6 @@ textarea {
   margin-inline: auto;
 }
 
-/* ===== Optional Admin Announcement Bar ===== */
-.nd-notice-bar {
-  position: relative;
-  z-index: 92;
-  background: rgba(229, 9, 20, 0.14);
-  border-bottom: 1px solid var(--border-subtle);
-  font-size: 0.8rem;
-}
-
-.nd-notice-inner {
-  min-height: 38px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-block: 6px;
-}
-
-.nd-notice-text {
-  color: #e5e7eb;
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 /* ===== Top Header Bar ===== */
 .nd-topbar {
   position: sticky;
@@ -1701,69 +1676,7 @@ textarea {
   z-index: 60;
 }
 
-/* ===== Admin Panel Cards (Selaras dengan Tema Rounded Dark-Glass) ===== */
-.nd-admin-kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
-  gap: 14px;
-  margin-bottom: 22px;
-}
-
-.nd-kpi-tile {
-  background: var(--bg-surface);
-  backdrop-filter: blur(14px);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 16px 18px;
-}
-
-.nd-kpi-label {
-  font-size: 0.74rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-.nd-kpi-val {
-  font-family: var(--font-display);
-  font-size: 1.7rem;
-  font-weight: 800;
-  color: #fff;
-  margin-top: 6px;
-}
-
-.nd-kpi-sub {
-  font-size: 0.72rem;
-  color: var(--emerald);
-  margin-top: 4px;
-}
-
-.nd-admin-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 20px;
-  margin-bottom: 28px;
-}
-
-@media (max-width: 500px) {
-  .nd-admin-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.nd-admin-card {
-  background: var(--bg-surface);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: 22px;
-}
-
-.nd-admin-card h3 {
-  margin: 0 0 8px;
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-}
-
+/* ===== Shared Form Controls ===== */
 .nd-form-row {
   display: flex;
   flex-direction: column;

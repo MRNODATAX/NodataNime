@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/styles.css?v=5.0" />
+  <link rel="stylesheet" href="/css/styles.css?v=6.0" />
 </head>
 <body>
   <!-- Animasi Pembuka Logo & Nama Brand NodataNime -->
@@ -39,15 +39,6 @@
 
   <!-- Live Starry Night Sky Background (Cahaya Putih Bintang di Malam Hari) -->
   <canvas id="starfieldCanvas" class="nd-starfield" aria-hidden="true"></canvas>
-
-  <!-- Banner Pengumuman Admin (Hanya tampil bila diaktifkan dari Admin Panel) -->
-  <div id="studioNoticeBar" class="nd-notice-bar" hidden>
-    <div class="nd-container nd-notice-inner">
-      <span class="nd-pill-crimson" id="studioNoticeBadge">INFO</span>
-      <span class="nd-notice-text" id="studioNoticeText"></span>
-      <button type="button" class="nd-link-more" id="studioNoticeAction" hidden>Buka</button>
-    </div>
-  </div>
 
   <!-- Minimal Top Header (Brand + Search + Install PWA + Obrolan & Info Komunitas) -->
   <header class="nd-topbar" id="navbar">
@@ -341,18 +332,6 @@
             <small>Inspector &amp; verifikasi</small>
           </div>
         </button>
-
-        <button type="button" class="nd-sheet-item" data-view="admin">
-          <span class="nd-sheet-icon" aria-hidden="true">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            </svg>
-          </span>
-          <div>
-            <strong>Admin Panel</strong>
-            <small>Kontrol Hybrid &amp; Mirror</small>
-          </div>
-        </button>
       </div>
     </div>
 
@@ -438,6 +417,6 @@
   <!-- Toast Container -->
   <div id="toastRoot" class="nd-toast-root" aria-live="polite"></div>
 
-  <script type="module" src="/js/app.js?v=5.0"></script>
+  <script type="module" src="/js/app.js?v=6.0"></script>
 </body>
 </html>
