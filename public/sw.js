@@ -1,14 +1,13 @@
-const CACHE_VERSION = "nodatanime-pwa-v5.0";
+const CACHE_VERSION = "nodatanime-pwa-v6.0";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const API_CACHE = `${CACHE_VERSION}-api`;
 
 const PRECACHE_URLS = [
   "/",
-  "/index.html",
   "/offline.html",
   "/manifest.webmanifest",
-  "/css/styles.css?v=5.0",
-  "/js/app.js?v=5.0",
+  "/css/styles.css?v=6.0",
+  "/js/app.js?v=6.0",
   "/assets/favicon.svg",
   "/assets/no-cover.svg",
   "/assets/icon-192.png",
@@ -53,10 +52,9 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  // Jangan pernah men-cache stream video besar atau endpoint privat admin
+  // Jangan pernah men-cache stream video besar
   if (
     url.pathname.startsWith("/api/anime/stream-proxy") ||
-    url.pathname.startsWith("/api/admin") ||
     url.pathname.endsWith(".mp4")
   ) {
     return;
@@ -92,12 +90,12 @@ self.addEventListener("fetch", (event) => {
         .then((response) => {
           if (response && response.ok) {
             const copy = response.clone();
-            caches.open(STATIC_CACHE).then((cache) => cache.put("/index.html", copy));
+            caches.open(STATIC_CACHE).then((cache) => cache.put("/", copy));
           }
           return response;
         })
         .catch(async () => {
-          const shell = await caches.match("/index.html");
+          const shell = await caches.match("/");
           if (shell) return shell;
           return caches.match("/offline.html");
         })

@@ -1,13 +1,15 @@
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import express from "express";
 import cors from "cors";
 import compression from "compression";
 import { animeRouter } from "./routes/animeRoutes.js";
-import { adminRouter } from "./routes/adminRoutes.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.join(__dirname, "../public");
+const indexHtmlPath = path.join(__dirname, "../views/index.html");
+const indexHtmlContent = fs.readFileSync(indexHtmlPath, "utf8");
 
 /**
  * Menormalkan path request apabila proxy/rewrite meneruskan query `__vpath`.
@@ -55,12 +57,12 @@ export function createApp() {
     next();
   });
 
-  app.use("/api/admin", adminRouter);
   app.use("/api", animeRouter);
 
   app.use(
     express.static(publicDir, {
       etag: true,
+      index: false,
       setHeaders: (res, filePath) => {
         if (filePath.endsWith(".webmanifest")) {
           res.setHeader("Content-Type", "application/manifest+json; charset=UTF-8");
@@ -86,9 +88,12 @@ export function createApp() {
     });
   });
 
-  // SPA Fallback ke public/index.html untuk navigasi client-side
+  // Sajikan App Shell HTML (`views/index.html`) untuk `/`, `/index.html`, dan seluruh rute SPA
+  // tanpa bentrok static/index.html vs functions/index.func di Vercel Express
   app.get("*", (_req, res) => {
-    res.sendFile(path.join(publicDir, "index.html"));
+    res.setHeader("Content-Type", "text/html; charset=UTF-8");
+    res.setHeader("Cache-Control", "no-cache, must-revalidate");
+    res.status(200).send(indexHtmlContent);
   });
 
   // Penanganan error global
@@ -104,6 +109,6 @@ export function createApp() {
   return app;
 }
 
-// Default export instance Express untuk runtime native `@vercel/express`
+// Default export instance Express untuk runtime resmi `@vercel/express`
 const app = createApp();
 export default app;

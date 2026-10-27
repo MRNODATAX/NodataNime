@@ -1,14 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "express",
-  "buildCommand": "npm run build:icons",
   "outputDirectory": null,
   "functions": {
     "src/app.js": {
-      "includeFiles": "{data/**,public/**}"
+      "includeFiles": "{data/**,views/**,public/**}"
     },
     "public/app.js": {
-      "includeFiles": "{data/**,public/**}"
+      "includeFiles": "{data/**,views/**,public/**}"
     }
   },
   "headers": [
@@ -33,11 +32,5 @@
         { "key": "Referrer-Policy", "value": "no-referrer" }
       ]
     }
-  ],
-  "rewrites": [
-    { "source": "/admin", "destination": "/index.html" },
-    { "source": "/ongoing", "destination": "/index.html" },
-    { "source": "/jadwal", "destination": "/index.html" },
-    { "source": "/watchlist", "destination": "/index.html" }
   ]
 }

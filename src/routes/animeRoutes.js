@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Router } from "express";
 import { animeService } from "../services/animeService.js";
-import { adminStore } from "../services/adminStore.js";
+import { communityStore } from "../services/communityStore.js";
 import { handleStreamProxy } from "./streamProxy.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -29,14 +29,6 @@ animeRouter.get("/health", (_req, res) => {
   });
 });
 
-animeRouter.get("/config/public", (_req, res) => {
-  res.json({
-    ok: true,
-    statusCode: 200,
-    data: adminStore.getPublicConfig(),
-  });
-});
-
 animeRouter.get("/community", async (_req, res, next) => {
   try {
     const payload = await animeService.getCommunity();
@@ -52,18 +44,11 @@ animeRouter.get("/community", async (_req, res, next) => {
 
 animeRouter.post("/community/messages", (req, res, next) => {
   try {
-    const authHeader = String(req.headers.authorization || "");
-    const token = authHeader.toLowerCase().startsWith("bearer ")
-      ? authHeader.slice(7).trim()
-      : "";
-    const adminSession = adminStore.verifyToken(token);
     const ip = req.ip || req.socket?.remoteAddress || "unknown";
-
-    const created = adminStore.addCommunityMessage({
+    const created = communityStore.addCommunityMessage({
       nickname: req.body?.nickname,
       message: req.body?.message,
       replyTo: req.body?.replyTo || null,
-      isAdmin: Boolean(adminSession),
       ip,
     });
 
@@ -71,19 +56,6 @@ animeRouter.post("/community/messages", (req, res, next) => {
       ok: true,
       statusCode: 201,
       data: created,
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-
-animeRouter.post("/anime/report", (req, res, next) => {
-  try {
-    const saved = adminStore.addBrokenReport(req.body || {});
-    res.status(201).json({
-      ok: true,
-      statusCode: 201,
-      data: saved,
     });
   } catch (err) {
     next(err);

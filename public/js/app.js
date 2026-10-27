@@ -1,8 +1,8 @@
 /**
- * NodataNime v5.0 — Client-Side Streaming & PWA Application
+ * NodataNime v6.0 — Client-Side Streaming & PWA Application
  * Menggunakan URL relatif `/api/*` sepenuhnya agar kompatibel di semua domain & Live Preview.
  * Dilengkapi Opening Brand Splash, Live Starry Night Background, 100% Vector SVG Bottom Navbar,
- * Obrolan & Info Komunitas Interaktif 2-Tab, Integrasi PWA, & Studio Admin Panel.
+ * Obrolan & Info Komunitas Interaktif 2-Tab, serta Integrasi PWA penuh.
  */
 
 const STORAGE_KEYS = {
@@ -10,7 +10,6 @@ const STORAGE_KEYS = {
   HISTORY: "nodatanime_history_v1",
   PROGRESS: "nodatanime_progress_v1",
   AUTONEXT: "nodatanime_autonext_v1",
-  ADMIN_TOKEN: "nodatanime_admin_token_v1",
   CHAT_NICK: "nodatanime_chat_nick_v1",
 };
 
@@ -38,8 +37,6 @@ const state = {
   cinemaMode: false,
   autoNext: localStorage.getItem(STORAGE_KEYS.AUTONEXT) !== "0",
   currentWatch: null,
-  adminTab: "overview",
-  adminPrefillStream: null,
   communityTab: "chat",
   communityData: { messages: [], info: [] },
   communityReplyTo: null,
@@ -345,28 +342,6 @@ function formatRelativeWib(tsSeconds = 0) {
   }
 }
 
-function syncAnnouncementBar(announcement) {
-  const bar = document.getElementById("studioNoticeBar");
-  const badgeEl = document.getElementById("studioNoticeBadge");
-  const textEl = document.getElementById("studioNoticeText");
-  const actionBtn = document.getElementById("studioNoticeAction");
-  if (!bar || !badgeEl || !textEl || !actionBtn) return;
-
-  if (!announcement || !announcement.enabled || !announcement.text) {
-    bar.hidden = true;
-    return;
-  }
-  bar.hidden = false;
-  badgeEl.textContent = announcement.badge || "INFO";
-  textEl.textContent = announcement.text;
-  if (announcement.linkSlug) {
-    actionBtn.hidden = false;
-    actionBtn.onclick = () => navigate({ series: announcement.linkSlug });
-  } else {
-    actionBtn.hidden = true;
-  }
-}
-
 /* ===== Watchlist & History Helpers ===== */
 function getWatchlist() {
   return readJsonStorage(STORAGE_KEYS.WATCHLIST, []);
@@ -444,18 +419,11 @@ function updateWatchlistBadge() {
 }
 
 /* ===== Relative API Client ===== */
-function getAdminToken() {
-  return localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN) || "";
-}
-
 async function apiRequest(path, options = {}) {
   const start = performance.now();
   const headers = {
     Accept: "application/json",
     ...(options.body ? { "Content-Type": "application/json" } : {}),
-    ...(options.auth && getAdminToken()
-      ? { Authorization: `Bearer ${getAdminToken()}` }
-      : {}),
     ...(options.headers || {}),
   };
 
@@ -480,9 +448,7 @@ async function apiRequest(path, options = {}) {
         ? "Engine: Live YLnime Scraper"
         : json.source === "upstream-animekita"
           ? "Engine: AnimeKita Upstream"
-          : json.source === "hybrid-lockdown"
-            ? "Engine: Snapshot Lockdown"
-            : "Engine: Verified YLnime Snapshot";
+          : "Engine: Verified YLnime Snapshot";
     footerSourceBadge.textContent = label;
   }
   return { ...json, elapsedMs };
@@ -527,12 +493,11 @@ function renderCommunityPanelContent() {
         .map((m) => {
           const initial = esc((m.nickname || "A").trim().charAt(0).toUpperCase());
           return `
-            <div class="nd-notif-item ${m.isAdmin ? "is-admin-msg" : ""}">
+            <div class="nd-notif-item">
               <div class="nd-notif-top">
                 <div class="nd-notif-user">
                   <span class="nd-comm-avatar">${initial}</span>
                   <span>${esc(m.nickname)}</span>
-                  ${m.isAdmin ? '<span class="nd-admin-badge">Admin</span>' : ""}
                 </div>
                 <span class="nd-notif-time">${esc(formatRelativeWib(m.timestamp))}</span>
               </div>
@@ -893,11 +858,10 @@ export function navigate(params = {}, push = true) {
   if (searchDropdown) searchDropdown.hidden = true;
 
   const url = new URL(window.location.href);
-  url.pathname = params.view === "admin" ? "/admin" : "/";
+  url.pathname = "/";
   url.search = "";
 
   Object.entries(params).forEach(([k, v]) => {
-    if (k === "view" && v === "admin") return;
     if (v !== undefined && v !== null && v !== "") {
       url.searchParams.set(k, String(v));
     }
@@ -915,8 +879,7 @@ async function routeCurrentUrl() {
   const params = new URLSearchParams(window.location.search);
   const cleanPath = window.location.pathname.replace(/\/+$/, "") || "/";
 
-  // Dukungan shortcut path PWA (/ongoing, /jadwal, /watchlist, /admin)
-  const pathIsAdmin = cleanPath === "/admin";
+  // Dukungan shortcut path PWA (/ongoing, /jadwal, /watchlist)
   const pathShortcutView =
     cleanPath === "/ongoing"
       ? "catalog"
@@ -930,7 +893,7 @@ async function routeCurrentUrl() {
   const episode = params.get("episode");
   const ep = params.get("ep");
   const search = params.get("search") || params.get("q");
-  const view = pathIsAdmin ? "admin" : pathShortcutView || params.get("view") || "home";
+  const view = pathShortcutView || params.get("view") || "home";
 
   try {
     if (episode || (series && ep)) {
@@ -982,10 +945,6 @@ async function routeCurrentUrl() {
       case "api":
         setActiveNav("api");
         await renderApiInspectorView();
-        break;
-      case "admin":
-        setActiveNav("admin");
-        await renderAdminView();
         break;
       default:
         setActiveNav("home");
@@ -1099,7 +1058,6 @@ async function renderHomeView() {
   }
   const { data } = await apiGet("/api/anime/home");
   state.homeData = data;
-  syncAnnouncementBar(data.announcement);
 
   const history = getWatchHistory().slice(0, 6);
   const banners = data.banners || [];
@@ -1738,9 +1696,6 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
               <button type="button" class="nd-pill-btn" id="toggleCinemaBtn">
                 ${SVG_ICONS.cinema}Mode Bioskop
               </button>
-              <button type="button" class="nd-pill-btn" id="reportBrokenBtn">
-                ${SVG_ICONS.flag}Lapor Mirror
-              </button>
             </div>
           </div>
 
@@ -1857,21 +1812,9 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
                   </a>`
                 : ""
             }
-            <button type="button" class="nd-btn nd-btn-secondary" id="addMirrorQuickBtn" style="padding:9px 16px;font-size:0.82rem;">
-              + Pasang Mirror di Admin
-            </button>
           </div>
         </div>
       `;
-
-      document.getElementById("addMirrorQuickBtn")?.addEventListener("click", () => {
-        state.adminPrefillStream = {
-          seriesSlug: data.seriesSlug,
-          episodeId: data.episodeId,
-        };
-        state.adminTab = "streams";
-        navigate({ view: "admin" });
-      });
       return;
     }
 
@@ -1973,29 +1916,6 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
   document.getElementById("toggleCinemaBtn")?.addEventListener("click", () => {
     setCinemaMode(!state.cinemaMode);
   });
-
-  document.getElementById("reportBrokenBtn")?.addEventListener("click", async (e) => {
-    const btn = e.currentTarget;
-    btn.disabled = true;
-    try {
-      const activeServer = activePool[currentStreamIndex]?.label || "Permintaan Mirror Baru";
-      await apiRequest("/api/anime/report", {
-        method: "POST",
-        body: {
-          seriesSlug: data.seriesSlug,
-          episodeId: data.episodeId,
-          animeTitle: data.animeTitle,
-          serverLabel: activeServer,
-          reason: `Dilaporkan penonton (${activeServer})`,
-        },
-      });
-      btn.textContent = "Laporan Terkirim";
-      showToast("Laporan berhasil dikirim ke Admin Panel!");
-    } catch (err) {
-      btn.disabled = false;
-      showToast(`Gagal mengirim laporan: ${err.message}`);
-    }
-  });
 }
 
 /* ===== 10. Interactive API & REA Inspector View ===== */
@@ -2076,697 +1996,6 @@ async function renderApiInspectorView() {
       </section>
     </div>
   `;
-}
-
-/* ===== 11. Admin Panel View (`/admin` & `?view=admin`) ===== */
-function renderAdminLoginGate(errorMsg = "") {
-  appRoot.innerHTML = `
-    <div class="nd-container" style="max-width:500px;padding-top:24px;">
-      <div class="nd-admin-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-          <span class="nd-pill-crimson">Admin Panel</span>
-          <span class="nd-tech-pill">Hybrid Control</span>
-        </div>
-        <h1 class="nd-section-title" style="margin-bottom:8px;">Login Admin NodataNime</h1>
-        <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:18px;">
-          Kelola mode mesin Hybrid/Lockdown, override katalog &amp; pin Hero, tambah mirror server video, moderasi Obrolan &amp; Info Komunitas, dan tangani laporan penonton.
-        </p>
-
-        ${errorMsg ? `<div style="padding:10px 12px;margin-bottom:14px;border-radius:10px;border:1px solid var(--accent-bright);background:rgba(255,42,75,0.14);font-size:0.82rem;">${esc(errorMsg)}</div>` : ""}
-
-        <form id="adminLoginForm">
-          <div class="nd-form-row">
-            <label for="admUser">Username</label>
-            <input id="admUser" class="nd-input" type="text" value="admin" required autocomplete="username" />
-          </div>
-          <div class="nd-form-row">
-            <label for="admPass">Password</label>
-            <input id="admPass" class="nd-input" type="password" placeholder="Masukkan password admin..." required autocomplete="current-password" />
-          </div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
-            <button type="submit" class="nd-btn nd-btn-primary" style="flex:1;">Masuk Admin</button>
-            <button type="button" class="nd-btn nd-btn-secondary" id="fillDemoAdminBtn">Isi Demo (nodata2026)</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  `;
-
-  document.getElementById("fillDemoAdminBtn")?.addEventListener("click", () => {
-    document.getElementById("admUser").value = "admin";
-    document.getElementById("admPass").value = "nodata2026";
-  });
-
-  document.getElementById("adminLoginForm")?.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const username = document.getElementById("admUser").value.trim();
-    const password = document.getElementById("admPass").value;
-    try {
-      const res = await apiRequest("/api/admin/login", {
-        method: "POST",
-        body: { username, password },
-      });
-      localStorage.setItem(STORAGE_KEYS.ADMIN_TOKEN, res.data.token);
-      showToast(`Selamat datang, ${res.data.username}!`);
-      await renderAdminView();
-    } catch (err) {
-      renderAdminLoginGate(err.message);
-    }
-  });
-}
-
-async function renderAdminView() {
-  if (!getAdminToken()) {
-    renderAdminLoginGate();
-    return;
-  }
-
-  let dash;
-  try {
-    const res = await apiRequest("/api/admin/dashboard", { auth: true });
-    dash = res.data;
-  } catch {
-    localStorage.removeItem(STORAGE_KEYS.ADMIN_TOKEN);
-    renderAdminLoginGate("Sesi berakhir, silakan login kembali.");
-    return;
-  }
-
-  const { health, vault } = dash;
-  const cfg = vault.config;
-  const counts = vault.counts;
-
-  const adminTabs = [
-    ["overview", "Mesin & Pengumuman"],
-    ["catalog", `Override Katalog (${counts.catalogOverrides})`],
-    ["streams", `Mirror Episode (${counts.streamOverrides})`],
-    ["community", `Komunitas (${counts.communityMessages ?? (vault.communityChat || []).length})`],
-    ["reports", `Laporan Error (${counts.openReports})`],
-    ["logs", "Audit Log"],
-  ];
-
-  appRoot.innerHTML = `
-    <div class="nd-container">
-      <div class="nd-section-head" style="flex-wrap:wrap;">
-        <h1 class="nd-section-title">Admin Panel &amp; Kontrol Hybrid</h1>
-        <div style="display:flex;gap:8px;">
-          <button type="button" class="nd-link-more" id="adminRefreshBtn">Muat Ulang</button>
-          <button type="button" class="nd-link-more" id="adminLogoutBtn">Logout</button>
-        </div>
-      </div>
-
-      <div class="nd-admin-kpi-grid">
-        <div class="nd-kpi-tile">
-          <div class="nd-kpi-label">Mode Engine</div>
-          <div class="nd-kpi-val" style="font-size:1.3rem;">${esc(cfg.engineMode.toUpperCase())}</div>
-          <div class="nd-kpi-sub">Multi-Tier Aktif</div>
-        </div>
-        <div class="nd-kpi-tile">
-          <div class="nd-kpi-label">Katalog Snapshot Lokal</div>
-          <div class="nd-kpi-val">${health.scrapers.snapshotCatalogCount}</div>
-          <div class="nd-kpi-sub">Judul terverifikasi</div>
-        </div>
-        <div class="nd-kpi-tile">
-          <div class="nd-kpi-label">Override Katalog</div>
-          <div class="nd-kpi-val">${counts.catalogOverrides}</div>
-          <div class="nd-kpi-sub">${counts.pinnedHeroes} Pin Hero</div>
-        </div>
-        <div class="nd-kpi-tile">
-          <div class="nd-kpi-label">Mirror Episode</div>
-          <div class="nd-kpi-val">${counts.streamOverrides}</div>
-          <div class="nd-kpi-sub">Prioritas Server #1</div>
-        </div>
-        <div class="nd-kpi-tile">
-          <div class="nd-kpi-label">Tiket Error Terbuka</div>
-          <div class="nd-kpi-val">${counts.openReports}</div>
-          <div class="nd-kpi-sub">Total ${counts.totalReports} laporan</div>
-        </div>
-      </div>
-
-      <div class="nd-pills-row">
-        ${adminTabs
-          .map(
-            ([id, label]) =>
-              `<button type="button" class="nd-pill-btn ${state.adminTab === id ? "active" : ""}" data-admin-tab="${id}">${esc(label)}</button>`
-          )
-          .join("")}
-      </div>
-
-      <div id="adminSubMount"></div>
-    </div>
-  `;
-
-  document.getElementById("adminRefreshBtn")?.addEventListener("click", () => renderAdminView());
-  document.getElementById("adminLogoutBtn")?.addEventListener("click", async () => {
-    await apiRequest("/api/admin/logout", { method: "POST", auth: true }).catch(() => {});
-    localStorage.removeItem(STORAGE_KEYS.ADMIN_TOKEN);
-    showToast("Berhasil keluar dari Admin Panel.");
-    renderAdminLoginGate();
-  });
-
-  document.querySelectorAll("[data-admin-tab]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      state.adminTab = btn.dataset.adminTab;
-      renderAdminView();
-    });
-  });
-
-  const subMount = document.getElementById("adminSubMount");
-  if (!subMount) return;
-
-  if (state.adminTab === "overview") {
-    subMount.innerHTML = `
-      <div class="nd-admin-grid">
-        <div class="nd-admin-card">
-          <h3>Saklar Mode Engine</h3>
-          <p style="font-size:0.82rem;color:var(--text-secondary);margin-top:0;">
-            Alihkan ke <strong>Snapshot Lockdown</strong> jika web sumber mengalami gangguan agar website berjalan 100% dari penyimpanan lokal.
-          </p>
-          <div class="nd-mode-cards">
-            <button type="button" class="nd-mode-option ${cfg.engineMode === "hybrid" ? "active" : ""}" data-pick-mode="hybrid">
-              <strong>Hybrid Auto</strong>
-              <small>Override Admin + Live Scraper + Snapshot Fallback.</small>
-            </button>
-            <button type="button" class="nd-mode-option ${cfg.engineMode === "live-first" ? "active" : ""}" data-pick-mode="live-first">
-              <strong>Live Scraper First</strong>
-              <small>Utamakan penarikan langsung dari YLnime.</small>
-            </button>
-            <button type="button" class="nd-mode-option ${cfg.engineMode === "snapshot-lockdown" ? "active" : ""}" data-pick-mode="snapshot-lockdown">
-              <strong>Snapshot Lockdown</strong>
-              <small>100% Database &amp; Snapshot Lokal mandiri.</small>
-            </button>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--border-subtle);">
-            <span style="font-size:0.8rem;color:var(--text-secondary);">Cache Aktif: ${health.cache.activeEntries ?? health.cache.size ?? 0} entri</span>
-            <button type="button" class="nd-btn nd-btn-secondary" style="padding:8px 14px;font-size:0.8rem;" id="flushCacheBtn">Bersihkan Cache</button>
-          </div>
-        </div>
-
-        <div class="nd-admin-card">
-          <h3>Banner Pengumuman Atas</h3>
-          <form id="noticeForm">
-            <div class="nd-form-row">
-              <label><input type="checkbox" id="ntEnabled" ${cfg.announcement?.enabled ? "checked" : ""} /> Aktifkan Banner Pengumuman</label>
-            </div>
-            <div style="display:grid;grid-template-columns:130px 1fr;gap:10px;">
-              <div class="nd-form-row">
-                <label>Badge</label>
-                <input id="ntBadge" class="nd-input" value="${esc(cfg.announcement?.badge || "INFO")}" />
-              </div>
-              <div class="nd-form-row">
-                <label>Target Slug (Opsional)</label>
-                <input id="ntSlug" class="nd-input" value="${esc(cfg.announcement?.linkSlug || "")}" placeholder="one-piece-sub-indo" />
-              </div>
-            </div>
-            <div class="nd-form-row">
-              <label>Teks Pengumuman</label>
-              <input id="ntText" class="nd-input" value="${esc(cfg.announcement?.text || "")}" required />
-            </div>
-            <button type="submit" class="nd-btn nd-btn-primary">Simpan Pengumuman</button>
-          </form>
-        </div>
-      </div>
-    `;
-
-    document.querySelectorAll("[data-pick-mode]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const engineMode = btn.dataset.pickMode;
-        await apiRequest("/api/admin/config", {
-          method: "PUT",
-          auth: true,
-          body: { engineMode },
-        });
-        state.homeData = null;
-        showToast(`Mode Engine diubah ke ${engineMode}`);
-        renderAdminView();
-      });
-    });
-
-    document.getElementById("flushCacheBtn")?.addEventListener("click", async () => {
-      await apiRequest("/api/admin/cache/clear", { method: "POST", auth: true });
-      state.homeData = null;
-      showToast("Cache berhasil dibersihkan!");
-      renderAdminView();
-    });
-
-    document.getElementById("noticeForm")?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const announcement = {
-        enabled: document.getElementById("ntEnabled").checked,
-        badge: document.getElementById("ntBadge").value.trim(),
-        linkSlug: document.getElementById("ntSlug").value.trim(),
-        text: document.getElementById("ntText").value.trim(),
-      };
-      const res = await apiRequest("/api/admin/config", {
-        method: "PUT",
-        auth: true,
-        body: { announcement },
-      });
-      syncAnnouncementBar(res.data.announcement);
-      state.homeData = null;
-      showToast("Pengumuman berhasil diperbarui!");
-    });
-  } else if (state.adminTab === "catalog") {
-    subMount.innerHTML = `
-      <div class="nd-admin-grid">
-        <div class="nd-admin-card">
-          <h3>Tambah / Override Anime</h3>
-          <form id="catalogOverrideForm">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-              <div class="nd-form-row">
-                <label>Slug Seri</label>
-                <input id="coSlug" class="nd-input" placeholder="sousou-no-frieren-sub-indo" required />
-              </div>
-              <div class="nd-form-row">
-                <label>Judul</label>
-                <input id="coTitle" class="nd-input" placeholder="Sousou no Frieren" required />
-              </div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
-              <div class="nd-form-row">
-                <label>Rating</label>
-                <input id="coScore" class="nd-input" value="9.0" />
-              </div>
-              <div class="nd-form-row">
-                <label>Status</label>
-                <select id="coStatus" class="nd-select">
-                  <option value="Ongoing">Ongoing</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Movie">Movie</option>
-                </select>
-              </div>
-              <div class="nd-form-row">
-                <label>Hari Rilis</label>
-                <input id="coDay" class="nd-input" placeholder="Sabtu" />
-              </div>
-            </div>
-            <div class="nd-form-row">
-              <label>URL Poster / Banner</label>
-              <input id="coPoster" class="nd-input" placeholder="Kosongkan untuk memakai poster bawaan" />
-            </div>
-            <div class="nd-form-row">
-              <label>Sinopsis</label>
-              <textarea id="coSynopsis" class="nd-textarea" rows="3"></textarea>
-            </div>
-            <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;font-size:0.83rem;">
-              <label><input type="checkbox" id="coPinHero" /> Pin ke Slide #1 Hero</label>
-              <label><input type="checkbox" id="coHidden" /> Sembunyikan Judul</label>
-            </div>
-            <button type="submit" class="nd-btn nd-btn-primary">Simpan Katalog</button>
-          </form>
-        </div>
-
-        <div class="nd-admin-card">
-          <h3>Override Aktif (${vault.catalogOverrides.length})</h3>
-          <div class="nd-table-list">
-            ${
-              vault.catalogOverrides.length
-                ? vault.catalogOverrides
-                    .map(
-                      (item) => `
-                    <div class="nd-table-row">
-                      <div>
-                        <strong>${esc(item.title)}</strong>
-                        <div style="font-size:0.75rem;color:var(--text-secondary);">${esc(item.slug)} • ${esc(item.status)} • ${SVG_ICONS.star} ${esc(item.score)}</div>
-                      </div>
-                      <div style="display:flex;gap:6px;">
-                        <button type="button" class="nd-link-more" data-open-series="${esc(item.slug)}">Buka</button>
-                        <button type="button" class="nd-link-more" data-del-override="${esc(item.slug)}">Hapus</button>
-                      </div>
-                    </div>
-                  `
-                    )
-                    .join("")
-                : '<div class="nd-muted-center">Belum ada override katalog.</div>'
-            }
-          </div>
-        </div>
-      </div>
-    `;
-
-    document.getElementById("catalogOverrideForm")?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      await apiRequest("/api/admin/catalog", {
-        method: "POST",
-        auth: true,
-        body: {
-          slug: document.getElementById("coSlug").value.trim(),
-          title: document.getElementById("coTitle").value.trim(),
-          score: document.getElementById("coScore").value.trim(),
-          status: document.getElementById("coStatus").value,
-          releaseDay: document.getElementById("coDay").value.trim(),
-          poster: document.getElementById("coPoster").value.trim(),
-          banner: document.getElementById("coPoster").value.trim(),
-          synopsis: document.getElementById("coSynopsis").value.trim(),
-          pinnedHero: document.getElementById("coPinHero").checked,
-          isHidden: document.getElementById("coHidden").checked,
-        },
-      });
-      state.homeData = null;
-      showToast("Override katalog disimpan!");
-      renderAdminView();
-    });
-
-    subMount.querySelectorAll("[data-del-override]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        await apiRequest(`/api/admin/catalog/${encodeURIComponent(btn.dataset.delOverride)}`, {
-          method: "DELETE",
-          auth: true,
-        });
-        state.homeData = null;
-        renderAdminView();
-      });
-    });
-  } else if (state.adminTab === "streams") {
-    const pre = state.adminPrefillStream || {};
-    state.adminPrefillStream = null;
-
-    subMount.innerHTML = `
-      <div class="nd-admin-grid">
-        <div class="nd-admin-card">
-          <h3>Tambah Mirror Server Video (#1)</h3>
-          <form id="streamMirrorForm">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-              <div class="nd-form-row">
-                <label>Series Slug</label>
-                <input id="smSeries" class="nd-input" value="${esc(pre.seriesSlug || "")}" placeholder="kusuriya-no-hitorigoto-s3" required />
-              </div>
-              <div class="nd-form-row">
-                <label>Episode ID</label>
-                <input id="smEpId" class="nd-input" value="${esc(pre.episodeId || "")}" placeholder="al-154210-4" required />
-              </div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 110px 110px;gap:10px;">
-              <div class="nd-form-row">
-                <label>Nama Server</label>
-                <input id="smProvider" class="nd-input" value="Nodata Cloud Mirror" required />
-              </div>
-              <div class="nd-form-row">
-                <label>Resolusi</label>
-                <select id="smReso" class="nd-select">
-                  <option value="1080p">1080p</option>
-                  <option value="720p">720p</option>
-                  <option value="480p">480p</option>
-                </select>
-              </div>
-              <div class="nd-form-row">
-                <label>Tipe</label>
-                <select id="smType" class="nd-select">
-                  <option value="mp4">MP4</option>
-                  <option value="embed">Embed</option>
-                </select>
-              </div>
-            </div>
-            <div class="nd-form-row">
-              <label>URL Video</label>
-              <input id="smUrl" class="nd-input" placeholder="https://s3.animeverse.id/...mp4" required />
-            </div>
-            <button type="submit" class="nd-btn nd-btn-primary">Pasang Mirror</button>
-          </form>
-        </div>
-
-        <div class="nd-admin-card">
-          <h3>Mirror Aktif (${vault.streamOverrides.length})</h3>
-          <div class="nd-table-list">
-            ${
-              vault.streamOverrides.length
-                ? vault.streamOverrides
-                    .map(
-                      (st) => `
-                    <div class="nd-table-row">
-                      <div>
-                        <strong>${esc(st.seriesSlug)}</strong>
-                        <div style="font-size:0.75rem;color:var(--text-secondary);">${esc(st.episodeId)}</div>
-                      </div>
-                      <div style="display:flex;gap:6px;">
-                        <button type="button" class="nd-link-more" data-play-ep="${esc(st.episodeId)}" data-play-series="${esc(st.seriesSlug)}">Putar</button>
-                        <button type="button" class="nd-link-more" data-del-stream-s="${esc(st.seriesSlug)}" data-del-stream-e="${esc(st.episodeId)}">Hapus</button>
-                      </div>
-                    </div>
-                  `
-                    )
-                    .join("")
-                : '<div class="nd-muted-center">Belum ada custom mirror episode.</div>'
-            }
-          </div>
-        </div>
-      </div>
-    `;
-
-    document.getElementById("streamMirrorForm")?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      await apiRequest("/api/admin/streams", {
-        method: "POST",
-        auth: true,
-        body: {
-          seriesSlug: document.getElementById("smSeries").value.trim(),
-          episodeId: document.getElementById("smEpId").value.trim(),
-          provider: document.getElementById("smProvider").value.trim(),
-          resolution: document.getElementById("smReso").value,
-          type: document.getElementById("smType").value,
-          url: document.getElementById("smUrl").value.trim(),
-        },
-      });
-      showToast("Mirror video berhasil ditambahkan!");
-      renderAdminView();
-    });
-
-    subMount.querySelectorAll("[data-del-stream-s]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        await apiRequest(
-          `/api/admin/streams?seriesSlug=${encodeURIComponent(btn.dataset.delStreamS)}&episodeId=${encodeURIComponent(btn.dataset.delStreamE)}`,
-          { method: "DELETE", auth: true }
-        );
-        renderAdminView();
-      });
-    });
-  } else if (state.adminTab === "community") {
-    const chatItems = vault.communityChat || [];
-    const infoItems = vault.communityInfo || [];
-
-    subMount.innerHTML = `
-      <div class="nd-admin-grid">
-        <div class="nd-admin-card">
-          <h3>Kirim Pesan Resmi Admin &amp; Moderasi Obrolan</h3>
-          <form id="adminChatPostForm" style="margin-bottom:16px;">
-            <div style="display:grid;grid-template-columns:150px 1fr;gap:10px;">
-              <div class="nd-form-row">
-                <label>Nama Admin</label>
-                <input id="admChatNick" class="nd-input" value="Admin NodataNime" required />
-              </div>
-              <div class="nd-form-row">
-                <label>Pesan Komunitas</label>
-                <input id="admChatMsg" class="nd-input" placeholder="Tulis info untuk penonton..." required />
-              </div>
-            </div>
-            <button type="submit" class="nd-btn nd-btn-primary">Kirim sebagai Admin</button>
-          </form>
-
-          <div class="nd-table-list" style="max-height:280px;">
-            ${
-              chatItems.length
-                ? chatItems
-                    .map(
-                      (c) => `
-                    <div class="nd-table-row">
-                      <div>
-                        <strong>${esc(c.nickname)}</strong> ${c.isAdmin ? '<span class="nd-admin-badge">Admin</span>' : ""}
-                        <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:3px;">${esc(c.message)}</div>
-                      </div>
-                      <button type="button" class="nd-link-more" data-del-chat="${esc(c.id)}">Hapus</button>
-                    </div>
-                  `
-                    )
-                    .join("")
-                : '<div class="nd-muted-center">Belum ada obrolan lokal tersimpan.</div>'
-            }
-          </div>
-        </div>
-
-        <div class="nd-admin-card">
-          <h3>Kelola Kartu Info Komunitas (${infoItems.length})</h3>
-          <form id="adminInfoPostForm" style="margin-bottom:16px;">
-            <div style="display:grid;grid-template-columns:1fr 140px;gap:10px;">
-              <div class="nd-form-row">
-                <label>Judul Info</label>
-                <input id="admInfoTitle" class="nd-input" placeholder="Pembaruan Server S3 1080p" required />
-              </div>
-              <div class="nd-form-row">
-                <label>Kategori</label>
-                <input id="admInfoCat" class="nd-input" value="Pengumuman" required />
-              </div>
-            </div>
-            <div class="nd-form-row">
-              <label>Isi Informasi</label>
-              <textarea id="admInfoBody" class="nd-textarea" rows="2" required></textarea>
-            </div>
-            <div style="margin-bottom:12px;font-size:0.82rem;">
-              <label><input type="checkbox" id="admInfoPin" checked /> Sematkan di urutan atas (Pinned)</label>
-            </div>
-            <button type="submit" class="nd-btn nd-btn-primary">Tambah Info Komunitas</button>
-          </form>
-
-          <div class="nd-table-list" style="max-height:250px;">
-            ${infoItems
-              .map(
-                (inf) => `
-                <div class="nd-table-row">
-                  <div>
-                    <strong>${esc(inf.title)}</strong> <span class="nd-pill-glass">${esc(inf.category)}</span>
-                    <div style="font-size:0.76rem;color:var(--text-secondary);margin-top:3px;">${esc(inf.body)}</div>
-                  </div>
-                  <button type="button" class="nd-link-more" data-del-info="${esc(inf.id)}">Hapus</button>
-                </div>
-              `
-              )
-              .join("")}
-          </div>
-        </div>
-      </div>
-    `;
-
-    document.getElementById("adminChatPostForm")?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      await apiRequest("/api/admin/community/messages", {
-        method: "POST",
-        auth: true,
-        body: {
-          nickname: document.getElementById("admChatNick").value.trim(),
-          message: document.getElementById("admChatMsg").value.trim(),
-        },
-      });
-      state.communityLoadedAt = 0;
-      await loadCommunityData(true);
-      showToast("Pesan resmi Admin terkirim!");
-      renderAdminView();
-    });
-
-    subMount.querySelectorAll("[data-del-chat]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        await apiRequest(`/api/admin/community/messages/${encodeURIComponent(btn.dataset.delChat)}`, {
-          method: "DELETE",
-          auth: true,
-        });
-        state.communityLoadedAt = 0;
-        await loadCommunityData(true);
-        renderAdminView();
-      });
-    });
-
-    document.getElementById("adminInfoPostForm")?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      await apiRequest("/api/admin/community/info", {
-        method: "POST",
-        auth: true,
-        body: {
-          title: document.getElementById("admInfoTitle").value.trim(),
-          category: document.getElementById("admInfoCat").value.trim(),
-          body: document.getElementById("admInfoBody").value.trim(),
-          pinned: document.getElementById("admInfoPin").checked,
-        },
-      });
-      state.communityLoadedAt = 0;
-      await loadCommunityData(true);
-      showToast("Info Komunitas berhasil disimpan!");
-      renderAdminView();
-    });
-
-    subMount.querySelectorAll("[data-del-info]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        await apiRequest(`/api/admin/community/info/${encodeURIComponent(btn.dataset.delInfo)}`, {
-          method: "DELETE",
-          auth: true,
-        });
-        state.communityLoadedAt = 0;
-        await loadCommunityData(true);
-        renderAdminView();
-      });
-    });
-  } else if (state.adminTab === "reports") {
-    subMount.innerHTML = `
-      <div class="nd-admin-card">
-        <h3>Laporan Video Error dari Penonton</h3>
-        <div class="nd-table-list" style="max-height:500px;margin-top:12px;">
-          ${
-            vault.brokenReports.length
-              ? vault.brokenReports
-                  .map(
-                    (rep) => `
-                  <div class="nd-table-row">
-                    <div>
-                      <strong>${esc(rep.animeTitle)}</strong> <span class="nd-pill-glass">${esc(rep.episodeId)}</span>
-                      <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">${esc(rep.serverLabel)} — ${esc(rep.reason)} (${esc(rep.status)})</div>
-                    </div>
-                    <div style="display:flex;gap:6px;">
-                      <button type="button" class="nd-link-more" data-fix-series="${esc(rep.seriesSlug)}" data-fix-ep="${esc(rep.episodeId)}">+ Mirror</button>
-                      ${rep.status === "open" ? `<button type="button" class="nd-link-more" data-resolve-rep="${esc(rep.id)}">Selesai</button>` : ""}
-                      <button type="button" class="nd-link-more" data-delete-rep="${esc(rep.id)}">Hapus</button>
-                    </div>
-                  </div>
-                `
-                  )
-                  .join("")
-                : '<div class="nd-muted-center">Tidak ada laporan error.</div>'
-          }
-        </div>
-      </div>
-    `;
-
-    subMount.querySelectorAll("[data-fix-series]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        state.adminPrefillStream = {
-          seriesSlug: btn.dataset.fixSeries,
-          episodeId: btn.dataset.fixEp,
-        };
-        state.adminTab = "streams";
-        renderAdminView();
-      });
-    });
-
-    subMount.querySelectorAll("[data-resolve-rep]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        await apiRequest(`/api/admin/reports/${encodeURIComponent(btn.dataset.resolveRep)}`, {
-          method: "PATCH",
-          auth: true,
-          body: { status: "resolved" },
-        });
-        renderAdminView();
-      });
-    });
-
-    subMount.querySelectorAll("[data-delete-rep]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        await apiRequest(`/api/admin/reports/${encodeURIComponent(btn.dataset.deleteRep)}`, {
-          method: "PATCH",
-          auth: true,
-          body: { status: "delete" },
-        });
-        renderAdminView();
-      });
-    });
-  } else {
-    subMount.innerHTML = `
-      <div class="nd-admin-card">
-        <h3>Audit Log Aktivitas Admin</h3>
-        <div class="nd-table-list" style="max-height:500px;margin-top:12px;">
-          ${(vault.auditLogs || [])
-            .map(
-              (log) => `
-              <div class="nd-table-row">
-                <div>
-                  <span class="nd-pill-glass">${esc(log.action)}</span>
-                  <span style="font-size:0.82rem;margin-left:8px;">${esc(log.detail)}</span>
-                </div>
-                <div style="font-size:0.74rem;color:var(--text-secondary);">
-                  ${esc(log.actor)} • ${esc(new Date(log.at).toLocaleString("id-ID"))}
-                </div>
-              </div>
-            `
-            )
-            .join("")}
-        </div>
-      </div>
-    `;
-  }
 }
 
 /* ===== Global Event Delegation ===== */

@@ -168,7 +168,6 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
     assert.equal(postRes.status, 201);
     const posted = await postRes.json();
     assert.equal(posted.data.nickname, "NakamaTester");
-    assert.equal(posted.data.isAdmin, false);
 
     // Rate-limit pengiriman beruntun dari IP yang sama
     const spamRes = await fetch(`${baseUrl}/api/community/messages`, {
@@ -234,12 +233,15 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
     assert.equal(blockedRes.status, 403);
   });
 
-  it("validates Vercel Express Serverless entrypoint, vercel.json contract, 3.5MB Range clamping, and stateless cold-start Admin tokens", async () => {
+  it("validates Vercel Express Serverless entrypoint, zero-collision views/index.html shell, and 3.5MB Range clamping", async () => {
     const vercelCfg = JSON.parse(fs.readFileSync(path.join(rootDir, "vercel.json"), "utf8"));
     assert.equal(vercelCfg.framework, "express");
     assert.equal(vercelCfg.outputDirectory, null);
-    assert.match(vercelCfg.functions["src/app.js"].includeFiles, /data\/\*\*/);
-    assert.match(vercelCfg.functions["public/app.js"].includeFiles, /data\/\*\*/);
+    assert.equal(vercelCfg.rewrites, undefined);
+    assert.match(vercelCfg.functions["src/app.js"].includeFiles, /views\/\*\*/);
+    assert.match(vercelCfg.functions["public/app.js"].includeFiles, /views\/\*\*/);
+    assert.equal(fs.existsSync(path.join(rootDir, "public/index.html")), false);
+    assert.equal(fs.existsSync(path.join(rootDir, "views/index.html")), true);
 
     const { default: vercelExpressApp, normalizeVercelRequestUrl } = await import("../src/app.js");
     const { default: vercelPublicFallbackApp } = await import("../public/app.js");
@@ -259,99 +261,23 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
     assert.equal(normalizeRangeForServerless("bytes=0-", true), "bytes=0-3670015");
     assert.equal(normalizeRangeForServerless("", true), "bytes=0-3670015");
     assert.equal(normalizeRangeForServerless("bytes=100-500", true), "bytes=100-500");
-
-    // Verifikasi token Admin stateless tetap valid pada instance AdminStore baru (simulasi cold-start Vercel)
-    const { AdminStore } = await import("../src/services/adminStore.js");
-    const instanceA = new AdminStore();
-    const instanceB = new AdminStore();
-    const { token } = instanceA.authenticate("admin", process.env.ADMIN_PASSWORD || "nodata2026", "1.1.1.1");
-    assert.ok(token.startsWith("nd1."));
-    const verifiedOnColdInstance = instanceB.verifyToken(token);
-    assert.equal(verifiedOnColdInstance?.username, "admin");
-
-    instanceB.revokeToken(token);
-    assert.equal(instanceB.verifyToken(token), null);
   });
 
-  it("authenticates Studio Admin, manages catalog/stream/community overrides & broken reports", async () => {
-    const adminHtmlRes = await fetch(`${baseUrl}/admin`);
-    assert.equal(adminHtmlRes.status, 200);
+  it("ensures Admin Panel & /api/admin/* are completely removed and SPA routes resolve cleanly", async () => {
+    const [ongoingSpaRes, jadwalSpaRes, watchlistSpaRes, removedAdminApiRes] = await Promise.all([
+      fetch(`${baseUrl}/ongoing`),
+      fetch(`${baseUrl}/jadwal`),
+      fetch(`${baseUrl}/watchlist`),
+      fetch(`${baseUrl}/api/admin/dashboard`),
+    ]);
 
-    const unauthRes = await fetch(`${baseUrl}/api/admin/dashboard`);
-    assert.equal(unauthRes.status, 401);
+    assert.equal(ongoingSpaRes.status, 200);
+    assert.equal(jadwalSpaRes.status, 200);
+    assert.equal(watchlistSpaRes.status, 200);
+    assert.equal(removedAdminApiRes.status, 404);
 
-    const loginRes = await fetch(`${baseUrl}/api/admin/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: "admin", password: process.env.ADMIN_PASSWORD || "nodata2026" }),
-    });
-    assert.equal(loginRes.status, 200);
-    const loginBody = await loginRes.json();
-    const token = loginBody.data.token;
-    assert.ok(token.length >= 32);
-
-    const authHeaders = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
-
-    const customRes = await fetch(`${baseUrl}/api/admin/catalog`, {
-      method: "POST",
-      headers: authHeaders,
-      body: JSON.stringify({
-        slug: "yozora-test-special",
-        title: "Yozora Test Special",
-        score: "9.5",
-        status: "Ongoing",
-        pinnedHero: true,
-      }),
-    });
-    assert.equal(customRes.status, 200);
-
-    const mirrorRes = await fetch(`${baseUrl}/api/admin/streams`, {
-      method: "POST",
-      headers: authHeaders,
-      body: JSON.stringify({
-        seriesSlug: "yozora-test-special",
-        episodeId: "yozora-ep-1",
-        provider: "Yozora Test R2",
-        resolution: "1080p",
-        url: "https://s3.animeverse.id/ro/33a8-1790534734773.mp4",
-      }),
-    });
-    assert.equal(mirrorRes.status, 200);
-
-    // Kirim pesan resmi Admin ke komunitas
-    const admMsgRes = await fetch(`${baseUrl}/api/admin/community/messages`, {
-      method: "POST",
-      headers: authHeaders,
-      body: JSON.stringify({
-        nickname: "Admin Studio",
-        message: "Server mirror 1080p siap ditonton!",
-      }),
-    });
-    assert.equal(admMsgRes.status, 201);
-    const admMsg = await admMsgRes.json();
-    assert.equal(admMsg.data.isAdmin, true);
-
-    const homeAfter = await (await fetch(`${baseUrl}/api/anime/home`)).json();
-    assert.equal(homeAfter.data.banners[0].slug, "yozora-test-special");
-
-    const epAfter = await (
-      await fetch(`${baseUrl}/api/anime/episode?series=yozora-test-special&episode=yozora-ep-1`)
-    ).json();
-    assert.equal(epAfter.data.streams[0].provider, "Yozora Test R2");
-
-    const repRes = await fetch(`${baseUrl}/api/anime/report`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        seriesSlug: "yozora-test-special",
-        episodeId: "yozora-ep-1",
-        animeTitle: "Yozora Test Special",
-        reason: "Unit test report",
-      }),
-    });
-    assert.equal(repRes.status, 201);
+    const html = await ongoingSpaRes.text();
+    assert.doesNotMatch(html, /Admin Panel/i);
+    assert.doesNotMatch(html, /studioNoticeBar/);
   });
 });
