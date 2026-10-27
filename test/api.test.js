@@ -313,4 +313,39 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
     assert.match(clientJs, /function closeSearchDropdown\(/);
     assert.match(clientJs, /new AbortController\(\)/);
   });
+
+  it("integrates Hubungi Admin (https://telegram.me/nodata_store) across More menu, Watch page, Detail, Search, Footer, and Community Info", async () => {
+    const indexHtml = fs.readFileSync(path.join(rootDir, "views/index.html"), "utf8");
+    const stylesCss = fs.readFileSync(path.join(rootDir, "public/css/styles.css"), "utf8");
+    const clientJs = fs.readFileSync(path.join(rootDir, "public/js/app.js"), "utf8");
+
+    // 1. Menu Lainnya (#bottomMoreSheet), Panel Komunitas (#notifPanel), Footer, dan Modal #adminContactModal
+    assert.match(indexHtml, /id="sheetContactAdminBtn"/);
+    assert.match(indexHtml, /id="adminContactBackdrop"/);
+    assert.match(indexHtml, /id="adminContactModal"/);
+    assert.match(indexHtml, /https:\/\/telegram\.me\/nodata_store/);
+    assert.match(indexHtml, /@nodata_store/);
+
+    // 2. Titik akses kontekstual di Halaman Tonton, Detail Anime, Pencarian Kosong, & Error Boundary
+    assert.match(clientJs, /id="watchReportIssueBtn"/);
+    assert.match(clientJs, /renderContactAdminBanner\("stream"\)/);
+    assert.match(clientJs, /renderContactAdminBanner\("general"\)/);
+    assert.match(clientJs, /data-open-admin-contact="anime"/);
+    assert.match(clientJs, /data-open-admin-contact="bug"/);
+    assert.match(clientJs, /function initAdminContactModal\(\)/);
+
+    // 3. CSS bebas dari bare grid-template-columns: 1fr; yang berisiko memotong kolom mobile
+    assert.doesNotMatch(stylesCss, /grid-template-columns:\s*1fr\s*;/);
+
+    // 4. Info Komunitas menyertakan pengumuman resmi Hubungi Admin (@nodata_store)
+    const commRes = await fetch(`${baseUrl}/api/community`);
+    assert.equal(commRes.status, 200);
+    const commJson = await commRes.json();
+    const hasAdminTgInfo = (commJson.data.info || []).some(
+      (item) =>
+        String(item.title || "").includes("@nodata_store") &&
+        String(item.body || "").includes("https://telegram.me/nodata_store")
+    );
+    assert.equal(hasAdminTgInfo, true);
+  });
 });

@@ -44,7 +44,7 @@
       flex-shrink: 0;
     }
   </style>
-  <link rel="stylesheet" href="/css/styles.css?v=6.4" />
+  <link rel="stylesheet" href="/css/styles.css?v=6.5" />
 </head>
 <body class="is-splashing">
   <!-- Animasi Pembuka Logo & Nama Brand NodataNime (100% Terpusat Stabil) -->
@@ -192,6 +192,17 @@
                 </svg>
                 <span>Info Komunitas</span>
                 <small id="commInfoCount">0</small>
+              </button>
+            </div>
+
+            <div class="nd-comm-admin-bar">
+              <span>Ada kendala, bug, atau req fitur?</span>
+              <button type="button" class="nd-comm-admin-btn" data-open-admin-contact="general">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+                <span>Hubungi Admin</span>
               </button>
             </div>
 
@@ -374,6 +385,19 @@
           </div>
         </button>
 
+        <button type="button" class="nd-sheet-item nd-sheet-item-telegram" id="sheetContactAdminBtn" data-open-admin-contact="general">
+          <span class="nd-sheet-icon nd-sheet-icon-telegram" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </span>
+          <div>
+            <strong>Hubungi Admin</strong>
+            <small>Lapor eror, bug &amp; req fitur</small>
+          </div>
+        </button>
+
         <button type="button" class="nd-sheet-item" id="sheetOpenCommunityBtn">
           <span class="nd-sheet-icon" aria-hidden="true">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -496,6 +520,13 @@
             <line x1="14" y1="2" x2="14" y2="4"></line>
           </svg>
           <span>Traktir Kopi (QRIS)</span>
+        </button>
+        <button type="button" class="nd-telegram-footer-btn" data-open-admin-contact="general">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+          <span>Hubungi Admin (@nodata_store)</span>
         </button>
         <span class="nd-tech-pill">REA v6.7.0 Verified</span>
         <span class="nd-tech-pill" id="footerSourceBadge">Engine: Ready</span>
@@ -628,9 +659,119 @@
     </div>
   </div>
 
+  <!-- Modal Hubungi Admin — Lapor Kendala, Eror, Bug & Request Fitur/Anime (Telegram Resmi @nodata_store) -->
+  <div id="adminContactBackdrop" class="nd-qris-backdrop" hidden>
+    <div id="adminContactModal" class="nd-qris-modal nd-admin-modal" role="dialog" aria-modal="true" aria-labelledby="adminContactModalTitle">
+      <div class="nd-qris-modal-header">
+        <div class="nd-qris-title-wrap">
+          <span class="nd-qris-title-icon nd-admin-title-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </span>
+          <div>
+            <h2 id="adminContactModalTitle" class="nd-qris-title">Hubungi Admin NodataNime</h2>
+            <p class="nd-qris-subtitle">Lapor kendala video, eror, bug tampilan, atau request fitur &amp; anime langsung ke Telegram resmi <strong>@nodata_store</strong>.</p>
+          </div>
+        </div>
+        <button type="button" id="adminContactCloseBtn" class="nd-icon-btn nd-icon-btn-sm" aria-label="Tutup modal Hubungi Admin">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="nd-qris-modal-body">
+        <div class="nd-qris-preset-label">Pilih Kategori Laporan / Request:</div>
+        <div class="nd-admin-topics" id="adminContactTopicGroup">
+          <button type="button" class="nd-admin-topic-btn active" data-admin-topic="stream">
+            <strong>Video / Episode Eror</strong>
+            <small>Server mati, buffering, sub</small>
+          </button>
+          <button type="button" class="nd-admin-topic-btn" data-admin-topic="bug">
+            <strong>Lapor Bug / Kendala</strong>
+            <small>Tampilan eror / fitur macet</small>
+          </button>
+          <button type="button" class="nd-admin-topic-btn" data-admin-topic="feature">
+            <strong>Request Fitur Baru</strong>
+            <small>Usulan fitur tambahan web</small>
+          </button>
+          <button type="button" class="nd-admin-topic-btn" data-admin-topic="anime">
+            <strong>Request Anime / Ep</strong>
+            <small>Judul baru atau update ep</small>
+          </button>
+        </div>
+
+        <div class="nd-admin-context-box" id="adminContactContextBox">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <div class="nd-admin-context-copy">
+            <span>Konteks Halaman Otomatis:</span>
+            <strong id="adminContactContextText">Beranda NodataNime</strong>
+          </div>
+        </div>
+
+        <div class="nd-admin-note-wrap">
+          <label for="adminContactNoteInput" class="nd-qris-preset-label">Detail Singkat Kendala / Fitur yang Diinginkan (Opsional):</label>
+          <textarea
+            id="adminContactNoteInput"
+            class="nd-admin-note-input"
+            rows="3"
+            maxlength="320"
+            placeholder="Contoh: Server 720p tidak bisa diputar di menit 10, atau request fitur baru..."
+          ></textarea>
+        </div>
+
+        <a
+          id="adminContactSendLink"
+          href="https://telegram.me/nodata_store"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="nd-btn nd-btn-telegram nd-admin-send-btn"
+        >
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+          <span>Kirim ke Telegram Admin (@nodata_store)</span>
+        </a>
+
+        <div class="nd-admin-secondary-actions">
+          <a
+            id="adminContactDirectLink"
+            href="https://telegram.me/nodata_store"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="nd-btn nd-btn-secondary nd-admin-sec-btn"
+          >
+            <span>Chat Langsung (@nodata_store)</span>
+          </a>
+          <button type="button" id="adminContactCopyBtn" class="nd-btn nd-btn-secondary nd-admin-sec-btn">
+            <span>Salin Format Pesan</span>
+          </button>
+        </div>
+
+        <div class="nd-qris-security-note nd-admin-safety-note">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <polyline points="9 12 11 14 15 10"></polyline>
+          </svg>
+          <div>
+            <strong>Kanal Bantuan Resmi:</strong> Seluruh laporan kendala, bug, maupun request fitur ditujukan langsung ke Telegram resmi <strong>@nodata_store</strong> (<code>telegram.me/nodata_store</code>). Admin tidak pernah meminta password, PIN, atau OTP.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Container -->
   <div id="toastRoot" class="nd-toast-root" aria-live="polite"></div>
 
-  <script type="module" src="/js/app.js?v=6.4"></script>
+  <script type="module" src="/js/app.js?v=6.5"></script>
 </body>
 </html>

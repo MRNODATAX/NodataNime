@@ -289,7 +289,7 @@ describe("Cloudflare Security Audit Skill — Multi-Layer Hardening Suite (Layer
     // Verifikasi Service Worker & vercel.json
     const swCode = fs.readFileSync(path.join(rootDir, "public/sw.js"), "utf8");
     assert.ok(swCode.includes("isAllowedStaticAssetPath"));
-    assert.ok(swCode.includes("nodatanime-pwa-v6.4"));
+    assert.ok(swCode.includes("nodatanime-pwa-v6.5"));
     assert.ok(swCode.includes('/api/support/'));
 
     const vercelCfg = JSON.parse(fs.readFileSync(path.join(rootDir, "vercel.json"), "utf8"));
@@ -398,5 +398,26 @@ describe("Cloudflare Security Audit Skill — Multi-Layer Hardening Suite (Layer
     assert.ok(appJs.includes("Traktir Kopi (QRIS)"));
     assert.ok(appJs.includes("verifyClientEmvcoQris"));
     assert.ok(indexHtml.includes("ID1025451509315"));
+  });
+
+  it("Layer 9 (Pinned Admin Contact & Anti-Tabnabbing): locks Hubungi Admin strictly to https://telegram.me/nodata_store with rel='noopener noreferrer'", async () => {
+    const indexHtml = fs.readFileSync(path.join(rootDir, "views/index.html"), "utf8");
+    const appJs = fs.readFileSync(path.join(rootDir, "public/js/app.js"), "utf8");
+
+    // 1. Seluruh tautan Telegram pada shell HTML wajib mengarah ke https://telegram.me/nodata_store dan memiliki rel="noopener noreferrer"
+    const tgLinks = [...indexHtml.matchAll(/<a\b[^>]*href="([^"]*telegram\.me[^"]*)"[^>]*>/gi)];
+    assert.ok(tgLinks.length >= 2, "Modal Hubungi Admin wajib memiliki tautan Telegram resmi");
+    for (const match of tgLinks) {
+      assert.equal(match[1], "https://telegram.me/nodata_store");
+      assert.match(match[0], /target="_blank"/i);
+      assert.match(match[0], /rel="noopener noreferrer"/i);
+    }
+
+    // 2. Client JS wajib membekukan konfigurasi PINNED_ADMIN_CONTACT dan memvalidasi origin/pathname Telegram
+    assert.match(appJs, /PINNED_ADMIN_CONTACT\s*=\s*Object\.freeze\(/);
+    assert.match(appJs, /telegramBaseUrl:\s*"https:\/\/telegram\.me\/nodata_store"/);
+    assert.match(appJs, /function buildVerifiedAdminTelegramUrl\(/);
+    assert.equal(/on(error|click|load)\s*=/i.test(appJs), false);
+    assert.equal(/on(error|click|load)\s*=/i.test(indexHtml), false);
   });
 });

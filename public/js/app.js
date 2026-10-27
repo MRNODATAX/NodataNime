@@ -25,7 +25,63 @@ const SVG_ICONS = {
   reply: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 17 4 12 9 7"></polyline><path d="M20 18v-2a4 4 0 0 0-4-4H4"></path></svg>`,
   coffee: `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h1a4 4 0 1 1 0 8h-1"></path><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path><line x1="6" y1="2" x2="6" y2="4"></line><line x1="10" y1="2" x2="10" y2="4"></line><line x1="14" y1="2" x2="14" y2="4"></line></svg>`,
   shield: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>`,
+  telegram: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`,
 };
+
+/* ===== Official Admin Telegram Pinning (@nodata_store) ===== */
+const PINNED_ADMIN_CONTACT = Object.freeze({
+  telegramBaseUrl: "https://telegram.me/nodata_store",
+  telegramOrigin: "https://telegram.me",
+  telegramPathname: "/nodata_store",
+  handle: "@nodata_store",
+});
+
+function buildVerifiedAdminTelegramUrl(draftText = "") {
+  const cleanDraft = String(draftText || "")
+    .replace(/[\u0000-\u0009\u000B-\u001F\u007F]/g, " ")
+    .trim()
+    .slice(0, 550);
+  const parsed = new URL(PINNED_ADMIN_CONTACT.telegramBaseUrl);
+  if (cleanDraft) {
+    // Hindari awalan '@' agar tidak memicu inline-bot query di klien Telegram
+    parsed.searchParams.set("text", cleanDraft.startsWith("@") ? ` ${cleanDraft}` : cleanDraft);
+  }
+  if (
+    parsed.origin !== PINNED_ADMIN_CONTACT.telegramOrigin ||
+    parsed.pathname !== PINNED_ADMIN_CONTACT.telegramPathname
+  ) {
+    return PINNED_ADMIN_CONTACT.telegramBaseUrl;
+  }
+  return parsed.href;
+}
+
+function renderContactAdminBanner(mode = "general") {
+  const isStream = mode === "stream";
+  const title = isStream
+    ? "Ada kendala video, server eror, bug, atau ingin request fitur?"
+    : "Menemukan kendala, eror, bug, atau ingin request fitur & anime baru?";
+  const subtitle = isStream
+    ? "Laporkan langsung ke Telegram resmi Admin — konteks episode & server otomatis disertakan"
+    : "Sampaikan laporan kendala atau usulan fitur langsung ke Telegram resmi Admin";
+  return `
+    <div class="nd-help-admin-card">
+      <div class="nd-support-card-left">
+        <span class="nd-help-admin-icon" aria-hidden="true">${SVG_ICONS.telegram}</span>
+        <div class="nd-support-card-copy">
+          <p class="nd-support-card-title">${esc(title)}</p>
+          <p class="nd-support-card-meta">
+            ${SVG_ICONS.shield}
+            <span>${esc(subtitle)} &bull; <strong>@nodata_store</strong></span>
+          </p>
+        </div>
+      </div>
+      <button type="button" class="nd-btn nd-btn-telegram nd-help-admin-btn" data-open-admin-contact="${isStream ? "stream" : "general"}">
+        ${SVG_ICONS.telegram}
+        <span>Hubungi Admin</span>
+      </button>
+    </div>
+  `;
+}
 
 /* ===== Client-Side Anti-QR-Swapping & Anti-Quishing Pinning ===== */
 const PINNED_CLIENT_QRIS_GUARD = Object.freeze({
@@ -73,6 +129,8 @@ const state = {
   cinemaMode: false,
   autoNext: localStorage.getItem(STORAGE_KEYS.AUTONEXT) !== "0",
   currentWatch: null,
+  currentWatchServer: "",
+  currentDetail: null,
   communityTab: "chat",
   communityData: { messages: [], info: [] },
   communityReplyTo: null,
@@ -669,6 +727,16 @@ function renderCommunityPanelContent() {
             </div>
             <div class="nd-info-title">${esc(inf.title)}</div>
             <div class="nd-info-body">${esc(inf.body)}</div>
+            ${
+              inf.id === "info-admin-tg-00" || inf.category === "Hubungi Admin"
+                ? `<div style="margin-top:8px;">
+                    <button type="button" class="nd-comm-admin-btn" data-open-admin-contact="general">
+                      ${SVG_ICONS.telegram}
+                      <span>Buka Menu Hubungi Admin (@nodata_store)</span>
+                    </button>
+                  </div>`
+                : ""
+            }
           </article>
         `
         )
@@ -1030,6 +1098,14 @@ async function routeCurrentUrl() {
   const search = params.get("search") || params.get("q");
   const view = pathShortcutView || params.get("view") || "home";
 
+  if (!(episode || (series && ep))) {
+    state.currentWatch = null;
+    state.currentWatchServer = "";
+  }
+  if (!series || episode || ep) {
+    state.currentDetail = null;
+  }
+
   try {
     if (episode || (series && ep)) {
       setActiveNav("");
@@ -1091,12 +1167,19 @@ async function routeCurrentUrl() {
       openCommunityPanel("chat");
     }
   } catch (err) {
+    const errText = err?.message || "Terjadi gangguan jaringan.";
     appRoot.innerHTML = `
       <div class="nd-container">
         <div class="nd-empty-state">
           <h3>Gagal memuat halaman</h3>
-          <p>${esc(err?.message || "Terjadi gangguan jaringan.")}</p>
-          <button type="button" class="nd-btn nd-btn-primary" id="retryBtn">Muat Ulang Beranda</button>
+          <p>${esc(errText)}</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px;">
+            <button type="button" class="nd-btn nd-btn-primary" id="retryBtn">Muat Ulang Beranda</button>
+            <button type="button" class="nd-btn nd-btn-telegram" data-open-admin-contact="bug" data-admin-context="${esc(`Gagal muat halaman: ${errText}`)}">
+              ${SVG_ICONS.telegram}
+              <span>Laporkan Eror ke Admin</span>
+            </button>
+          </div>
         </div>
       </div>
     `;
@@ -1310,6 +1393,7 @@ async function renderHomeView() {
       </div>
 
       ${renderSupportAdminBanner()}
+      ${renderContactAdminBanner("general")}
     </div>
   `;
 
@@ -1551,7 +1635,16 @@ async function renderSearchView(query) {
       ${
         items.length
           ? `<div class="nd-card-grid">${items.map((x) => renderAnimeCard(x)).join("")}</div>`
-          : `<div class="nd-empty-state"><h3>Tidak ada hasil untuk "${esc(cleanQuery)}"</h3><p>Coba kata kunci lain atau pilih salah satu tag populer di atas seperti One Piece, Isekai, Bleach, Solo Leveling, Frieren, atau Naruto.</p></div>`
+          : `<div class="nd-empty-state">
+              <h3>Tidak ada hasil untuk "${esc(cleanQuery)}"</h3>
+              <p>Coba kata kunci lain atau pilih salah satu tag populer di atas seperti One Piece, Isekai, Bleach, Solo Leveling, Frieren, atau Naruto.</p>
+              <div style="margin-top:16px;display:flex;justify-content:center;">
+                <button type="button" class="nd-btn nd-btn-telegram" data-open-admin-contact="anime" data-admin-context="${esc(`Pencarian belum tersedia: "${cleanQuery}"`)}">
+                  ${SVG_ICONS.telegram}
+                  <span>Request Anime "${esc(cleanQuery)}" ke Admin</span>
+                </button>
+              </div>
+            </div>`
       }
     </div>
   `;
@@ -1630,6 +1723,12 @@ async function renderDetailView(slug) {
   const { data } = await apiGet(`/api/anime/detail/${encodeURIComponent(slug)}`);
   const bookmarked = isBookmarked(data.slug);
   const episodes = data.episodes || [];
+  state.currentDetail = {
+    title: data.title,
+    slug: data.slug,
+    status: data.status || "Ongoing",
+    episodeCount: episodes.length,
+  };
   const firstEp = episodes[episodes.length - 1] || episodes[0];
   const latestEp = episodes[0];
   const maxEpNum = episodes.length
@@ -1699,6 +1798,10 @@ async function renderDetailView(slug) {
               }
               <button type="button" class="nd-btn nd-btn-secondary" id="detailBookmarkBtn">
                 ${bookmarked ? "Tersimpan di Koleksi" : "+ Simpan ke Koleksi"}
+              </button>
+              <button type="button" class="nd-btn nd-btn-telegram-outline" data-open-admin-contact="anime">
+                ${SVG_ICONS.telegram}
+                <span>Lapor / Req ke Admin</span>
               </button>
             </div>
           </div>
@@ -1881,6 +1984,9 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
               <button type="button" class="nd-pill-btn" id="toggleCinemaBtn">
                 ${SVG_ICONS.cinema}Mode Bioskop
               </button>
+              <button type="button" class="nd-pill-btn nd-report-pill-btn" id="watchReportIssueBtn" data-open-admin-contact="stream">
+                ${SVG_ICONS.flag}Lapor Kendala / Eror
+              </button>
             </div>
           </div>
 
@@ -1940,6 +2046,7 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
           }
 
           ${renderSupportAdminBanner()}
+          ${renderContactAdminBanner("stream")}
         </div>
 
         <aside class="nd-ep-box" style="margin-bottom:0;">
@@ -1975,6 +2082,9 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
   function mountStream(index, useProxy = false, autoFallbackTried = false) {
     currentStreamIndex = index;
     const stream = activePool[index];
+    state.currentWatchServer = stream
+      ? `${stream.label}${useProxy ? " (Proxy Range)" : ""}`
+      : "Mirror belum tersinkron";
     const mount = document.getElementById("videoMount");
     if (!mount) return;
 
@@ -1999,6 +2109,9 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
                   </a>`
                 : ""
             }
+            <button type="button" class="nd-btn nd-btn-telegram" style="padding:9px 16px;font-size:0.82rem;" data-open-admin-contact="stream">
+              ${SVG_ICONS.telegram} Laporkan ke Admin
+            </button>
           </div>
         </div>
       `;
@@ -2074,6 +2187,10 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
         showToast(`Mengalihkan otomatis ke ${activePool[index + 1].label}...`);
         highlightServerBtn(index + 1, false);
         mountStream(index + 1, false, true);
+      } else {
+        showToast(
+          "Server video sedang gangguan. Coba tombol Proxy Range atau klik 'Lapor Kendala / Eror' ke Admin."
+        );
       }
     });
   }
@@ -2969,10 +3086,192 @@ function initQrisSupportModal() {
       notifPanel.hidden = false;
       notifBtn?.setAttribute("aria-expanded", "true");
     }
-    const msgInput = document.getElementById("chatMessageInput");
+    const msgInput = document.getElementById("commMessageInput");
     if (msgInput && !msgInput.value.trim()) {
       msgInput.value = "Semangat terus Admin NodataNime! Sudah kirim kopi lewat QRIS.";
       msgInput.focus();
+    }
+  });
+}
+
+/* ===== Hubungi Admin — Lapor Kendala, Bug & Request Fitur (@nodata_store) ===== */
+const ADMIN_TOPIC_CONFIG = Object.freeze({
+  stream: {
+    tag: "[LAPOR VIDEO / EPISODE EROR]",
+    placeholder: "Contoh: Video tidak muncul, buffering terus di server 720p, atau salah episode...",
+    defaultDetail: "Mohon bantu cek kendala pemutaran video/server pada episode ini ya Min.",
+  },
+  bug: {
+    tag: "[LAPOR BUG / KENDALA WEB]",
+    placeholder: "Contoh: Ada kendala tampilan/fitur saat dibuka di perangkat saya...",
+    defaultDetail: "Mohon bantu cek kendala/bug pada halaman ini ya Min.",
+  },
+  feature: {
+    tag: "[REQUEST FITUR BARU]",
+    placeholder: "Contoh: Tolong tambahkan fitur pilih kualitas default, jadwal favorit, dll...",
+    defaultDetail: "Saya ingin mengusulkan penambahan fitur baru di NodataNime.",
+  },
+  anime: {
+    tag: "[REQUEST ANIME / UPDATE EPISODE]",
+    placeholder: "Contoh: Tolong tambahkan judul anime ini atau update episode terbarunya...",
+    defaultDetail: "Mohon bantu tambahkan/update anime ini di katalog NodataNime ya Min.",
+  },
+});
+
+let activeAdminTopic = "stream";
+let activeAdminContextText = "Beranda NodataNime";
+
+function detectCurrentAdminContext(explicitContext = "") {
+  const custom = String(explicitContext || "").trim();
+  if (custom) return custom.slice(0, 180);
+
+  if (state.currentWatch) {
+    const w = state.currentWatch;
+    const srv = state.currentWatchServer ? ` | Server: ${state.currentWatchServer}` : "";
+    return `Halaman Tonton: ${w.title || w.animeTitle || w.seriesSlug}${srv}`.slice(0, 180);
+  }
+
+  if (state.currentDetail) {
+    const d = state.currentDetail;
+    return `Detail Anime: ${d.title} (${d.status}, ${d.episodeCount} ep)`.slice(0, 180);
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const searchQ = params.get("search") || params.get("q");
+  if (searchQ) {
+    return `Pencarian Anime: "${searchQ}"`.slice(0, 180);
+  }
+  const view = params.get("view");
+  if (view) {
+    return `Halaman Menu: ${view}${params.get("type") ? ` (${params.get("type")})` : ""}`.slice(0, 180);
+  }
+  return "Beranda NodataNime";
+}
+
+function composeAdminContactMessage() {
+  const cfg = ADMIN_TOPIC_CONFIG[activeAdminTopic] || ADMIN_TOPIC_CONFIG.bug;
+  const noteEl = document.getElementById("adminContactNoteInput");
+  const userNote = String(noteEl?.value || "").trim();
+  return [
+    "Halo Admin NodataNime,",
+    `${cfg.tag}`,
+    `Konteks: ${activeAdminContextText}`,
+    `Pesan: ${userNote || cfg.defaultDetail}`,
+  ].join("\n");
+}
+
+function syncAdminContactModalUi() {
+  const cfg = ADMIN_TOPIC_CONFIG[activeAdminTopic] || ADMIN_TOPIC_CONFIG.bug;
+  document.querySelectorAll("#adminContactTopicGroup .nd-admin-topic-btn").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.adminTopic === activeAdminTopic);
+  });
+
+  const ctxEl = document.getElementById("adminContactContextText");
+  if (ctxEl) ctxEl.textContent = activeAdminContextText;
+
+  const noteEl = document.getElementById("adminContactNoteInput");
+  if (noteEl) noteEl.placeholder = cfg.placeholder;
+
+  const sendLink = document.getElementById("adminContactSendLink");
+  if (sendLink) {
+    sendLink.href = buildVerifiedAdminTelegramUrl(composeAdminContactMessage());
+  }
+
+  const directLink = document.getElementById("adminContactDirectLink");
+  if (directLink) {
+    directLink.href = PINNED_ADMIN_CONTACT.telegramBaseUrl;
+  }
+}
+
+function openAdminContactModal(preferredMode = "general", explicitContext = "") {
+  const backdrop = document.getElementById("adminContactBackdrop");
+  if (!backdrop) return;
+
+  closeMoreSheet();
+  closeCommunityPanel();
+  closeSearchDropdown({ collapseMobile: true });
+
+  activeAdminContextText = detectCurrentAdminContext(explicitContext);
+
+  if (preferredMode === "stream" || (preferredMode === "general" && state.currentWatch)) {
+    activeAdminTopic = "stream";
+  } else if (preferredMode === "anime") {
+    activeAdminTopic = "anime";
+  } else if (preferredMode === "feature") {
+    activeAdminTopic = "feature";
+  } else {
+    activeAdminTopic = "bug";
+  }
+
+  backdrop.hidden = false;
+  syncAdminContactModalUi();
+}
+
+function closeAdminContactModal() {
+  const backdrop = document.getElementById("adminContactBackdrop");
+  if (backdrop) backdrop.hidden = true;
+}
+
+function initAdminContactModal() {
+  const backdrop = document.getElementById("adminContactBackdrop");
+  const closeBtn = document.getElementById("adminContactCloseBtn");
+  const topicGroup = document.getElementById("adminContactTopicGroup");
+  const noteInput = document.getElementById("adminContactNoteInput");
+  const sendLink = document.getElementById("adminContactSendLink");
+  const directLink = document.getElementById("adminContactDirectLink");
+  const copyBtn = document.getElementById("adminContactCopyBtn");
+
+  document.addEventListener("click", (e) => {
+    const trigger = e.target.closest("[data-open-admin-contact]");
+    if (!trigger) return;
+    e.preventDefault();
+    const mode = trigger.dataset.openAdminContact || "general";
+    const explicitCtx = trigger.dataset.adminContext || "";
+    openAdminContactModal(mode, explicitCtx);
+  });
+
+  closeBtn?.addEventListener("click", closeAdminContactModal);
+  backdrop?.addEventListener("click", (e) => {
+    if (e.target === backdrop) closeAdminContactModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && backdrop && !backdrop.hidden) {
+      closeAdminContactModal();
+    }
+  });
+
+  topicGroup?.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-admin-topic]");
+    if (!btn) return;
+    const nextTopic = btn.dataset.adminTopic;
+    if (nextTopic && ADMIN_TOPIC_CONFIG[nextTopic]) {
+      activeAdminTopic = nextTopic;
+      syncAdminContactModalUi();
+    }
+  });
+
+  noteInput?.addEventListener("input", () => {
+    syncAdminContactModalUi();
+  });
+
+  sendLink?.addEventListener("click", () => {
+    syncAdminContactModalUi();
+    showToast("Membuka Telegram resmi Admin (@nodata_store)...");
+  });
+
+  directLink?.addEventListener("click", () => {
+    directLink.href = PINNED_ADMIN_CONTACT.telegramBaseUrl;
+    showToast("Membuka chat langsung Telegram @nodata_store...");
+  });
+
+  copyBtn?.addEventListener("click", async () => {
+    const text = composeAdminContactMessage();
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast("Format pesan disalin! Silakan tempel di Telegram @nodata_store.");
+    } catch {
+      showToast("Silakan klik tombol Kirim ke Telegram Admin (@nodata_store).");
     }
   });
 }
@@ -2982,20 +3281,10 @@ window.addEventListener("popstate", () => {
 });
 
 /* ===== Boot ===== */
-document.addEventListener(
-  "error",
-  (e) => {
-    const el = e.target;
-    if (el && el.tagName === "IMG" && el.dataset?.fallbackApplied !== "1") {
-      el.dataset.fallbackApplied = "1";
-      el.src = "/assets/no-cover.svg";
-    }
-  },
-  true
-);
 initStarfield();
 initCommunityControls();
 initQrisSupportModal();
+initAdminContactModal();
 initPwa();
 updateWatchlistBadge();
 loadCommunityData(true);

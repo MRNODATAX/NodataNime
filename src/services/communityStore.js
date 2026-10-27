@@ -35,6 +35,15 @@ function createSeedState() {
     version: 1,
     communityInfo: [
       {
+        id: "info-admin-tg-00",
+        category: "Hubungi Admin",
+        title: "Lapor Kendala, Bug & Request Fitur: Telegram @nodata_store",
+        body: "Menemukan kendala video/server, tampilan eror, bug, atau ingin request fitur & anime baru? Gunakan menu Hubungi Admin atau chat langsung Telegram resmi https://telegram.me/nodata_store.",
+        linkSlug: "",
+        pinned: true,
+        createdAt: "2026-10-27T09:00:00.000Z",
+      },
+      {
         id: "info-qris-00",
         category: "Penyemangat Admin",
         title: "QRIS Resmi NodataNime: NODATASHOP (ID1025451509315)",
@@ -103,12 +112,18 @@ export class CommunityStore {
     try {
       if (fs.existsSync(COMMUNITY_STORE_PATH)) {
         const parsed = JSON.parse(fs.readFileSync(COMMUNITY_STORE_PATH, "utf8"));
+        const existingInfo = Array.isArray(parsed.communityInfo) ? parsed.communityInfo : [];
+        const existingInfoIds = new Set(existingInfo.map((item) => item?.id).filter(Boolean));
+        const mergedInfo =
+          existingInfo.length > 0
+            ? [
+                ...seed.communityInfo.filter((item) => !existingInfoIds.has(item.id)),
+                ...existingInfo,
+              ]
+            : seed.communityInfo;
         return {
           ...seed,
-          communityInfo:
-            Array.isArray(parsed.communityInfo) && parsed.communityInfo.length > 0
-              ? parsed.communityInfo
-              : seed.communityInfo,
+          communityInfo: mergedInfo,
           communityChat:
             Array.isArray(parsed.communityChat) && parsed.communityChat.length > 0
               ? parsed.communityChat
