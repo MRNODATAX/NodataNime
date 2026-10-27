@@ -17,6 +17,12 @@ import {
 } from "../src/parsers/ylnimeParser.js";
 import { CommunityStore } from "../src/services/communityStore.js";
 import { TtlCache } from "../src/utils/cache.js";
+import {
+  PINNED_QRIS_CONFIG,
+  computeCrc16CcittFalse,
+  verifyPinnedQrisPayload,
+  sha256Hex,
+} from "../src/utils/qrisSecurity.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
@@ -283,11 +289,114 @@ describe("Cloudflare Security Audit Skill — Multi-Layer Hardening Suite (Layer
     // Verifikasi Service Worker & vercel.json
     const swCode = fs.readFileSync(path.join(rootDir, "public/sw.js"), "utf8");
     assert.ok(swCode.includes("isAllowedStaticAssetPath"));
-    assert.ok(swCode.includes("nodatanime-pwa-v6.2"));
+    assert.ok(swCode.includes("nodatanime-pwa-v6.3"));
+    assert.ok(swCode.includes('/api/support/'));
 
     const vercelCfg = JSON.parse(fs.readFileSync(path.join(rootDir, "vercel.json"), "utf8"));
     assert.equal(vercelCfg.framework, "express");
     assert.equal(vercelCfg.outputDirectory, null);
     assert.equal(vercelCfg.rewrites, undefined);
+  });
+
+  it("Layer 8 (Anti-Quishing & Anti-QR-Swapping): locks QRIS to NODATASHOP (ID1025451509315) via SHA-256 + EMVCo CRC-16 and blocks rogue QR injection", async () => {
+    // 1. Blokir serangan Quishing (QR berisi URL phishing / javascript)
+    for (const quishPayload of [
+      "https://fake-banking-login.example/qris",
+      "http://evil.example/steal-pin",
+      "javascript:alert(document.domain)",
+      "000201https://evil.example6304ABCD",
+    ]) {
+      assert.throws(
+        () => verifyPinnedQrisPayload(quishPayload),
+        (err) =>
+          err.code === "QUISHING_OR_INVALID_FORMAT" ||
+          err.code === "QRIS_INTEGRITY_VIOLATION"
+      );
+    }
+
+    // 2. Blokir serangan QR-Swapping: penyerang membuat QRIS EMVCo valid ber-CRC16 sah tetapi mengganti nama merchant / NMID ke rekening miliknya sendiri
+    const swappedMerchantBody = PINNED_QRIS_CONFIG.staticPayload
+      .slice(0, -4)
+      .replace("5910NODATASHOP", "5910HACKERSHOP");
+    const swappedMerchantQris = `${swappedMerchantBody}${computeCrc16CcittFalse(swappedMerchantBody)}`;
+    assert.throws(
+      () => verifyPinnedQrisPayload(swappedMerchantQris),
+      (err) => err.code === "QRIS_MERCHANT_TAMPERED" && err.statusCode === 403
+    );
+
+    const swappedNmidBody = PINNED_QRIS_CONFIG.staticPayload
+      .slice(0, -4)
+      .replace("ID1025451509315", "ID1025999999999");
+    const swappedNmidQris = `${swappedNmidBody}${computeCrc16CcittFalse(swappedNmidBody)}`;
+    assert.throws(
+      () => verifyPinnedQrisPayload(swappedNmidQris),
+      (err) => err.code === "QRIS_MERCHANT_TAMPERED" && err.statusCode === 403
+    );
+
+    // 3. Blokir manipulasi nominal tanpa checksum CRC-16 valid
+    const badCrcQris = `${PINNED_QRIS_CONFIG.staticPayload.slice(0, -4)}FFFF`;
+    assert.throws(
+      () => verifyPinnedQrisPayload(badCrcQris),
+      (err) => err.code === "QRIS_CRC_MISMATCH"
+    );
+
+    // 4. Blokir segala percobaan injeksi parameter QR/merchant/URL pada endpoint GET /api/support/qris
+    const injectionProbes = [
+      "/api/support/qris?qris=000201010211...",
+      "/api/support/qris?payload=https://evil.example",
+      "/api/support/qris?url=https://evil.example/qr.png",
+      "/api/support/qris?merchant=HACKERSHOP",
+      "/api/support/qris?nmid=ID1025999999999",
+      "/api/support/qris?svg=<svg><script>alert(1)</script></svg>",
+      "/api/support/qris?unknownParam=1",
+      "/api/support/qris?amount=-10000",
+      "/api/support/qris?amount=500",
+      "/api/support/qris?amount=50000000",
+      "/api/support/qris?amount=10000.5",
+      "/api/support/qris?amount[]=5000&amount[]=10000",
+    ];
+    for (const probe of injectionProbes) {
+      const res = await fetch(`${baseUrl}${probe}`);
+      assert.equal(res.status, 400, `Probe injeksi ${probe} wajib ditolak dengan HTTP 400`);
+    }
+
+    // 5. Verifikasi QRIS Dinamis resmi (Rp10.000) terisolasi same-origin, no-store, dan terkunci ke NODATASHOP
+    const qrisRes = await fetch(`${baseUrl}/api/support/qris?amount=10000`, {
+      headers: { Origin: "https://foreign-attacker.example" },
+    });
+    assert.equal(qrisRes.status, 200);
+    assert.equal(qrisRes.headers.get("access-control-allow-origin"), null, "Endpoint /api/support/qris tidak boleh membocorkan CORS lintas-origin");
+    assert.equal(qrisRes.headers.get("cross-origin-resource-policy"), "same-origin");
+    assert.ok((qrisRes.headers.get("cache-control") || "").includes("no-store"));
+    assert.equal(qrisRes.headers.get("x-qris-merchant"), "NODATASHOP");
+    assert.equal(qrisRes.headers.get("x-qris-nmid"), "ID1025451509315");
+
+    const qrisJson = await qrisRes.json();
+    assert.equal(qrisJson.ok, true);
+    assert.equal(qrisJson.data.merchantName, "NODATASHOP");
+    assert.equal(qrisJson.data.nmid, "ID1025451509315");
+    assert.equal(qrisJson.data.amount, 10000);
+    assert.ok(qrisJson.data.payload.includes("540510000"));
+    assert.ok(qrisJson.data.svg.startsWith("<svg"));
+    assert.equal(/<script|on[a-z]+\s*=/i.test(qrisJson.data.svg), false);
+
+    // 6. Verifikasi poster QRIS asli memiliki hash SHA-256 utuh dan header CORP same-origin
+    const posterRes = await fetch(`${baseUrl}/assets/qris-nodatashop.jpg`);
+    assert.equal(posterRes.status, 200);
+    assert.equal(posterRes.headers.get("cross-origin-resource-policy"), "same-origin");
+    assert.equal(
+      posterRes.headers.get("x-qris-poster-sha256"),
+      PINNED_QRIS_CONFIG.posterFileSha256
+    );
+    const posterBuf = Buffer.from(await posterRes.arrayBuffer());
+    assert.equal(sha256Hex(posterBuf), PINNED_QRIS_CONFIG.posterFileSha256);
+
+    // 7. Verifikasi UI copy & penangkalan inline script tetap bersih
+    const indexHtml = fs.readFileSync(path.join(rootDir, "views/index.html"), "utf8");
+    const appJs = fs.readFileSync(path.join(rootDir, "public/js/app.js"), "utf8");
+    assert.ok(appJs.includes("Nonton lancar tanpa iklan pop-up? Kasih penyemangat buat Admin yuk!"));
+    assert.ok(appJs.includes("Traktir Kopi (QRIS)"));
+    assert.ok(appJs.includes("verifyClientEmvcoQris"));
+    assert.ok(indexHtml.includes("ID1025451509315"));
   });
 });

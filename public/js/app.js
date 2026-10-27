@@ -23,7 +23,43 @@ const SVG_ICONS = {
   download: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`,
   external: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`,
   reply: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 17 4 12 9 7"></polyline><path d="M20 18v-2a4 4 0 0 0-4-4H4"></path></svg>`,
+  coffee: `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h1a4 4 0 1 1 0 8h-1"></path><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path><line x1="6" y1="2" x2="6" y2="4"></line><line x1="10" y1="2" x2="10" y2="4"></line><line x1="14" y1="2" x2="14" y2="4"></line></svg>`,
+  shield: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>`,
 };
+
+/* ===== Client-Side Anti-QR-Swapping & Anti-Quishing Pinning ===== */
+const PINNED_CLIENT_QRIS_GUARD = Object.freeze({
+  merchantName: "NODATASHOP",
+  nmid: "ID1025451509315",
+  acquirerDomain: "ID.DANA.WWW",
+  merchantPan: "936009153004927138",
+  currency: "360",
+  country: "ID",
+  posterUrl: "/assets/qris-nodatashop.jpg",
+  posterSha256: "8d15a9a4e70d095a4c189b1b210549c1e706430c0811a6407caa2eaa6ef503d0",
+  staticPayloadSha256: "f6d4fff24c1bb7213791c970034700687428360d4e7e421f248ea9105e6631d2",
+});
+
+function renderSupportAdminBanner() {
+  return `
+    <div class="nd-support-card">
+      <div class="nd-support-card-left">
+        <span class="nd-support-card-icon" aria-hidden="true">${SVG_ICONS.coffee}</span>
+        <div class="nd-support-card-copy">
+          <p class="nd-support-card-title">Nonton lancar tanpa iklan pop-up? Kasih penyemangat buat Admin yuk!</p>
+          <p class="nd-support-card-meta">
+            ${SVG_ICONS.shield}
+            <span>QRIS Resmi Terkunci &bull; <strong>NODATASHOP</strong> (<code>ID1025451509315</code>)</span>
+          </p>
+        </div>
+      </div>
+      <button type="button" class="nd-btn nd-btn-primary nd-support-qris-btn" data-open-qris="1">
+        ${SVG_ICONS.coffee}
+        <span>Traktir Kopi (QRIS)</span>
+      </button>
+    </div>
+  `;
+}
 
 const bootStartedAt = performance.now();
 let splashDismissed = false;
@@ -1192,6 +1228,8 @@ async function renderHomeView() {
           </div>
         </aside>
       </div>
+
+      ${renderSupportAdminBanner()}
     </div>
   `;
 
@@ -1769,6 +1807,8 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
           `
               : ""
           }
+
+          ${renderSupportAdminBanner()}
         </div>
 
         <aside class="nd-ep-box" style="margin-bottom:0;">
@@ -2292,6 +2332,377 @@ function flashSeek(label, side) {
   }, 600);
 }
 
+/* ===== Anti-Quishing & Anti-QR-Swapping Modal Controller ===== */
+let verifiedPosterBlobUrl = null;
+let currentQrisRenderState = {
+  mode: "poster",
+  amount: 0,
+  svgMarkup: "",
+  merchantName: PINNED_CLIENT_QRIS_GUARD.merchantName,
+  nmid: PINNED_CLIENT_QRIS_GUARD.nmid,
+};
+
+function computeClientCrc16(str = "") {
+  let crc = 0xffff;
+  for (let i = 0; i < str.length; i += 1) {
+    crc ^= (str.charCodeAt(i) & 0xff) << 8;
+    for (let bit = 0; bit < 8; bit += 1) {
+      if (crc & 0x8000) {
+        crc = ((crc << 1) ^ 0x1021) & 0xffff;
+      } else {
+        crc = (crc << 1) & 0xffff;
+      }
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, "0");
+}
+
+function parseClientTlv(raw = "") {
+  const tags = new Map();
+  let i = 0;
+  while (i < raw.length) {
+    if (i + 4 > raw.length) throw new Error("TLV QRIS terpotong.");
+    const tag = raw.slice(i, i + 2);
+    const len = Number.parseInt(raw.slice(i + 2, i + 4), 10);
+    if (!/^\d{2}$/.test(tag) || !Number.isInteger(len) || len <= 0 || i + 4 + len > raw.length) {
+      throw new Error("Struktur TLV QRIS rusak.");
+    }
+    tags.set(tag, raw.slice(i + 4, i + 4 + len));
+    i += 4 + len;
+  }
+  return tags;
+}
+
+function verifyClientEmvcoQris(payload = "", expectedAmount = 0) {
+  const str = String(payload || "");
+  if (
+    !str.startsWith("000201") ||
+    str.slice(-8, -4) !== "6304" ||
+    /(?:https?|javascript|data|vbscript|file):/i.test(str) ||
+    str.includes("://")
+  ) {
+    throw new Error("Kode QR ditolak: terdeteksi format non-EMVCo / URL mencurigakan.");
+  }
+  const crcActual = str.slice(-4).toUpperCase();
+  const crcExpected = computeClientCrc16(str.slice(0, -4));
+  if (crcActual !== crcExpected) {
+    throw new Error("Checksum CRC-16 QRIS tidak valid (indikasi manipulasi QR).");
+  }
+  const tags = parseClientTlv(str);
+  const tag26 = tags.has("26") ? parseClientTlv(tags.get("26")) : new Map();
+  const tag51 = tags.has("51") ? parseClientTlv(tags.get("51")) : new Map();
+
+  if (
+    tags.get("59") !== PINNED_CLIENT_QRIS_GUARD.merchantName ||
+    tag51.get("02") !== PINNED_CLIENT_QRIS_GUARD.nmid ||
+    tag26.get("00") !== PINNED_CLIENT_QRIS_GUARD.acquirerDomain ||
+    tag26.get("01") !== PINNED_CLIENT_QRIS_GUARD.merchantPan ||
+    tags.get("53") !== PINNED_CLIENT_QRIS_GUARD.currency ||
+    tags.get("58") !== PINNED_CLIENT_QRIS_GUARD.country
+  ) {
+    throw new Error("Identitas merchant QRIS tidak sesuai dengan NODATASHOP resmi!");
+  }
+
+  if (expectedAmount > 0 && tags.get("54") !== String(expectedAmount)) {
+    throw new Error("Nominal pada kode QRIS dinamis tidak cocok.");
+  }
+  return true;
+}
+
+async function verifyPosterBlobUrl() {
+  if (verifiedPosterBlobUrl) return verifiedPosterBlobUrl;
+  const resp = await fetch(PINNED_CLIENT_QRIS_GUARD.posterUrl, {
+    method: "GET",
+    credentials: "same-origin",
+    cache: "no-cache",
+  });
+  if (!resp.ok) {
+    throw new Error("Gagal memuat poster QRIS resmi dari server.");
+  }
+  const buf = await resp.arrayBuffer();
+  if (window.crypto?.subtle) {
+    const hashBuf = await window.crypto.subtle.digest("SHA-256", buf);
+    const hex = Array.from(new Uint8Array(hashBuf))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+    if (hex !== PINNED_CLIENT_QRIS_GUARD.posterSha256) {
+      throw new Error("Peringatan Keamanan: Hash SHA-256 gambar QRIS tidak cocok! Gambar diblokir.");
+    }
+  }
+  const blob = new Blob([buf], { type: "image/jpeg" });
+  verifiedPosterBlobUrl = URL.createObjectURL(blob);
+  return verifiedPosterBlobUrl;
+}
+
+function buildSafeSvgElement(svgMarkup = "") {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(String(svgMarkup || ""), "image/svg+xml");
+  const root = doc.documentElement;
+  if (!root || root.tagName.toLowerCase() !== "svg" || doc.querySelector("parsererror")) {
+    throw new Error("Dokumen SVG QRIS tidak valid.");
+  }
+  const safeSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  const viewBox = root.getAttribute("viewBox") || "0 0 33 33";
+  if (!/^[\d.\s-]+$/.test(viewBox)) {
+    throw new Error("Atribut viewBox SVG QRIS tidak aman.");
+  }
+  safeSvg.setAttribute("viewBox", viewBox);
+  safeSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  safeSvg.setAttribute("role", "img");
+  safeSvg.setAttribute("aria-label", "QRIS Resmi NODATASHOP Terverifikasi");
+
+  for (const child of Array.from(root.children)) {
+    const tag = child.tagName.toLowerCase();
+    if (tag !== "path" && tag !== "rect") {
+      throw new Error(`Elemen SVG asing '${tag}' diblokir oleh proteksi Anti-QR-Injection.`);
+    }
+    const cleanEl = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (const attr of ["d", "x", "y", "width", "height", "fill", "stroke", "shape-rendering"]) {
+      const val = child.getAttribute(attr);
+      if (val !== null) {
+        if (/url\(|javascript:|expression\(/i.test(val)) {
+          throw new Error("Nilai atribut SVG berbahaya diblokir.");
+        }
+        cleanEl.setAttribute(attr, val);
+      }
+    }
+    safeSvg.appendChild(cleanEl);
+  }
+  return safeSvg;
+}
+
+function formatRupiah(amount = 0) {
+  return `Rp${Number(amount || 0).toLocaleString("id-ID")}`;
+}
+
+async function loadAndRenderQrisAmount(amount = 0) {
+  const visualBox = document.getElementById("qrisVisualBox");
+  const amountLabel = document.getElementById("qrisActiveAmountLabel");
+  const badge = document.getElementById("qrisIntegrityBadge");
+  const downloadBtn = document.getElementById("qrisDownloadBtn");
+  if (!visualBox || !amountLabel || !badge) return;
+
+  visualBox.innerHTML = `<div class="nd-qris-loading">Memverifikasi keaslian QRIS NODATASHOP...</div>`;
+  badge.classList.remove("is-error");
+  if (downloadBtn) downloadBtn.disabled = true;
+
+  try {
+    const cleanAmt = Number.parseInt(amount, 10) || 0;
+    if (cleanAmt === 0) {
+      const safeBlobUrl = await verifyPosterBlobUrl();
+      const img = document.createElement("img");
+      img.src = safeBlobUrl;
+      img.alt = "Poster QRIS Resmi NODATASHOP (ID1025451509315)";
+      visualBox.innerHTML = "";
+      visualBox.appendChild(img);
+
+      amountLabel.textContent = "Nominal Bebas (Masukkan di Aplikasi Pembayaran)";
+      badge.innerHTML = `${SVG_ICONS.shield}<span>SHA-256 Poster Asli Terverifikasi</span>`;
+      currentQrisRenderState = {
+        mode: "poster",
+        amount: 0,
+        svgMarkup: "",
+        merchantName: PINNED_CLIENT_QRIS_GUARD.merchantName,
+        nmid: PINNED_CLIENT_QRIS_GUARD.nmid,
+      };
+      if (downloadBtn) downloadBtn.disabled = false;
+      return;
+    }
+
+    const res = await apiGet(`/api/support/qris?amount=${encodeURIComponent(cleanAmt)}`);
+    const data = res.data || {};
+    verifyClientEmvcoQris(data.payload, cleanAmt);
+    const safeSvgEl = buildSafeSvgElement(data.svg);
+
+    visualBox.innerHTML = "";
+    visualBox.appendChild(safeSvgEl);
+    amountLabel.textContent = `Nominal Otomatis: ${formatRupiah(cleanAmt)}`;
+    badge.innerHTML = `${SVG_ICONS.shield}<span>EMVCo CRC-16 (${esc(data.crc16)}) Terverifikasi</span>`;
+
+    currentQrisRenderState = {
+      mode: "dynamic",
+      amount: cleanAmt,
+      svgMarkup: new XMLSerializer().serializeToString(safeSvgEl),
+      merchantName: PINNED_CLIENT_QRIS_GUARD.merchantName,
+      nmid: PINNED_CLIENT_QRIS_GUARD.nmid,
+    };
+    if (downloadBtn) downloadBtn.disabled = false;
+  } catch (err) {
+    badge.classList.add("is-error");
+    badge.textContent = "Proteksi Keamanan Memblokir QR";
+    visualBox.innerHTML = `<div class="nd-qris-tamper-alert">${esc(
+      err?.message || "Verifikasi keamanan QRIS gagal."
+    )}</div>`;
+  }
+}
+
+async function downloadVerifiedQrisImage() {
+  try {
+    if (currentQrisRenderState.mode === "poster") {
+      const blobUrl = await verifyPosterBlobUrl();
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = "QRIS-NODATASHOP-ID1025451509315.jpg";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      showToast("Gambar QRIS resmi NODATASHOP berhasil disimpan!");
+      return;
+    }
+
+    const { amount, svgMarkup } = currentQrisRenderState;
+    if (!svgMarkup) return;
+    const svgBlob = new Blob([svgMarkup], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(svgBlob);
+
+    await new Promise((resolve, reject) => {
+      const img = new Image();
+      img.addEventListener("load", () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = 720;
+        canvas.height = 900;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "#e50914";
+        ctx.fillRect(0, 0, canvas.width, 16);
+
+        ctx.fillStyle = "#0b0f19";
+        ctx.font = "800 36px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("NODATASHOP", 360, 88);
+
+        ctx.fillStyle = "#475569";
+        ctx.font = "600 22px monospace";
+        ctx.fillText("NMID : ID1025451509315 (A01)", 360, 128);
+
+        ctx.fillStyle = "#e50914";
+        ctx.font = "700 26px sans-serif";
+        ctx.fillText(`Nominal Otomatis: ${formatRupiah(amount)}`, 360, 174);
+
+        ctx.drawImage(img, 110, 200, 500, 500);
+
+        ctx.fillStyle = "#0f172a";
+        ctx.font = "700 20px sans-serif";
+        ctx.fillText("SATU QRIS UNTUK SEMUA — Penyemangat Admin NodataNime", 360, 750);
+
+        ctx.fillStyle = "#64748b";
+        ctx.font = "500 17px sans-serif";
+        ctx.fillText("Pastikan nama penerima muncul NODATASHOP sebelum bayar.", 360, 790);
+
+        URL.revokeObjectURL(url);
+        const pngUrl = canvas.toDataURL("image/png");
+        const a = document.createElement("a");
+        a.href = pngUrl;
+        a.download = `QRIS-NODATASHOP-Rp${amount}.png`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        resolve();
+      });
+      img.addEventListener("error", () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("Gagal merender gambar QRIS untuk diunduh."));
+      });
+      img.src = url;
+    });
+
+    showToast(`QRIS ${formatRupiah(amount)} berhasil disimpan ke perangkat!`);
+  } catch (err) {
+    showToast(err?.message || "Gagal menyimpan gambar QRIS.");
+  }
+}
+
+function openQrisSupportModal(initialAmount = 0) {
+  const backdrop = document.getElementById("qrisModalBackdrop");
+  if (!backdrop) return;
+  if (bottomMoreSheet && !bottomMoreSheet.hidden) {
+    bottomMoreSheet.hidden = true;
+    bottomMoreBtn?.setAttribute("aria-expanded", "false");
+  }
+  backdrop.hidden = false;
+  document.querySelectorAll(".nd-qris-preset").forEach((btn) => {
+    btn.classList.toggle("active", Number(btn.dataset.qrisAmount) === Number(initialAmount));
+  });
+  loadAndRenderQrisAmount(initialAmount);
+}
+
+function closeQrisSupportModal() {
+  const backdrop = document.getElementById("qrisModalBackdrop");
+  if (backdrop) backdrop.hidden = true;
+}
+
+function initQrisSupportModal() {
+  const backdrop = document.getElementById("qrisModalBackdrop");
+  const closeBtn = document.getElementById("qrisModalCloseBtn");
+  const presetGroup = document.getElementById("qrisPresetGroup");
+  const customForm = document.getElementById("qrisCustomForm");
+  const customInput = document.getElementById("qrisCustomInput");
+  const downloadBtn = document.getElementById("qrisDownloadBtn");
+  const sayThanksBtn = document.getElementById("qrisSayThanksBtn");
+
+  document.addEventListener("click", (e) => {
+    const trigger = e.target.closest("[data-open-qris]");
+    if (trigger) {
+      e.preventDefault();
+      openQrisSupportModal(0);
+    }
+  });
+
+  closeBtn?.addEventListener("click", closeQrisSupportModal);
+  backdrop?.addEventListener("click", (e) => {
+    if (e.target === backdrop) closeQrisSupportModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && backdrop && !backdrop.hidden) {
+      closeQrisSupportModal();
+    }
+  });
+
+  presetGroup?.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-qris-amount]");
+    if (!btn) return;
+    const amt = Number.parseInt(btn.dataset.qrisAmount, 10) || 0;
+    document.querySelectorAll(".nd-qris-preset").forEach((el) => {
+      el.classList.toggle("active", el === btn);
+    });
+    if (customInput) customInput.value = amt > 0 ? String(amt) : "";
+    loadAndRenderQrisAmount(amt);
+  });
+
+  customForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const rawVal = Number.parseInt(customInput?.value || "", 10);
+    if (!Number.isSafeInteger(rawVal) || rawVal < 1000 || rawVal > 10000000) {
+      showToast("Masukkan nominal bulat antara Rp1.000 s/d Rp10.000.000.");
+      return;
+    }
+    document.querySelectorAll(".nd-qris-preset").forEach((el) => {
+      el.classList.toggle("active", Number(el.dataset.qrisAmount) === rawVal);
+    });
+    loadAndRenderQrisAmount(rawVal);
+  });
+
+  downloadBtn?.addEventListener("click", () => {
+    downloadVerifiedQrisImage();
+  });
+
+  sayThanksBtn?.addEventListener("click", () => {
+    closeQrisSupportModal();
+    if (notifPanel) {
+      notifPanel.hidden = false;
+      notifBtn?.setAttribute("aria-expanded", "true");
+    }
+    const msgInput = document.getElementById("chatMessageInput");
+    if (msgInput && !msgInput.value.trim()) {
+      msgInput.value = "Semangat terus Admin NodataNime! Sudah kirim kopi lewat QRIS.";
+      msgInput.focus();
+    }
+  });
+}
+
 window.addEventListener("popstate", () => {
   routeCurrentUrl();
 });
@@ -2310,6 +2721,7 @@ document.addEventListener(
 );
 initStarfield();
 initCommunityControls();
+initQrisSupportModal();
 initPwa();
 updateWatchlistBadge();
 loadCommunityData(true);

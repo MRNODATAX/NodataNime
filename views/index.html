@@ -44,7 +44,7 @@
       flex-shrink: 0;
     }
   </style>
-  <link rel="stylesheet" href="/css/styles.css?v=6.2" />
+  <link rel="stylesheet" href="/css/styles.css?v=6.3" />
 </head>
 <body class="is-splashing">
   <!-- Animasi Pembuka Logo & Nama Brand NodataNime (100% Terpusat Stabil) -->
@@ -103,6 +103,18 @@
           />
           <div id="searchDropdown" class="nd-search-dropdown" hidden></div>
         </form>
+
+        <!-- Tombol Traktir Kopi (QRIS) — Penyemangat Admin -->
+        <button type="button" id="qrisSupportTopBtn" class="nd-pwa-btn nd-qris-top-btn" data-open-qris="1" title="Traktir Kopi (QRIS) — Penyemangat Admin" aria-label="Traktir Kopi QRIS Penyemangat Admin">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M17 8h1a4 4 0 1 1 0 8h-1"></path>
+            <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path>
+            <line x1="6" y1="2" x2="6" y2="4"></line>
+            <line x1="10" y1="2" x2="10" y2="4"></line>
+            <line x1="14" y1="2" x2="14" y2="4"></line>
+          </svg>
+          <span class="nd-pwa-btn-label">Traktir Kopi</span>
+        </button>
 
         <!-- Tombol Install Aplikasi PWA -->
         <button type="button" id="pwaInstallBtn" class="nd-pwa-btn" title="Install Aplikasi NodataNime" aria-label="Install Aplikasi NodataNime">
@@ -334,6 +346,22 @@
           </div>
         </button>
 
+        <button type="button" class="nd-sheet-item nd-sheet-item-qris" id="sheetSupportAdminBtn" data-open-qris="1">
+          <span class="nd-sheet-icon nd-sheet-icon-qris" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 8h1a4 4 0 1 1 0 8h-1"></path>
+              <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path>
+              <line x1="6" y1="2" x2="6" y2="4"></line>
+              <line x1="10" y1="2" x2="10" y2="4"></line>
+              <line x1="14" y1="2" x2="14" y2="4"></line>
+            </svg>
+          </span>
+          <div>
+            <strong>Traktir Kopi (QRIS)</strong>
+            <small>Penyemangat Admin</small>
+          </div>
+        </button>
+
         <button type="button" class="nd-sheet-item" id="sheetOpenCommunityBtn">
           <span class="nd-sheet-icon" aria-hidden="true">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -447,6 +475,16 @@
         </p>
       </div>
       <div class="nd-footer-meta">
+        <button type="button" class="nd-qris-footer-btn" data-open-qris="1">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M17 8h1a4 4 0 1 1 0 8h-1"></path>
+            <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path>
+            <line x1="6" y1="2" x2="6" y2="4"></line>
+            <line x1="10" y1="2" x2="10" y2="4"></line>
+            <line x1="14" y1="2" x2="14" y2="4"></line>
+          </svg>
+          <span>Traktir Kopi (QRIS)</span>
+        </button>
         <span class="nd-tech-pill">REA v6.7.0 Verified</span>
         <span class="nd-tech-pill" id="footerSourceBadge">Engine: Ready</span>
         <span class="nd-tech-pill" id="pwaStatusBadge">PWA Ready</span>
@@ -454,9 +492,133 @@
     </div>
   </footer>
 
+  <!-- Modal Penyemangat Admin — Traktir Kopi (QRIS Resmi Terkunci SHA-256 & EMVCo CRC-16) -->
+  <div id="qrisModalBackdrop" class="nd-qris-backdrop" hidden>
+    <div id="qrisSupportModal" class="nd-qris-modal" role="dialog" aria-modal="true" aria-labelledby="qrisModalTitle">
+      <div class="nd-qris-modal-header">
+        <div class="nd-qris-title-wrap">
+          <span class="nd-qris-title-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 8h1a4 4 0 1 1 0 8h-1"></path>
+              <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path>
+              <line x1="6" y1="2" x2="6" y2="4"></line>
+              <line x1="10" y1="2" x2="10" y2="4"></line>
+              <line x1="14" y1="2" x2="14" y2="4"></line>
+            </svg>
+          </span>
+          <div>
+            <h2 id="qrisModalTitle" class="nd-qris-title">Penyemangat Admin</h2>
+            <p class="nd-qris-subtitle">Nonton lancar tanpa iklan pop-up? Kasih penyemangat buat Admin yuk!</p>
+          </div>
+        </div>
+        <button type="button" id="qrisModalCloseBtn" class="nd-icon-btn nd-icon-btn-sm" aria-label="Tutup modal QRIS">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="nd-qris-modal-body">
+        <!-- Pilihan Nominal Cepat (Statis Poster Asli atau QRIS Dinamis EMVCo) -->
+        <div class="nd-qris-preset-label">Pilih Paket Penyemangat (0% Potongan Admin):</div>
+        <div class="nd-qris-presets" id="qrisPresetGroup">
+          <button type="button" class="nd-qris-preset active" data-qris-amount="0">
+            <strong>Bebas</strong>
+            <small>Poster Asli</small>
+          </button>
+          <button type="button" class="nd-qris-preset" data-qris-amount="5000">
+            <strong>Rp5.000</strong>
+            <small>Kopi Malam</small>
+          </button>
+          <button type="button" class="nd-qris-preset" data-qris-amount="10000">
+            <strong>Rp10.000</strong>
+            <small>Es Kopi Susu</small>
+          </button>
+          <button type="button" class="nd-qris-preset" data-qris-amount="25000">
+            <strong>Rp25.000</strong>
+            <small>Booster Server</small>
+          </button>
+          <button type="button" class="nd-qris-preset" data-qris-amount="50000">
+            <strong>Rp50.000</strong>
+            <small>Sultan Nakama</small>
+          </button>
+        </div>
+
+        <!-- Input Nominal Kustom -->
+        <form id="qrisCustomForm" class="nd-qris-custom-form">
+          <input
+            type="number"
+            id="qrisCustomInput"
+            class="nd-input nd-qris-custom-input"
+            min="1000"
+            max="10000000"
+            step="500"
+            inputmode="numeric"
+            placeholder="Atau ketik nominal lain (min. Rp1.000)..."
+          />
+          <button type="submit" class="nd-btn nd-btn-secondary nd-qris-apply-btn">Buat QR</button>
+        </form>
+
+        <!-- Panggung Kode QR Terverifikasi -->
+        <div class="nd-qris-stage-card">
+          <div class="nd-qris-merchant-head">
+            <span class="nd-qris-verified-pill" id="qrisIntegrityBadge">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <polyline points="9 12 11 14 15 10"></polyline>
+              </svg>
+              <span>SHA-256 &amp; CRC-16 Terverifikasi</span>
+            </span>
+            <strong class="nd-qris-merchant-name">NODATASHOP</strong>
+            <span class="nd-qris-nmid">NMID: ID1025451509315 &bull; A01</span>
+            <span class="nd-qris-amount-tag" id="qrisActiveAmountLabel">Nominal Bebas (Isi di Aplikasi Pembayaran)</span>
+          </div>
+
+          <div class="nd-qris-visual-box" id="qrisVisualBox">
+            <div class="nd-qris-loading">Memverifikasi keaslian QRIS NODATASHOP...</div>
+          </div>
+
+          <p class="nd-qris-helper-text">
+            Mendukung semua aplikasi berlogo <strong>QRIS</strong> (GoPay, DANA, OVO, ShopeePay, LinkAja, BCA, BRI, Mandiri, BNI, SeaBank, Jago, dll).
+          </p>
+        </div>
+
+        <!-- Aksi Cepat: Simpan ke Galeri HP & Kirim Ucapan -->
+        <div class="nd-qris-actions">
+          <button type="button" id="qrisDownloadBtn" class="nd-btn nd-btn-primary nd-qris-action-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Simpan Gambar QRIS</span>
+          </button>
+          <button type="button" id="qrisSayThanksBtn" class="nd-btn nd-btn-secondary nd-qris-action-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span>Kirim Pesan Penyemangat</span>
+          </button>
+        </div>
+
+        <!-- Kotak Edukasi & Proteksi Anti-Quishing / QR Palsu -->
+        <div class="nd-qris-security-note">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <div>
+            <strong>Proteksi Anti-QR Palsu Aktif:</strong> Pastikan nama penerima di m-banking / e-wallet Anda tertulis <strong>NODATASHOP</strong> (NMID <code>ID1025451509315</code>) sebelum konfirmasi bayar. Kode QR ini dikunci kriptografis dan tidak pernah mengarah ke tautan browser atau meminta PIN/OTP.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Container -->
   <div id="toastRoot" class="nd-toast-root" aria-live="polite"></div>
 
-  <script type="module" src="/js/app.js?v=6.2"></script>
+  <script type="module" src="/js/app.js?v=6.3"></script>
 </body>
 </html>

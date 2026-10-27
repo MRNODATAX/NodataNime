@@ -5,9 +5,30 @@ import { Router } from "express";
 import { animeService } from "../services/animeService.js";
 import { communityStore } from "../services/communityStore.js";
 import { handleStreamProxy } from "./streamProxy.js";
+import { generateVerifiedQrisPayloadAndSvg } from "../utils/qrisSecurity.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const reaDir = path.resolve(__dirname, "../../docs/rea");
+const publicDir = fs.existsSync(path.resolve(__dirname, "../../public"))
+  ? path.resolve(__dirname, "../../public")
+  : path.resolve(process.cwd(), "public");
+
+const FORBIDDEN_QRIS_INJECTION_PARAMS = [
+  "payload",
+  "qris",
+  "qr",
+  "merchant",
+  "merchantName",
+  "nmid",
+  "pan",
+  "url",
+  "redirect",
+  "src",
+  "image",
+  "poster",
+  "callback",
+  "svg",
+];
 
 const VALID_LIST_TYPES = new Set([
   "ongoing",
@@ -134,6 +155,45 @@ animeRouter.get("/health", (_req, res) => {
     statusCode: 200,
     data: animeService.getHealth(),
   });
+});
+
+animeRouter.get("/support/qris", async (req, res, next) => {
+  try {
+    // Tolak keras segala percobaan injeksi parameter QR/URL/merchant dari luar (Anti-Quishing & Anti-QR-Swapping)
+    for (const forbiddenKey of FORBIDDEN_QRIS_INJECTION_PARAMS) {
+      if (Object.prototype.hasOwnProperty.call(req.query, forbiddenKey)) {
+        throw badRequest(
+          `Parameter '${forbiddenKey}' ditolak oleh sistem proteksi Anti-QR-Injection NodataNime.`
+        );
+      }
+    }
+
+    const unknownKeys = Object.keys(req.query || {}).filter((k) => k !== "amount");
+    if (unknownKeys.length > 0) {
+      throw badRequest("Hanya parameter 'amount' (nominal Rupiah) yang diizinkan pada endpoint QRIS.");
+    }
+
+    const rawAmount = readScalarParam(req.query.amount, "0");
+    const verified = await generateVerifiedQrisPayloadAndSvg({
+      amount: rawAmount,
+      publicDir,
+    });
+
+    res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, private");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Cross-Origin-Resource-Policy", "same-origin");
+    res.setHeader("X-QRIS-Merchant", verified.merchantName);
+    res.setHeader("X-QRIS-NMID", verified.nmid);
+    res.setHeader("X-QRIS-CRC16", verified.crc16);
+
+    res.json({
+      ok: true,
+      statusCode: 200,
+      data: verified,
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 animeRouter.get("/community", async (_req, res, next) => {

@@ -1,7 +1,7 @@
 {
   "analyzer": "rea-agents analyze-javascript-application",
   "reaVersion": "6.7.0",
-  "verifiedAt": "2026-10-27T07:04:57.259Z",
+  "verifiedAt": "2026-10-27T07:53:12.739Z",
   "targetAudited": "NodataNime (/home/user/NodataNime)",
   "inventoriedSourcePaths": [
     "src/app.js",
@@ -16,10 +16,11 @@
     "src/routes/animeRoutes.js",
     "src/routes/streamProxy.js",
     "src/utils/cache.js",
+    "src/utils/qrisSecurity.js",
     "public/js/app.js",
     "public/sw.js"
   ],
-  "fileCount": 14,
+  "fileCount": 15,
   "topLevelEvidenceKeys": [
     "evidence_id",
     "subject",
