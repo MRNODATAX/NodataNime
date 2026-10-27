@@ -212,6 +212,11 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
     const clientJs = fs.readFileSync(path.join(rootDir, "public/js/app.js"), "utf8");
     assert.match(clientJs, /function dismissIntroSplash\(\)/);
     assert.match(clientJs, /function initStarfield\(\)/);
+
+    const stylesCss = fs.readFileSync(path.join(rootDir, "public/css/styles.css"), "utf8");
+    assert.doesNotMatch(stylesCss, /grid-template-columns:\s*1fr\s*;/);
+    assert.match(stylesCss, /\.nd-intro-ring-svg/);
+    assert.match(stylesCss, /height:\s*100dvh/);
     assert.match(clientJs, /function initPwa\(\)/);
     assert.doesNotMatch(clientJs, /localhost|127\.0\.0\.1/i);
     assert.doesNotMatch(html, /localhost|127\.0\.0\.1/i);
