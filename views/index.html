@@ -44,7 +44,7 @@
       flex-shrink: 0;
     }
   </style>
-  <link rel="stylesheet" href="/css/styles.css?v=6.3" />
+  <link rel="stylesheet" href="/css/styles.css?v=6.4" />
 </head>
 <body class="is-splashing">
   <!-- Animasi Pembuka Logo & Nama Brand NodataNime (100% Terpusat Stabil) -->
@@ -90,18 +90,30 @@
 
       <div class="nd-topbar-actions">
         <form id="navSearchForm" class="nd-search-wrap" role="search">
-          <svg class="nd-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input
-            type="search"
-            id="navSearchInput"
-            class="nd-search-input"
-            placeholder="Cari anime..."
-            autocomplete="off"
-          />
-          <div id="searchDropdown" class="nd-search-dropdown" hidden></div>
+          <div class="nd-search-field">
+            <svg class="nd-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="search"
+              id="navSearchInput"
+              class="nd-search-input"
+              placeholder="Cari anime..."
+              autocomplete="off"
+              enterkeyhint="search"
+              aria-label="Cari judul anime"
+              aria-expanded="false"
+              aria-controls="searchDropdown"
+            />
+            <button type="button" id="navSearchClearBtn" class="nd-search-clear-btn" aria-label="Bersihkan atau tutup pencarian" title="Bersihkan pencarian" hidden>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+          <div id="searchDropdown" class="nd-search-dropdown" role="listbox" aria-label="Saran pencarian cepat" hidden></div>
         </form>
 
         <!-- Tombol Traktir Kopi (QRIS) — Penyemangat Admin -->
@@ -619,6 +631,6 @@
   <!-- Toast Container -->
   <div id="toastRoot" class="nd-toast-root" aria-live="polite"></div>
 
-  <script type="module" src="/js/app.js?v=6.3"></script>
+  <script type="module" src="/js/app.js?v=6.4"></script>
 </body>
 </html>

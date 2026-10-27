@@ -153,12 +153,35 @@ export class SnapshotStore {
     const q = normalizeText(query);
     if (!q) return [];
     const tokens = q.split(/\s+/).filter(Boolean);
-    return this.data.catalog
-      .filter((item) => {
-        const hay = normalizeText(`${item.title} ${item.rawSlug} ${(item.genres || []).join(" ")}`);
-        return tokens.every((t) => hay.includes(t));
-      })
-      .slice(0, 30);
+    const scored = [];
+
+    for (const item of this.data.catalog) {
+      const normTitle = normalizeText(item.title);
+      const normSlug = normalizeText(item.rawSlug);
+      const normGenres = normalizeText((item.genres || []).join(" "));
+      const hay = `${normTitle} ${normSlug} ${normGenres}`.trim();
+      if (!tokens.every((t) => hay.includes(t))) continue;
+
+      let relevance = 0;
+      if (normTitle === q) relevance += 1000;
+      else if (normTitle.startsWith(`${q} `) || normTitle.startsWith(q)) relevance += 500;
+      else if (normTitle.includes(q)) relevance += 260;
+
+      if (tokens.every((t) => normTitle.includes(t))) relevance += 150;
+      else if (tokens.every((t) => `${normTitle} ${normSlug}`.includes(t))) relevance += 80;
+      else relevance += 20;
+
+      const numericScore = Number.parseFloat(item.score) || 0;
+      scored.push({ item, relevance, numericScore });
+    }
+
+    scored.sort((a, b) => {
+      if (b.relevance !== a.relevance) return b.relevance - a.relevance;
+      if (b.numericScore !== a.numericScore) return b.numericScore - a.numericScore;
+      return String(a.item.title || "").localeCompare(String(b.item.title || ""));
+    });
+
+    return scored.slice(0, 36).map((entry) => entry.item);
   }
 
   getDetail(slugOrToken) {

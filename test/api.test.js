@@ -285,4 +285,32 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
     assert.doesNotMatch(html, /Admin Panel/i);
     assert.doesNotMatch(html, /studioNoticeBar/);
   });
+
+  it("prevents search UI clipping, ranks title matches first, and enforces CSP-safe poster fallback", async () => {
+    // 1. Relevansi pencarian: judul berawalan "Isekai" wajib berada di urutan teratas dibanding kecocokan genre semata
+    const isekaiRes = await fetch(`${baseUrl}/api/anime/search?q=isekai`);
+    assert.equal(isekaiRes.status, 200);
+    const isekaiBody = await isekaiRes.json();
+    assert.ok(isekaiBody.data.items.length >= 10);
+    assert.match(isekaiBody.data.items[0].title, /^Isekai/i);
+
+    // 2. Pastikan snapshot tidak menyimpan URL poster AniList sintetis yang pasti 404
+    const snapJson = fs.readFileSync(path.join(rootDir, "data/ylnime-snapshot.json"), "utf8");
+    assert.doesNotMatch(snapJson, /bx1735-k4pM7nR2wQ9L|bx178025-cWJ2qN2hD2hF/);
+
+    // 3. Verifikasi struktur anti-terpotong pada HTML, CSS, dan JS pencarian
+    const indexHtml = fs.readFileSync(path.join(rootDir, "views/index.html"), "utf8");
+    const stylesCss = fs.readFileSync(path.join(rootDir, "public/css/styles.css"), "utf8");
+    const clientJs = fs.readFileSync(path.join(rootDir, "public/js/app.js"), "utf8");
+
+    assert.match(indexHtml, /class="nd-search-field"/);
+    assert.match(indexHtml, /id="navSearchClearBtn"/);
+    assert.match(stylesCss, /\.nd-search-dropdown-list\s*\{[\s\S]*?overflow-y:\s*auto/);
+    assert.match(stylesCss, /var\(--nd-vvh,\s*100dvh\)/);
+    assert.match(stylesCss, /\.nd-topbar-inner\.is-search-active\s+\.nd-search-wrap/);
+    assert.match(stylesCss, /font-size:\s*16px/);
+    assert.match(clientJs, /function applySafePosterFallback\(/);
+    assert.match(clientJs, /function closeSearchDropdown\(/);
+    assert.match(clientJs, /new AbortController\(\)/);
+  });
 });

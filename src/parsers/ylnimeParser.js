@@ -186,6 +186,43 @@ export function parseCards(htmlOrCheerio, rootSelector = null) {
 }
 
 /**
+ * Mem-parsing halaman hasil pencarian `index.php?search=...` secara terisolasi
+ * agar tidak ikut mengambil kartu beranda/sidebar jika YLnime mengembalikan halaman kosong.
+ */
+export function parseSearch(htmlOrCheerio) {
+  const $ = typeof htmlOrCheerio === "string" ? cheerio.load(htmlOrCheerio) : htmlOrCheerio;
+
+  let searchHeading = null;
+  $("h1, h2, h3, h4").each((_, el) => {
+    if (!searchHeading && /Hasil\s+Pencarian/i.test(cleanText($(el).text()))) {
+      searchHeading = $(el);
+    }
+  });
+
+  if (searchHeading) {
+    const seen = new Set();
+    const scopedCards = [];
+    const siblingRows = searchHeading.nextAll(".row");
+    const targetScope = siblingRows.length > 0 ? siblingRows : searchHeading.parent();
+
+    targetScope.find(".card").each((_, el) => {
+      const parsed = parseCardElement($, el);
+      if (!parsed || seen.has(parsed.slug)) return;
+      seen.add(parsed.slug);
+      scopedCards.push(parsed);
+    });
+    return scopedCards;
+  }
+
+  // Cegah kebocoran kartu beranda apabila YLnime merender homepage saat kueri tidak cocok
+  if ($(".carousel-item, #heroBanner").length > 0) {
+    return [];
+  }
+
+  return parseCards($);
+}
+
+/**
  * Mem-parsing paginasi `.pager` YLnime (Sebelumnya / Berikutnya).
  */
 export function parsePagination(htmlOrCheerio, currentPage = 1) {

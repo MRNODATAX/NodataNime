@@ -9,6 +9,7 @@ import {
   toEpisodeToken,
   fromEpisodeToken,
   parseCards,
+  parseSearch,
   parsePagination,
   parseGenres,
   parseSchedule,
@@ -48,14 +49,21 @@ describe("OBL-01: Reversible Series & Episode Slug Tokenization", () => {
 });
 
 describe("OBL-02: Real YLnime HTML Fixture Parsers", () => {
-  it("parses 20 unique anime cards from ylnime-search.html fixture", () => {
-    const cards = parseCards(fixture("ylnime-search.html"));
+  it("parses 20 unique anime cards from ylnime-search.html fixture and isolates search scope", () => {
+    const cards = parseSearch(fixture("ylnime-search.html"));
     assert.equal(cards.length, 20);
     assert.equal(new Set(cards.map((c) => c.slug)).size, 20);
     assert.equal(cards[0].title, "Isekai Cheat Magician");
     assert.equal(cards[0].slug, "isekai-cheat-sub-indo~");
     assert.equal(cards[0].score, "5.2");
     assert.equal(cards[0].status, "Completed");
+
+    // Pastikan jika YLnime merender homepage (carousel-item tanpa heading Hasil Pencarian), parseSearch mengembalikan []
+    const leakedHomeHtml = `
+      <div id="heroBanner"><div class="carousel-item"><h2>Banner</h2><a href="?series=banner-1"></a></div></div>
+      <div class="row"><div class="card"><img src="/assets/no-cover.svg" alt="Cover"/><a href="?series=unrelated"></a><h6 class="card-title">Unrelated</h6></div></div>
+    `;
+    assert.deepEqual(parseSearch(leakedHomeHtml), []);
   });
 
   it("parses 100+ catalog items from ylnime-anime-list.html fixture", () => {

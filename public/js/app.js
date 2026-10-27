@@ -80,7 +80,9 @@ const state = {
 };
 
 const appRoot = document.getElementById("appRoot");
+const topbarInner = document.querySelector(".nd-topbar-inner");
 const navSearchInput = document.getElementById("navSearchInput");
+const navSearchClearBtn = document.getElementById("navSearchClearBtn");
 const navSearchForm = document.getElementById("navSearchForm");
 const searchDropdown = document.getElementById("searchDropdown");
 const watchlistBadge = document.getElementById("watchlistBadge");
@@ -92,6 +94,77 @@ const bottomMoreBtn = document.getElementById("bottomMoreBtn");
 const bottomMoreSheet = document.getElementById("bottomMoreSheet");
 const notifPanel = document.getElementById("notifPanel");
 const notifBtn = document.getElementById("notifBtn");
+
+const FALLBACK_POSTER_SRC = "/assets/no-cover.svg";
+
+function applySafePosterFallback(imgEl) {
+  if (!(imgEl instanceof HTMLImageElement)) return;
+  if (imgEl.id === "qrisDynamicImg" || imgEl.id === "qrisPosterImg") return;
+  if (imgEl.dataset.fallbackApplied === "1") return;
+  imgEl.dataset.fallbackApplied = "1";
+  imgEl.src = FALLBACK_POSTER_SRC;
+}
+
+function hydrateBrokenImages(root = document) {
+  if (!root || typeof root.querySelectorAll !== "function") return;
+  root.querySelectorAll("img").forEach((imgEl) => {
+    if (imgEl.id === "qrisDynamicImg" || imgEl.id === "qrisPosterImg") return;
+    if (imgEl.complete && imgEl.naturalWidth === 0) {
+      applySafePosterFallback(imgEl);
+    }
+  });
+}
+
+document.addEventListener(
+  "error",
+  (event) => {
+    if (event.target instanceof HTMLImageElement) {
+      applySafePosterFallback(event.target);
+    }
+  },
+  true
+);
+
+function syncVisualViewportHeight() {
+  const vvh = window.visualViewport?.height || window.innerHeight;
+  if (Number.isFinite(vvh) && vvh > 120) {
+    document.documentElement.style.setProperty("--nd-vvh", `${Math.round(vvh)}px`);
+  }
+}
+
+syncVisualViewportHeight();
+window.visualViewport?.addEventListener("resize", syncVisualViewportHeight);
+window.visualViewport?.addEventListener("scroll", syncVisualViewportHeight);
+window.addEventListener("resize", syncVisualViewportHeight);
+
+let searchTimer = null;
+let searchAbortController = null;
+let searchRequestSeq = 0;
+let searchHighlightIndex = -1;
+
+function syncSearchClearVisibility() {
+  if (!navSearchClearBtn || !navSearchInput) return;
+  const hasValue = navSearchInput.value.length > 0;
+  const isMobileExpanded = Boolean(topbarInner?.classList.contains("is-search-active"));
+  navSearchClearBtn.hidden = !(hasValue || isMobileExpanded);
+}
+
+function closeSearchDropdown({ collapseMobile = true } = {}) {
+  clearTimeout(searchTimer);
+  searchTimer = null;
+  if (searchAbortController) {
+    searchAbortController.abort();
+    searchAbortController = null;
+  }
+  searchRequestSeq += 1;
+  searchHighlightIndex = -1;
+  if (searchDropdown) searchDropdown.hidden = true;
+  navSearchInput?.setAttribute("aria-expanded", "false");
+  if (collapseMobile) {
+    topbarInner?.classList.remove("is-search-active");
+  }
+  syncSearchClearVisibility();
+}
 
 /* ===== Opening Brand Logo & Name Splash Controller ===== */
 function dismissIntroSplash() {
@@ -488,6 +561,7 @@ async function apiRequest(path, options = {}) {
     method: options.method || "GET",
     headers,
     body: options.body ? JSON.stringify(options.body) : undefined,
+    signal: options.signal,
   });
 
   const elapsedMs = Math.round(performance.now() - start);
@@ -511,8 +585,8 @@ async function apiRequest(path, options = {}) {
   return { ...json, elapsedMs };
 }
 
-function apiGet(path) {
-  return apiRequest(path);
+function apiGet(path, options = {}) {
+  return apiRequest(path, options);
 }
 
 /* ===== Interactive 2-Tab Community Chat & Info System ===== */
@@ -911,7 +985,12 @@ export function navigate(params = {}, push = true) {
   setCinemaMode(false);
   closeMoreSheet();
   closeCommunityPanel();
-  if (searchDropdown) searchDropdown.hidden = true;
+  closeSearchDropdown({ collapseMobile: true });
+
+  if (navSearchInput && !params.search && !params.q) {
+    navSearchInput.value = "";
+    syncSearchClearVisibility();
+  }
 
   const url = new URL(window.location.href);
   url.pathname = "/";
@@ -1023,6 +1102,7 @@ async function routeCurrentUrl() {
     `;
     document.getElementById("retryBtn")?.addEventListener("click", () => navigate({}));
   } finally {
+    hydrateBrokenImages(appRoot);
     dismissIntroSplash();
   }
 }
@@ -1413,25 +1493,76 @@ async function renderAzView(letter = "I", page = 1) {
 }
 
 /* ===== 6. Search View ===== */
+const POPULAR_SEARCH_KEYWORDS = [
+  "One Piece",
+  "Isekai",
+  "Bleach",
+  "Solo Leveling",
+  "Frieren",
+  "Kimetsu",
+  "Naruto",
+];
+
 async function renderSearchView(query) {
   renderSkeleton();
-  if (navSearchInput) navSearchInput.value = query;
-  const { data } = await apiGet(`/api/anime/search?q=${encodeURIComponent(query)}`);
+  const cleanQuery = String(query || "").trim();
+  if (navSearchInput) {
+    navSearchInput.value = cleanQuery;
+    syncSearchClearVisibility();
+  }
+  const { data } = await apiGet(`/api/anime/search?q=${encodeURIComponent(cleanQuery)}`);
   const items = data.items || [];
 
   appRoot.innerHTML = `
     <div class="nd-container">
+      <div class="nd-search-page-box">
+        <form id="pageSearchForm" class="nd-search-page-form" role="search">
+          <div class="nd-search-page-input-wrap">
+            <svg class="nd-search-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="search"
+              id="pageSearchInput"
+              class="nd-search-page-input"
+              value="${esc(cleanQuery)}"
+              placeholder="Ketik judul anime favoritmu..."
+              autocomplete="off"
+              enterkeyhint="search"
+              aria-label="Kata kunci pencarian anime"
+            />
+          </div>
+          <button type="submit" class="nd-search-page-submit">Cari</button>
+        </form>
+        <div class="nd-search-quick-tags">
+          <span class="nd-search-quick-label">Populer:</span>
+          ${POPULAR_SEARCH_KEYWORDS.map(
+            (kw) =>
+              `<button type="button" class="nd-search-quick-chip" data-quick-search="${esc(kw)}">${esc(kw)}</button>`
+          ).join("")}
+        </div>
+      </div>
+
       <div class="nd-section-head">
-        <h1 class="nd-section-title">Hasil Pencarian: "${esc(query)}"</h1>
+        <h1 class="nd-section-title">Hasil Pencarian: "${esc(cleanQuery)}"</h1>
         <span class="nd-tech-pill">${items.length} judul ditemukan</span>
       </div>
       ${
         items.length
           ? `<div class="nd-card-grid">${items.map((x) => renderAnimeCard(x)).join("")}</div>`
-          : `<div class="nd-empty-state"><h3>Tidak ada hasil untuk "${esc(query)}"</h3><p>Coba kata kunci lain seperti One Piece, Isekai, Bleach, Solo Leveling, Frieren, atau Naruto.</p></div>`
+          : `<div class="nd-empty-state"><h3>Tidak ada hasil untuk "${esc(cleanQuery)}"</h3><p>Coba kata kunci lain atau pilih salah satu tag populer di atas seperti One Piece, Isekai, Bleach, Solo Leveling, Frieren, atau Naruto.</p></div>`
       }
     </div>
   `;
+
+  hydrateBrokenImages(appRoot);
+
+  document.getElementById("pageSearchForm")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const nextQ = document.getElementById("pageSearchInput")?.value.trim() || "";
+    if (nextQ) navigate({ search: nextQ });
+  });
 }
 
 /* ===== 7. Watchlist & History View ===== */
@@ -2218,6 +2349,13 @@ document.addEventListener("click", async (e) => {
     return;
   }
 
+  const quickSearchBtn = e.target.closest("[data-quick-search]");
+  if (quickSearchBtn) {
+    const kw = quickSearchBtn.dataset.quickSearch;
+    if (kw) navigate({ search: kw });
+    return;
+  }
+
   const tryApiBtn = e.target.closest("[data-try-api]");
   if (tryApiBtn) {
     const outBox = document.getElementById("apiOutputBox");
@@ -2238,7 +2376,7 @@ document.addEventListener("click", async (e) => {
     closeCommunityPanel();
   }
   if (!e.target.closest("#navSearchForm")) {
-    if (searchDropdown) searchDropdown.hidden = true;
+    closeSearchDropdown({ collapseMobile: true });
   }
   if (!e.target.closest("#bottomDockWrap")) {
     closeMoreSheet();
@@ -2247,52 +2385,185 @@ document.addEventListener("click", async (e) => {
 
 cinemaOverlay?.addEventListener("click", () => setCinemaMode(false));
 
-/* ===== Debounced Instant Search ===== */
-let searchTimer = null;
-navSearchInput?.addEventListener("input", () => {
-  const q = navSearchInput.value.trim();
+/* ===== Debounced Instant Search (Viewport-Safe & Race-Free) ===== */
+function renderInstantSearchResults(q, items = []) {
+  if (!searchDropdown) return;
+  const totalCount = items.length;
+  const top = items.slice(0, 6);
+  searchHighlightIndex = -1;
+
+  if (!top.length) {
+    searchDropdown.innerHTML = `
+      <div class="nd-search-status-msg">
+        Tidak ada saran cepat untuk <strong>"${esc(q)}"</strong>.
+      </div>
+      <button type="button" class="nd-search-footer-btn" id="seeAllSearchBtn">
+        <span class="nd-search-footer-text">Cari penuh "${esc(q)}"</span>
+      </button>
+    `;
+  } else {
+    searchDropdown.innerHTML = `
+      <div class="nd-search-dropdown-list">
+        ${top
+          .map(
+            (item) => `
+            <div class="nd-search-item" role="option" data-open-series="${esc(item.slug)}">
+              <img src="${esc(safeUrl(item.poster, FALLBACK_POSTER_SRC))}" alt="" loading="lazy" referrerpolicy="no-referrer" />
+              <div class="nd-search-meta">
+                <div class="nd-search-title">${esc(item.title)}</div>
+                <div class="nd-search-sub">${esc(item.status || "Anime")}${item.episode ? ` • ${esc(item.episode)}` : ""}${item.score ? ` • ★ ${esc(item.score)}` : ""}</div>
+              </div>
+            </div>
+          `
+          )
+          .join("")}
+      </div>
+      <button type="button" class="nd-search-footer-btn" id="seeAllSearchBtn">
+        <span class="nd-search-footer-text">Lihat semua ${totalCount} hasil untuk "${esc(q)}"</span>
+      </button>
+    `;
+  }
+
+  hydrateBrokenImages(searchDropdown);
+  document.getElementById("seeAllSearchBtn")?.addEventListener("click", () => {
+    navSearchInput?.blur();
+    navigate({ search: q });
+  });
+
+  searchDropdown.hidden = false;
+  navSearchInput?.setAttribute("aria-expanded", "true");
+}
+
+function scheduleInstantSearch(rawQuery) {
+  const q = String(rawQuery || "").trim();
   clearTimeout(searchTimer);
+  if (searchAbortController) {
+    searchAbortController.abort();
+    searchAbortController = null;
+  }
+
   if (q.length < 2) {
-    searchDropdown.hidden = true;
+    searchRequestSeq += 1;
+    searchHighlightIndex = -1;
+    if (searchDropdown) searchDropdown.hidden = true;
+    navSearchInput?.setAttribute("aria-expanded", "false");
     return;
   }
+
+  const reqSeq = ++searchRequestSeq;
+
+  if (searchDropdown && searchDropdown.hidden) {
+    searchDropdown.innerHTML = `<div class="nd-search-status-msg">Mencari "${esc(q)}"...</div>`;
+    searchDropdown.hidden = false;
+    navSearchInput?.setAttribute("aria-expanded", "true");
+  }
+
   searchTimer = setTimeout(async () => {
+    const controller = new AbortController();
+    searchAbortController = controller;
     try {
-      const { data } = await apiGet(`/api/anime/search?q=${encodeURIComponent(q)}`);
-      const top = (data.items || []).slice(0, 6);
-      if (!top.length) {
-        searchDropdown.innerHTML = `<div style="padding:14px;font-size:0.82rem;color:var(--text-secondary);">Tidak ada hasil cepat untuk "${esc(q)}"</div>`;
-      } else {
-        searchDropdown.innerHTML =
-          top
-            .map(
-              (item) => `
-              <div class="nd-search-item" data-open-series="${esc(item.slug)}">
-                <img src="${esc(safeUrl(item.poster, "/assets/no-cover.svg"))}" alt="" referrerpolicy="no-referrer" />
-                <div class="nd-search-meta">
-                  <div class="nd-search-title">${esc(item.title)}</div>
-                  <div class="nd-search-sub">${esc(item.status || "Anime")} ${item.episode ? `• ${esc(item.episode)}` : ""} ${item.score ? `• ★ ${esc(item.score)}` : ""}</div>
-                </div>
-              </div>
-            `
-            )
-            .join("") +
-          `<div class="nd-search-item" style="justify-content:center;color:var(--accent-bright);font-weight:700;font-size:0.82rem;" id="seeAllSearchBtn">Lihat semua hasil untuk "${esc(q)}"</div>`;
+      const { data } = await apiGet(`/api/anime/search?q=${encodeURIComponent(q)}`, {
+        signal: controller.signal,
+      });
+      if (reqSeq !== searchRequestSeq || controller.signal.aborted) return;
+      renderInstantSearchResults(q, data.items || []);
+    } catch (err) {
+      if (err?.name === "AbortError" || reqSeq !== searchRequestSeq) return;
+      if (searchDropdown) {
+        searchDropdown.innerHTML = `
+          <div class="nd-search-status-msg">Tekan Enter untuk membuka halaman pencarian penuh.</div>
+          <button type="button" class="nd-search-footer-btn" id="seeAllSearchBtn">
+            <span class="nd-search-footer-text">Cari "${esc(q)}"</span>
+          </button>
+        `;
         document.getElementById("seeAllSearchBtn")?.addEventListener("click", () => {
+          navSearchInput?.blur();
           navigate({ search: q });
         });
+        searchDropdown.hidden = false;
       }
-      searchDropdown.hidden = false;
-    } catch {
-      searchDropdown.hidden = true;
+    } finally {
+      if (searchAbortController === controller) {
+        searchAbortController = null;
+      }
     }
-  }, 220);
+  }, 200);
+}
+
+navSearchInput?.addEventListener("focus", () => {
+  closeCommunityPanel();
+  closeMoreSheet();
+  syncVisualViewportHeight();
+  topbarInner?.classList.add("is-search-active");
+  syncSearchClearVisibility();
+  const q = navSearchInput.value.trim();
+  if (q.length >= 2) {
+    scheduleInstantSearch(q);
+  }
+});
+
+navSearchInput?.addEventListener("input", () => {
+  topbarInner?.classList.add("is-search-active");
+  syncSearchClearVisibility();
+  scheduleInstantSearch(navSearchInput.value);
+});
+
+navSearchInput?.addEventListener("keydown", (e) => {
+  if (!searchDropdown || searchDropdown.hidden) return;
+  const optionEls = Array.from(
+    searchDropdown.querySelectorAll(".nd-search-item[data-open-series]")
+  );
+  if (!optionEls.length) return;
+
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    searchHighlightIndex = (searchHighlightIndex + 1) % optionEls.length;
+    optionEls.forEach((el, idx) =>
+      el.classList.toggle("is-highlighted", idx === searchHighlightIndex)
+    );
+    optionEls[searchHighlightIndex]?.scrollIntoView({ block: "nearest" });
+  } else if (e.key === "ArrowUp") {
+    e.preventDefault();
+    searchHighlightIndex =
+      searchHighlightIndex <= 0 ? optionEls.length - 1 : searchHighlightIndex - 1;
+    optionEls.forEach((el, idx) =>
+      el.classList.toggle("is-highlighted", idx === searchHighlightIndex)
+    );
+    optionEls[searchHighlightIndex]?.scrollIntoView({ block: "nearest" });
+  } else if (e.key === "Enter" && searchHighlightIndex >= 0) {
+    const activeItem = optionEls[searchHighlightIndex];
+    if (activeItem?.dataset.openSeries) {
+      e.preventDefault();
+      const targetSlug = activeItem.dataset.openSeries;
+      navSearchInput.blur();
+      navigate({ series: targetSlug });
+    }
+  }
+});
+
+navSearchClearBtn?.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (!navSearchInput) return;
+  if (navSearchInput.value.length > 0) {
+    navSearchInput.value = "";
+    scheduleInstantSearch("");
+    syncSearchClearVisibility();
+    navSearchInput.focus();
+  } else {
+    closeSearchDropdown({ collapseMobile: true });
+    navSearchInput.blur();
+  }
 });
 
 navSearchForm?.addEventListener("submit", (e) => {
   e.preventDefault();
-  const q = navSearchInput.value.trim();
-  if (q) navigate({ search: q });
+  const q = navSearchInput?.value.trim() || "";
+  if (q) {
+    closeSearchDropdown({ collapseMobile: true });
+    navSearchInput?.blur();
+    navigate({ search: q });
+  }
 });
 
 /* ===== Keyboard Shortcuts ===== */
@@ -2304,7 +2575,10 @@ document.addEventListener("keydown", (e) => {
     return;
   }
   if (e.key === "Escape") {
-    if (searchDropdown) searchDropdown.hidden = true;
+    closeSearchDropdown({ collapseMobile: true });
+    if (document.activeElement === navSearchInput) {
+      navSearchInput.blur();
+    }
     closeCommunityPanel();
     closeMoreSheet();
     setCinemaMode(false);
