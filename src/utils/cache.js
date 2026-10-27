@@ -1,13 +1,21 @@
 /**
- * NodataNime — In-Memory TTL Cache with In-Flight Request Deduplication
+ * NodataNime — Hardened In-Memory TTL Cache with Pinned Key Protection & Bounded In-Flight Deduplication
  */
+const PINNED_CORE_KEYS = new Set([
+  "home:v3",
+  "genres:all",
+  "schedule:weekly",
+  "community:external:v1",
+]);
+
 export class TtlCache {
-  constructor(defaultTtlMs = 5 * 60 * 1000, maxEntries = 500) {
+  constructor(defaultTtlMs = 5 * 60 * 1000, maxEntries = 500, maxInFlight = 120) {
     this.defaultTtlMs = defaultTtlMs;
     this.maxEntries = maxEntries;
+    this.maxInFlight = maxInFlight;
     this.store = new Map();
     this.inFlight = new Map();
-    this.stats = { hits: 0, misses: 0, sets: 0 };
+    this.stats = { hits: 0, misses: 0, sets: 0, evictions: 0 };
   }
 
   get(key) {
@@ -25,12 +33,34 @@ export class TtlCache {
     return entry.value;
   }
 
-  set(key, value, ttlMs = this.defaultTtlMs) {
-    if (this.store.size >= this.maxEntries && !this.store.has(key)) {
-      const oldestKey = this.store.keys().next().value;
-      if (oldestKey !== undefined) {
-        this.store.delete(oldestKey);
+  _evictOne() {
+    const now = Date.now();
+    for (const [k, entry] of this.store.entries()) {
+      if (now > entry.expiresAt) {
+        this.store.delete(k);
+        this.stats.evictions += 1;
+        return;
       }
+    }
+    for (const k of this.store.keys()) {
+      if (!PINNED_CORE_KEYS.has(k)) {
+        this.store.delete(k);
+        this.stats.evictions += 1;
+        return;
+      }
+    }
+    const oldestKey = this.store.keys().next().value;
+    if (oldestKey !== undefined) {
+      this.store.delete(oldestKey);
+      this.stats.evictions += 1;
+    }
+  }
+
+  set(key, value, ttlMs = this.defaultTtlMs) {
+    if (this.store.has(key)) {
+      this.store.delete(key);
+    } else if (this.store.size >= this.maxEntries) {
+      this._evictOne();
     }
     this.store.set(key, {
       value,
@@ -48,6 +78,9 @@ export class TtlCache {
     }
     if (this.inFlight.has(key)) {
       return this.inFlight.get(key);
+    }
+    if (this.inFlight.size >= this.maxInFlight && !PINNED_CORE_KEYS.has(key)) {
+      return loader();
     }
     const promise = (async () => {
       try {
@@ -77,4 +110,4 @@ export class TtlCache {
   }
 }
 
-export const appCache = new TtlCache(5 * 60 * 1000, 600);
+export const appCache = new TtlCache(5 * 60 * 1000, 600, 120);

@@ -12,6 +12,22 @@ const DATA_DIR = process.env.DATA_DIR
     : path.resolve(__dirname, "../../data");
 
 const COMMUNITY_STORE_PATH = path.join(DATA_DIR, "community-store.json");
+const MAX_RATE_ENTRIES = 2000;
+const RATE_WINDOW_MS = 60_000;
+const MIN_POST_COOLDOWN_MS = 2500;
+const MAX_PER_IP_PER_MINUTE = 8;
+const MAX_GLOBAL_PER_MINUTE = 30;
+
+const RESERVED_NICK_REGEX =
+  /^(nodatanime(?:\s*bot|\s*official|\s*staff|\s*team|\s*admin)?|admin(?:istrator)?|moderator|mod|official|system|root|staff)$/i;
+
+function sanitizeText(raw = "", maxLen = 280) {
+  return String(raw ?? "")
+    .replace(/[\u0000-\u001F\u007F]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLen);
+}
 
 function createSeedState() {
   const nowSec = Math.floor(Date.now() / 1000);
@@ -62,6 +78,8 @@ export class CommunityStore {
   constructor() {
     this._state = null;
     this._chatRateMap = new Map();
+    this._globalWindowStart = 0;
+    this._globalWindowCount = 0;
   }
 
   get state() {
@@ -104,6 +122,20 @@ export class CommunityStore {
     }
   }
 
+  _pruneRateMap(now) {
+    if (this._chatRateMap.size < MAX_RATE_ENTRIES / 2) return;
+    for (const [key, entry] of this._chatRateMap.entries()) {
+      if (now - entry.windowStart >= RATE_WINDOW_MS) {
+        this._chatRateMap.delete(key);
+      }
+    }
+    while (this._chatRateMap.size >= MAX_RATE_ENTRIES) {
+      const oldestKey = this._chatRateMap.keys().next().value;
+      if (oldestKey === undefined) break;
+      this._chatRateMap.delete(oldestKey);
+    }
+  }
+
   getCommunityPayload(externalFeed = []) {
     const localMessages = this.state.communityChat || [];
     const seenIds = new Set(localMessages.map((m) => m.id));
@@ -111,9 +143,9 @@ export class CommunityStore {
     const normalizedExternal = (externalFeed || [])
       .filter((m) => m && m.id && !seenIds.has(m.id))
       .map((m) => ({
-        id: String(m.id),
-        nickname: String(m.nickname || "Penonton"),
-        message: String(m.message || ""),
+        id: sanitizeText(m.id, 64),
+        nickname: sanitizeText(m.nickname || "Penonton", 28) || "Penonton",
+        message: sanitizeText(m.message || "", 280),
         timestamp: Number(m.timestamp || Math.floor(Date.now() / 1000) - 3600),
         replyTo: m.replyTo || null,
       }));
@@ -135,36 +167,29 @@ export class CommunityStore {
   }
 
   addCommunityMessage({ nickname = "", message = "", replyTo = null, ip = "unknown" }) {
-    const now = Date.now();
-    const rate = this._chatRateMap.get(ip);
-    if (rate && now - rate.lastPostAt < 2500) {
-      const err = new Error("Terlalu cepat mengirim pesan. Tunggu beberapa detik lagi.");
-      err.statusCode = 429;
+    if (typeof nickname !== "string" && typeof nickname !== "number") {
+      const err = new Error("Format nama panggilan tidak valid.");
+      err.statusCode = 400;
       throw err;
     }
-    if (rate && now - rate.windowStart < 60_000) {
-      if (rate.count >= 8) {
-        const err = new Error("Batas pesan per menit tercapai. Coba sebentar lagi.");
-        err.statusCode = 429;
-        throw err;
-      }
-      rate.count += 1;
-      rate.lastPostAt = now;
-    } else {
-      this._chatRateMap.set(ip, { windowStart: now, count: 1, lastPostAt: now });
+    if (typeof message !== "string" && typeof message !== "number") {
+      const err = new Error("Format pesan obrolan tidak valid.");
+      err.statusCode = 400;
+      throw err;
     }
 
-    const cleanNick = String(nickname || "")
-      .replace(/[\u0000-\u001F\u007F]/g, "")
-      .trim()
-      .slice(0, 28);
-    const cleanMsg = String(message || "")
-      .replace(/[\u0000-\u001F\u007F]/g, " ")
-      .trim()
-      .slice(0, 280);
+    const cleanNick = sanitizeText(nickname, 28);
+    const cleanMsg = sanitizeText(message, 280);
 
     if (cleanNick.length < 2) {
       const err = new Error("Nama panggilan minimal 2 karakter.");
+      err.statusCode = 400;
+      throw err;
+    }
+    if (RESERVED_NICK_REGEX.test(cleanNick)) {
+      const err = new Error(
+        "Nama panggilan tersebut dilindungi oleh sistem NodataNime. Gunakan nama panggilan lain."
+      );
       err.statusCode = 400;
       throw err;
     }
@@ -174,23 +199,58 @@ export class CommunityStore {
       throw err;
     }
 
-    const replySnippet = replyTo
-      ? String(replyTo.message || replyTo.snippet || "").slice(0, 80)
-      : "";
+    const now = Date.now();
+    const safeIp = sanitizeText(ip || "unknown", 64) || "unknown";
+    this._pruneRateMap(now);
+
+    if (now - this._globalWindowStart >= RATE_WINDOW_MS) {
+      this._globalWindowStart = now;
+      this._globalWindowCount = 0;
+    }
+    if (this._globalWindowCount >= MAX_GLOBAL_PER_MINUTE) {
+      const err = new Error("Lalu lintas obrolan komunitas sedang padat. Coba sebentar lagi.");
+      err.statusCode = 429;
+      throw err;
+    }
+
+    const rate = this._chatRateMap.get(safeIp);
+    if (rate && now - rate.lastPostAt < MIN_POST_COOLDOWN_MS) {
+      const err = new Error("Terlalu cepat mengirim pesan. Tunggu beberapa detik lagi.");
+      err.statusCode = 429;
+      throw err;
+    }
+    if (rate && now - rate.windowStart < RATE_WINDOW_MS) {
+      if (rate.count >= MAX_PER_IP_PER_MINUTE) {
+        const err = new Error("Batas pesan per menit tercapai. Coba sebentar lagi.");
+        err.statusCode = 429;
+        throw err;
+      }
+      rate.count += 1;
+      rate.lastPostAt = now;
+    } else {
+      this._chatRateMap.set(safeIp, { windowStart: now, count: 1, lastPostAt: now });
+    }
+    this._globalWindowCount += 1;
+
+    let normalizedReply = null;
+    if (replyTo && typeof replyTo === "object" && !Array.isArray(replyTo)) {
+      const replyNick = sanitizeText(replyTo.nickname || "", 28);
+      const replySnippet = sanitizeText(replyTo.message || replyTo.snippet || "", 80);
+      if (replyNick) {
+        normalizedReply = {
+          nickname: replyNick,
+          message: replySnippet,
+          snippet: replySnippet,
+        };
+      }
+    }
 
     const entry = {
       id: `chat-${now.toString(36)}-${Math.random().toString(36).slice(2, 6)}`,
       nickname: cleanNick,
       message: cleanMsg,
       timestamp: Math.floor(now / 1000),
-      replyTo:
-        replyTo && replyTo.nickname
-          ? {
-              nickname: String(replyTo.nickname || "").slice(0, 28),
-              message: replySnippet,
-              snippet: replySnippet,
-            }
-          : null,
+      replyTo: normalizedReply,
     };
 
     this.state.communityChat.unshift(entry);

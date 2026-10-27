@@ -55,22 +55,42 @@ export function extractQueryParam(href = "", paramName = "") {
   }
 }
 
+export function sanitizeHttpUrl(rawUrl = "") {
+  const str = String(rawUrl || "").trim();
+  if (!str || str.length > 2048 || /[\u0000-\u001F\u007F]/.test(str)) {
+    return "";
+  }
+  try {
+    const parsed = new URL(str);
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+      return "";
+    }
+    return parsed.href;
+  } catch {
+    return "";
+  }
+}
+
 export function resolvePosterUrl(src = "") {
   const raw = String(src || "").trim();
   if (!raw || raw.endsWith("no-cover.svg")) {
     return "/assets/no-cover.svg";
   }
-  if (raw.startsWith("//")) {
-    return `https:${raw}`;
+  if (/^(javascript|data|vbscript|file|blob):/i.test(raw)) {
+    return "/assets/no-cover.svg";
   }
+  const candidate = raw.startsWith("//") ? `https:${raw}` : raw;
   try {
-    const resolved = new URL(raw, `${YLNIME_BASE_URL}/`).href;
-    if (resolved.endsWith("/assets/no-cover.svg")) {
+    const resolved = new URL(candidate, `${YLNIME_BASE_URL}/`);
+    if (resolved.protocol !== "https:" && resolved.protocol !== "http:") {
       return "/assets/no-cover.svg";
     }
-    return resolved;
+    if (resolved.pathname.endsWith("/assets/no-cover.svg")) {
+      return "/assets/no-cover.svg";
+    }
+    return resolved.href;
   } catch {
-    return raw;
+    return "/assets/no-cover.svg";
   }
 }
 
@@ -632,7 +652,7 @@ export function normalizeEpisodeStreams({
   const streams = [];
 
   for (const raw of rawStreamPool) {
-    const link = String(raw?.link || raw?.url || "").trim();
+    const link = sanitizeHttpUrl(raw?.link || raw?.url || "");
     if (!link || seenLinks.has(link)) continue;
     seenLinks.add(link);
 

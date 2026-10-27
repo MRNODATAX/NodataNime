@@ -292,6 +292,23 @@ function esc(value = "") {
   });
 }
 
+function safeUrl(rawUrl = "", fallback = "") {
+  const str = String(rawUrl ?? "").trim();
+  if (!str || /[\u0000-\u001F\u007F]/.test(str)) return fallback;
+  if (str.startsWith("/") && !str.startsWith("//")) {
+    return str;
+  }
+  try {
+    const parsed = new URL(str);
+    if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+      return parsed.href;
+    }
+    return fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 function readJsonStorage(key, fallback) {
   try {
     const raw = localStorage.getItem(key);
@@ -761,7 +778,7 @@ function initPwa() {
 /* ===== Reusable Card Component ===== */
 function renderAnimeCard(item, options = {}) {
   const directEpisode = Boolean(options.directEpisode);
-  const poster = esc(item.poster || "/assets/no-cover.svg");
+  const poster = esc(safeUrl(item.poster, "/assets/no-cover.svg"));
   const title = esc(item.title || "Anime");
   const slug = esc(item.slug || item.rawSlug || "");
   const epId = directEpisode ? esc(item.episodeId || "") : "";
@@ -786,7 +803,6 @@ function renderAnimeCard(item, options = {}) {
           class="nd-card-poster"
           loading="lazy"
           referrerpolicy="no-referrer"
-          onerror="this.onerror=null;this.src='/assets/no-cover.svg';"
         />
         ${topBadge ? `<span class="nd-badge-top-left">${topBadge}</span>` : ""}
         ${score ? `<span class="nd-badge-top-right">${SVG_ICONS.star} ${score}</span>` : ""}
@@ -981,11 +997,10 @@ function renderHeroSlide(banners, idx) {
   if (!b) return "";
   return `
     <img
-      src="${esc(b.banner || b.poster)}"
+      src="${esc(safeUrl(b.banner || b.poster, "/assets/no-cover.svg"))}"
       alt="${esc(b.title)}"
       class="nd-hero-bg"
       referrerpolicy="no-referrer"
-      onerror="this.onerror=null;this.src='/assets/no-cover.svg';"
     />
     <div class="nd-hero-shade"></div>
     <div class="nd-hero-content">
@@ -1031,12 +1046,11 @@ function renderTopRankingItems(topAnime, tabKey) {
       <div class="nd-rank-item" data-open-series="${esc(item.slug)}">
         <div class="nd-rank-num">${esc(item.rank || idx + 1)}</div>
         <img
-          src="${esc(item.poster || "/assets/no-cover.svg")}"
+          src="${esc(safeUrl(item.poster, "/assets/no-cover.svg"))}"
           alt="${esc(item.title)}"
           class="nd-rank-poster"
           loading="lazy"
           referrerpolicy="no-referrer"
-          onerror="this.onerror=null;this.src='/assets/no-cover.svg';"
         />
         <div class="nd-rank-info">
           <div class="nd-rank-title">${esc(item.title)}</div>
@@ -1465,19 +1479,17 @@ async function renderDetailView(slug) {
 
       <section class="nd-detail-hero">
         <img
-          src="${esc(data.banner || data.poster)}"
+          src="${esc(safeUrl(data.banner || data.poster, "/assets/no-cover.svg"))}"
           alt=""
           class="nd-detail-backdrop"
           referrerpolicy="no-referrer"
-          onerror="this.onerror=null;this.src='/assets/no-cover.svg';"
         />
         <div class="nd-detail-body">
           <img
-            src="${esc(data.poster)}"
+            src="${esc(safeUrl(data.poster, "/assets/no-cover.svg"))}"
             alt="${esc(data.title)}"
             class="nd-detail-poster"
             referrerpolicy="no-referrer"
-            onerror="this.onerror=null;this.src='/assets/no-cover.svg';"
           />
           <div>
             <h1 class="nd-detail-title">${esc(data.title)}</h1>
@@ -1739,9 +1751,10 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
                   <div style="font-weight:700;font-size:0.84rem;color:var(--text-secondary);margin-bottom:8px;">Tautan Unduh Langsung (Direct Download):</div>
                   <div class="nd-server-group">
                     ${(data.downloadLinks || [])
+                      .filter((dl) => Boolean(safeUrl(dl?.url, "")))
                       .map(
                         (dl) => `
-                        <a href="${esc(dl.url)}" target="_blank" rel="noopener noreferrer" class="nd-link-more">
+                        <a href="${esc(safeUrl(dl.url, "#"))}" target="_blank" rel="noopener noreferrer" class="nd-link-more">
                           ${SVG_ICONS.download}${esc(dl.label)}
                         </a>
                       `
@@ -1798,11 +1811,10 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
       mount.innerHTML = `
         <div class="nd-player-unavailable">
           <img
-            src="${esc(data.poster || "/assets/no-cover.svg")}"
+            src="${esc(safeUrl(data.poster, "/assets/no-cover.svg"))}"
             alt="${esc(data.animeTitle)}"
             class="nd-player-unavailable-poster"
             referrerpolicy="no-referrer"
-            onerror="this.onerror=null;this.src='/assets/no-cover.svg';"
           />
           <strong style="font-size:1rem;color:#fff;">${esc(data.title)}</strong>
           <p style="max-width:460px;font-size:0.83rem;color:var(--text-secondary);line-height:1.55;margin:0;">
@@ -1810,8 +1822,8 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
           </p>
           <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px;">
             ${
-              data.sourceUrl
-                ? `<a href="${esc(data.sourceUrl)}" target="_blank" rel="noopener noreferrer" class="nd-btn nd-btn-primary" style="padding:9px 16px;font-size:0.82rem;">
+              safeUrl(data.sourceUrl, "")
+                ? `<a href="${esc(safeUrl(data.sourceUrl, "#"))}" target="_blank" rel="noopener noreferrer" class="nd-btn nd-btn-primary" style="padding:9px 16px;font-size:0.82rem;">
                     ${SVG_ICONS.external} Buka Sumber Episode Ini
                   </a>`
                 : ""
@@ -1822,10 +1834,15 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
       return;
     }
 
-    const srcUrl = useProxy && stream.proxyUrl ? stream.proxyUrl : stream.url;
+    const rawCandidateUrl = useProxy && stream.proxyUrl ? stream.proxyUrl : stream.url;
+    const srcUrl = safeUrl(rawCandidateUrl, "");
+    if (!srcUrl) {
+      mount.innerHTML = `<div class="nd-player-unavailable"><strong>URL stream diblokir oleh kebijakan keamanan klien.</strong></div>`;
+      return;
+    }
 
     if (stream.type === "embed") {
-      mount.innerHTML = `<iframe src="${esc(srcUrl)}" allowfullscreen referrerpolicy="no-referrer"></iframe>`;
+      mount.innerHTML = `<iframe src="${esc(srcUrl)}" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen referrerpolicy="no-referrer"></iframe>`;
       return;
     }
 
@@ -1836,7 +1853,7 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
         playsinline
         preload="metadata"
         referrerpolicy="no-referrer"
-        poster="${esc(data.poster || "")}"
+        poster="${esc(safeUrl(data.poster, "/assets/no-cover.svg"))}"
         src="${esc(srcUrl)}"
       ></video>
     `;
@@ -2211,7 +2228,7 @@ navSearchInput?.addEventListener("input", () => {
             .map(
               (item) => `
               <div class="nd-search-item" data-open-series="${esc(item.slug)}">
-                <img src="${esc(item.poster)}" alt="" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='/assets/no-cover.svg';" />
+                <img src="${esc(safeUrl(item.poster, "/assets/no-cover.svg"))}" alt="" referrerpolicy="no-referrer" />
                 <div class="nd-search-meta">
                   <div class="nd-search-title">${esc(item.title)}</div>
                   <div class="nd-search-sub">${esc(item.status || "Anime")} ${item.episode ? `• ${esc(item.episode)}` : ""} ${item.score ? `• ★ ${esc(item.score)}` : ""}</div>
@@ -2280,12 +2297,20 @@ window.addEventListener("popstate", () => {
 });
 
 /* ===== Boot ===== */
+document.addEventListener(
+  "error",
+  (e) => {
+    const el = e.target;
+    if (el && el.tagName === "IMG" && el.dataset?.fallbackApplied !== "1") {
+      el.dataset.fallbackApplied = "1";
+      el.src = "/assets/no-cover.svg";
+    }
+  },
+  true
+);
 initStarfield();
 initCommunityControls();
 initPwa();
 updateWatchlistBadge();
 loadCommunityData(true);
-apiGet("/api/config/public")
-  .then((res) => syncAnnouncementBar(res.data?.announcement))
-  .catch(() => {});
 routeCurrentUrl();

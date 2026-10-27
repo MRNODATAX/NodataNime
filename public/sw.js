@@ -1,4 +1,4 @@
-const CACHE_VERSION = "nodatanime-pwa-v6.1";
+const CACHE_VERSION = "nodatanime-pwa-v6.2";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const API_CACHE = `${CACHE_VERSION}-api`;
 
@@ -6,14 +6,25 @@ const PRECACHE_URLS = [
   "/",
   "/offline.html",
   "/manifest.webmanifest",
-  "/css/styles.css?v=6.1",
-  "/js/app.js?v=6.1",
+  "/css/styles.css?v=6.2",
+  "/js/app.js?v=6.2",
   "/assets/favicon.svg",
   "/assets/no-cover.svg",
   "/assets/icon-192.png",
   "/assets/icon-512.png",
   "/assets/apple-touch-icon.png",
 ];
+
+function isAllowedStaticAssetPath(pathname = "") {
+  return (
+    pathname === "/" ||
+    pathname === "/offline.html" ||
+    pathname === "/manifest.webmanifest" ||
+    pathname.startsWith("/css/") ||
+    pathname.startsWith("/js/") ||
+    pathname.startsWith("/assets/")
+  );
+}
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -60,12 +71,13 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Strategi Network-First untuk API publik katalog & komunitas (data segar diutamakan)
+  // Strategi Network-First untuk API publik katalog & komunitas (hanya cache respons JSON valid)
   if (url.pathname.startsWith("/api/")) {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          if (response && response.ok) {
+          const ct = (response.headers.get("content-type") || "").toLowerCase();
+          if (response && response.ok && ct.includes("application/json")) {
             const copy = response.clone();
             caches.open(API_CACHE).then((cache) => cache.put(request, copy));
           }
@@ -88,7 +100,8 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          if (response && response.ok) {
+          const ct = (response.headers.get("content-type") || "").toLowerCase();
+          if (response && response.ok && ct.includes("text/html")) {
             const copy = response.clone();
             caches.open(STATIC_CACHE).then((cache) => cache.put("/", copy));
           }
@@ -100,6 +113,11 @@ self.addEventListener("fetch", (event) => {
           return caches.match("/offline.html");
         })
     );
+    return;
+  }
+
+  // Hanya cache path aset statis resmi agar STATIC_CACHE tidak dipenuhi URL acak
+  if (!isAllowedStaticAssetPath(url.pathname)) {
     return;
   }
 

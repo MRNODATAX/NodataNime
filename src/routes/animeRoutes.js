@@ -9,6 +9,113 @@ import { handleStreamProxy } from "./streamProxy.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const reaDir = path.resolve(__dirname, "../../docs/rea");
 
+const VALID_LIST_TYPES = new Set([
+  "ongoing",
+  "completed",
+  "movie",
+  "movies",
+  "baru",
+  "rekomendasi",
+  "hyper",
+]);
+const VALID_GENRE_ID_REGEX = /^[a-z0-9-]{1,40}$/i;
+const VALID_LETTER_REGEX = /^([a-z]|#|0-9)$/i;
+
+function badRequest(message) {
+  const err = new Error(message);
+  err.statusCode = 400;
+  return err;
+}
+
+function readScalarParam(val, fallback = "") {
+  if (val === undefined || val === null) return fallback;
+  if (typeof val !== "string" && typeof val !== "number") {
+    throw badRequest("Format parameter kueri tidak valid.");
+  }
+  return String(val).trim();
+}
+
+function parseBoundedPage(rawPage) {
+  if (rawPage === undefined || rawPage === null || rawPage === "") return 1;
+  if (typeof rawPage !== "string" && typeof rawPage !== "number") {
+    throw badRequest("Parameter 'page' harus berupa angka bulat positif.");
+  }
+  const str = String(rawPage).trim();
+  if (!/^\d+$/.test(str)) {
+    throw badRequest("Parameter 'page' harus berupa angka bulat antara 1 hingga 500.");
+  }
+  const n = Number.parseInt(str, 10);
+  if (!Number.isSafeInteger(n) || n < 1 || n > 500) {
+    throw badRequest("Parameter 'page' di luar batas aman (1-500).");
+  }
+  return n;
+}
+
+function validateSafeIdentifier(raw, fieldName = "slug", maxLen = 180) {
+  const str = readScalarParam(raw, "");
+  if (!str) return "";
+  if (
+    str.length > maxLen ||
+    /[\u0000-\u001F\u007F\\]/.test(str) ||
+    str.includes("..")
+  ) {
+    throw badRequest(`Parameter '${fieldName}' mengandung karakter atau panjang yang tidak diizinkan.`);
+  }
+  return str;
+}
+
+export function resolveTrustedClientIp(req) {
+  if (process.env.VERCEL) {
+    const vercelIp = String(
+      req.headers["x-vercel-forwarded-for"] || req.headers["x-real-ip"] || ""
+    )
+      .split(",")[0]
+      .trim();
+    if (vercelIp) return vercelIp;
+  }
+  if (process.env.TRUST_PROXY === "1") {
+    return String(req.ip || req.socket?.remoteAddress || "unknown").trim();
+  }
+  return String(req.socket?.remoteAddress || "local").trim();
+}
+
+export function assertSameOriginJsonPost(req) {
+  const contentType = String(req.headers["content-type"] || "").toLowerCase();
+  if (!contentType.startsWith("application/json")) {
+    const err = new Error("Permintaan tulis wajib menggunakan Content-Type: application/json.");
+    err.statusCode = 415;
+    throw err;
+  }
+
+  const fetchSite = String(req.headers["sec-fetch-site"] || "").toLowerCase();
+  if (fetchSite === "cross-site") {
+    const err = new Error("Permintaan lintas situs (cross-site) ditolak oleh kebijakan keamanan CSRF.");
+    err.statusCode = 403;
+    throw err;
+  }
+
+  const origin = req.headers.origin;
+  if (origin) {
+    let originHost = "";
+    try {
+      originHost = new URL(String(origin)).host.toLowerCase();
+    } catch {
+      const err = new Error("Header Origin tidak valid.");
+      err.statusCode = 403;
+      throw err;
+    }
+    const targetHost = String(req.headers["x-forwarded-host"] || req.headers.host || "")
+      .split(",")[0]
+      .trim()
+      .toLowerCase();
+    if (targetHost && originHost !== targetHost) {
+      const err = new Error("Origin permintaan tidak sesuai dengan host aplikasi.");
+      err.statusCode = 403;
+      throw err;
+    }
+  }
+}
+
 function sendOk(res, payload) {
   const { dataSource = "verified-snapshot", ...rest } = payload || {};
   return res.json({
@@ -44,7 +151,8 @@ animeRouter.get("/community", async (_req, res, next) => {
 
 animeRouter.post("/community/messages", (req, res, next) => {
   try {
-    const ip = req.ip || req.socket?.remoteAddress || "unknown";
+    assertSameOriginJsonPost(req);
+    const ip = resolveTrustedClientIp(req);
     const created = communityStore.addCommunityMessage({
       nickname: req.body?.nickname,
       message: req.body?.message,
@@ -78,7 +186,7 @@ animeRouter.get("/anime", (_req, res) => {
       { method: "GET", path: "/api/anime/jadwal", description: "Jadwal rilis mingguan (Sabtu s/d Jumat)" },
       { method: "GET", path: "/api/anime/detail/:slug", description: "Detail lengkap anime & daftar episode" },
       { method: "GET", path: "/api/anime/episode?series=:slug&episode=:epId", description: "Multi-resolusi & multi-server stream video (yl_ep_json=1)" },
-      { method: "GET", path: "/api/anime/stream-proxy?url=:encodedUrl", description: "HTTP 206 Range video proxy dengan Referer otomatis" },
+      { method: "GET", path: "/api/anime/stream-proxy?url=:encodedUrl", description: "HTTP 206 Range video proxy dengan Referer otomatis & proteksi SSRF berlapis" },
       { method: "GET", path: "/api/rea/evidence", description: "Laporan Reverse-Engineering & Obligation Ledger REA" },
     ],
   });
@@ -94,9 +202,13 @@ animeRouter.get("/anime/home", async (_req, res, next) => {
 
 animeRouter.get("/anime/list", async (req, res, next) => {
   try {
-    const type = String(req.query.type || "ongoing");
-    const page = Number(req.query.page || 1);
-    sendOk(res, await animeService.getList(type, page));
+    const rawType = readScalarParam(req.query.type, "ongoing").toLowerCase();
+    if (!VALID_LIST_TYPES.has(rawType)) {
+      throw badRequest("Kategori 'type' tidak dikenali.");
+    }
+    const normalizedType = rawType === "movies" ? "movie" : rawType;
+    const page = parseBoundedPage(req.query.page);
+    sendOk(res, await animeService.getList(normalizedType, page));
   } catch (err) {
     next(err);
   }
@@ -104,7 +216,7 @@ animeRouter.get("/anime/list", async (req, res, next) => {
 
 animeRouter.get("/anime/ongoing", async (req, res, next) => {
   try {
-    sendOk(res, await animeService.getList("ongoing", Number(req.query.page || 1)));
+    sendOk(res, await animeService.getList("ongoing", parseBoundedPage(req.query.page)));
   } catch (err) {
     next(err);
   }
@@ -112,7 +224,7 @@ animeRouter.get("/anime/ongoing", async (req, res, next) => {
 
 animeRouter.get("/anime/completed", async (req, res, next) => {
   try {
-    sendOk(res, await animeService.getList("completed", Number(req.query.page || 1)));
+    sendOk(res, await animeService.getList("completed", parseBoundedPage(req.query.page)));
   } catch (err) {
     next(err);
   }
@@ -120,7 +232,7 @@ animeRouter.get("/anime/completed", async (req, res, next) => {
 
 animeRouter.get("/anime/movies", async (req, res, next) => {
   try {
-    sendOk(res, await animeService.getList("movie", Number(req.query.page || 1)));
+    sendOk(res, await animeService.getList("movie", parseBoundedPage(req.query.page)));
   } catch (err) {
     next(err);
   }
@@ -128,8 +240,11 @@ animeRouter.get("/anime/movies", async (req, res, next) => {
 
 animeRouter.get("/anime/az", async (req, res, next) => {
   try {
-    const letter = String(req.query.letter || req.query.l || "A");
-    const page = Number(req.query.page || 1);
+    const letter = readScalarParam(req.query.letter ?? req.query.l, "A");
+    if (!VALID_LETTER_REGEX.test(letter)) {
+      throw badRequest("Parameter 'letter' harus berupa huruf A-Z atau '#'.");
+    }
+    const page = parseBoundedPage(req.query.page);
     sendOk(res, await animeService.getAz(letter, page));
   } catch (err) {
     next(err);
@@ -138,15 +253,18 @@ animeRouter.get("/anime/az", async (req, res, next) => {
 
 animeRouter.get("/anime/search", async (req, res, next) => {
   try {
-    const q = String(req.query.q || req.query.search || req.query.keyword || "").trim();
-    if (!q) {
+    const rawQ = readScalarParam(req.query.q ?? req.query.search ?? req.query.keyword, "");
+    if (!rawQ) {
       return res.status(400).json({
         ok: false,
         statusCode: 400,
         message: "Parameter pencarian 'q' wajib diisi.",
       });
     }
-    sendOk(res, await animeService.search(q));
+    if (rawQ.length > 100 || /[\u0000-\u001F\u007F]/.test(rawQ)) {
+      throw badRequest("Panjang kata kunci pencarian maksimal 100 karakter tanpa karakter kontrol.");
+    }
+    sendOk(res, await animeService.search(rawQ));
   } catch (err) {
     next(err);
   }
@@ -162,8 +280,11 @@ animeRouter.get("/anime/genres", async (_req, res, next) => {
 
 animeRouter.get("/anime/genre", async (req, res, next) => {
   try {
-    const genreId = String(req.query.g || req.query.genre || "action");
-    const page = Number(req.query.page || 1);
+    const genreId = readScalarParam(req.query.g ?? req.query.genre, "action").toLowerCase();
+    if (!VALID_GENRE_ID_REGEX.test(genreId)) {
+      throw badRequest("Parameter 'genre' tidak valid.");
+    }
+    const page = parseBoundedPage(req.query.page);
     sendOk(res, await animeService.getByGenre(genreId, page));
   } catch (err) {
     next(err);
@@ -172,8 +293,12 @@ animeRouter.get("/anime/genre", async (req, res, next) => {
 
 animeRouter.get("/anime/genre/:genreId", async (req, res, next) => {
   try {
-    const page = Number(req.query.page || 1);
-    sendOk(res, await animeService.getByGenre(req.params.genreId, page));
+    const genreId = readScalarParam(req.params.genreId, "").toLowerCase();
+    if (!VALID_GENRE_ID_REGEX.test(genreId)) {
+      throw badRequest("Parameter 'genreId' tidak valid.");
+    }
+    const page = parseBoundedPage(req.query.page);
+    sendOk(res, await animeService.getByGenre(genreId, page));
   } catch (err) {
     next(err);
   }
@@ -191,7 +316,7 @@ animeRouter.get("/anime/schedule", scheduleHandler);
 
 animeRouter.get("/anime/detail", async (req, res, next) => {
   try {
-    const slug = String(req.query.slug || req.query.series || "").trim();
+    const slug = validateSafeIdentifier(req.query.slug ?? req.query.series, "slug", 180);
     if (!slug) {
       return res.status(400).json({
         ok: false,
@@ -215,7 +340,8 @@ animeRouter.get("/anime/detail", async (req, res, next) => {
 
 animeRouter.get("/anime/detail/:slug", async (req, res, next) => {
   try {
-    const detail = await animeService.getDetail(req.params.slug);
+    const slug = validateSafeIdentifier(req.params.slug, "slug", 180);
+    const detail = await animeService.getDetail(slug);
     if (!detail) {
       return res.status(404).json({
         ok: false,
@@ -231,10 +357,18 @@ animeRouter.get("/anime/detail/:slug", async (req, res, next) => {
 
 const episodeHandler = async (req, res, next) => {
   try {
-    const token = String(req.params.token || req.query.token || "").trim();
-    const series = String(req.query.series || req.query.slug || "").trim();
-    const episode = String(req.query.episode || "").trim();
-    const ep = req.query.ep;
+    const token = validateSafeIdentifier(req.params.token ?? req.query.token, "token", 260);
+    const series = validateSafeIdentifier(req.query.series ?? req.query.slug, "series", 180);
+    const episode = validateSafeIdentifier(req.query.episode, "episode", 180);
+    const rawEp = req.query.ep;
+    let ep = null;
+    if (rawEp !== undefined && rawEp !== null && rawEp !== "") {
+      const epStr = readScalarParam(rawEp, "");
+      if (!/^\d{1,5}$/.test(epStr)) {
+        throw badRequest("Parameter 'ep' harus berupa nomor episode numerik.");
+      }
+      ep = Number.parseInt(epStr, 10);
+    }
 
     if (!token && !series && !episode) {
       return res.status(400).json({
