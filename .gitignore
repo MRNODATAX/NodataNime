@@ -9,3 +9,4 @@ dist/
 .cache/
 Unselected files/
 data/admin-store.json
+data/community-store.json

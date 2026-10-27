@@ -43,7 +43,7 @@ export class AnimeService {
 
   async getList(type = "ongoing", page = 1) {
     const cleanType = String(type || "ongoing").toLowerCase().trim();
-    const p = Math.max(1, Number(page) || 1);
+    const p = Math.min(500, Math.max(1, Number.parseInt(page, 10) || 1));
 
     return appCache.remember(`list:${cleanType}:${p}`, async () => {
       try {
@@ -154,7 +154,7 @@ export class AnimeService {
   }
 
   async search(query = "") {
-    const q = String(query || "").trim();
+    const q = String(query || "").trim().slice(0, 100);
     if (!q) return { dataSource: "none", query: "", items: [] };
 
     return appCache.remember(`search:${q.toLowerCase()}`, async () => {

@@ -8,6 +8,26 @@ import { animeRouter } from "./routes/animeRoutes.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+export const APP_CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' https://fonts.gstatic.com data:",
+  "img-src 'self' https: http: data: blob:",
+  "media-src 'self' https: http: blob:",
+  "frame-src https:",
+  "connect-src 'self'",
+  "worker-src 'self'",
+  "manifest-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self' https://*.e2b.app https://*.arena.ai https://arena.ai",
+].join("; ");
+
+export const APP_PERMISSIONS_POLICY =
+  "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()";
+
 function resolveExistingPath(candidates) {
   for (const candidate of candidates) {
     if (fs.existsSync(candidate)) return candidate;
@@ -42,11 +62,19 @@ export function normalizeVercelRequestUrl(rawUrl = "/") {
   return `${parsed.pathname}${parsed.search}`;
 }
 
+const readOnlyCors = cors({
+  origin: true,
+  methods: ["GET", "HEAD", "OPTIONS"],
+  credentials: false,
+});
+
 export function createApp() {
   const app = express();
 
   app.disable("x-powered-by");
-  app.set("trust proxy", 1);
+  if (process.env.VERCEL || process.env.TRUST_PROXY === "1") {
+    app.set("trust proxy", 1);
+  }
 
   app.use((req, _res, next) => {
     if (req.url && req.url.includes("__vpath=")) {
@@ -55,21 +83,25 @@ export function createApp() {
     next();
   });
 
-  // Mengizinkan semua host & origin untuk domain produksi, PWA, dan Live Preview
-  app.use(
-    cors({
-      origin: true,
-      credentials: false,
-    })
-  );
-  app.use(compression());
-  app.use(express.json({ limit: "1mb" }));
+  // Izinkan CORS lintas-origin hanya untuk operasi baca (GET/HEAD/OPTIONS); blokir refleksi CORS pada POST/PUT/DELETE
+  app.use((req, res, next) => {
+    if (req.method === "GET" || req.method === "HEAD" || req.method === "OPTIONS") {
+      return readOnlyCors(req, res, next);
+    }
+    return next();
+  });
 
-  // Header keamanan ringan tanpa memblokir iframe Live Preview
+  app.use(compression());
+  app.use(express.json({ limit: "16kb", strict: true }));
+
+  // Header keamanan berlapis (tetap mengizinkan penyematan iframe Live Preview melalui frame-ancestors)
   app.use((_req, res, next) => {
     res.removeHeader("X-Frame-Options");
     res.setHeader("X-Content-Type-Options", "nosniff");
     res.setHeader("Referrer-Policy", "no-referrer");
+    res.setHeader("Content-Security-Policy", APP_CONTENT_SECURITY_POLICY);
+    res.setHeader("Permissions-Policy", APP_PERMISSIONS_POLICY);
+    res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
     next();
   });
 
@@ -95,30 +127,35 @@ export function createApp() {
     })
   );
 
-  // 404 khusus endpoint /api/* yang tidak dikenal
+  // 404 khusus endpoint /api/* yang tidak dikenal (tanpa merefleksikan kueri panjang)
   app.use("/api/*", (req, res) => {
+    const safePath = String(req.path || "").slice(0, 120);
     res.status(404).json({
       ok: false,
       statusCode: 404,
-      message: `Endpoint API tidak ditemukan: ${req.originalUrl}`,
+      message: `Endpoint API tidak ditemukan: /api${safePath}`,
     });
   });
 
   // Sajikan App Shell HTML (`views/index.html`) untuk `/`, `/index.html`, dan seluruh rute SPA
-  // tanpa bentrok static/index.html vs functions/index.func di Vercel Express
   app.get("*", (_req, res) => {
     res.setHeader("Content-Type", "text/html; charset=UTF-8");
     res.setHeader("Cache-Control", "no-cache, must-revalidate");
     res.status(200).send(indexHtmlContent);
   });
 
-  // Penanganan error global
+  // Penanganan error global tanpa membocorkan detail internal pada error >= 500
   app.use((err, _req, res, _next) => {
-    const status = Number(err?.statusCode) || 500;
+    const rawStatus = Number(err?.statusCode || err?.status) || 500;
+    const status = rawStatus >= 400 && rawStatus < 600 ? rawStatus : 500;
+    const safeMessage =
+      status < 500 && err?.message
+        ? String(err.message)
+        : "Terjadi kesalahan internal pada server NodataNime.";
     res.status(status).json({
       ok: false,
       statusCode: status,
-      message: err?.message || "Terjadi kesalahan internal pada server NodataNime.",
+      message: safeMessage,
     });
   });
 

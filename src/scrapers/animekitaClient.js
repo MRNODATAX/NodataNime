@@ -1,4 +1,9 @@
-import { toSeriesToken, classifyStreamProvider } from "../parsers/ylnimeParser.js";
+import {
+  toSeriesToken,
+  classifyStreamProvider,
+  sanitizeHttpUrl,
+  resolvePosterUrl,
+} from "../parsers/ylnimeParser.js";
 
 const ANIMEKITA_BASE = "https://apps.animekita.org/api/v1.2.5";
 const DART_UA = "Dart/3.9 (dart:io)";
@@ -68,7 +73,7 @@ class AnimeKitaClient {
       title: String(item.judul || item.title || rawSlug).trim(),
       slug: toSeriesToken(rawSlug),
       rawSlug,
-      poster: item.cover || item.image || "/assets/no-cover.svg",
+      poster: resolvePosterUrl(item.cover || item.image || ""),
       score: String(item.rating || item.score || ""),
       status: item.status || item.type || "Anime",
       label: item.lastch || item.hari || "",
@@ -103,22 +108,26 @@ class AnimeKitaClient {
     );
     const data = json?.data?.[0] || {};
     const streamList = Array.isArray(data.stream) ? data.stream : [];
-    return streamList.map((s, idx) => {
-      const meta = classifyStreamProvider(s.link, s.provide);
-      return {
-        id: s.id || idx + 1,
-        label: `${meta.provider} ${s.reso || "720p"}`,
-        resolution: s.reso || "720p",
-        resolutionRank: Number.parseInt(s.reso, 10) || 720,
-        url: s.link,
-        proxyUrl: `/api/anime/stream-proxy?url=${encodeURIComponent(s.link)}`,
-        provider: meta.provider,
-        providerId: meta.providerId,
-        type: meta.type,
-        playableDirect: meta.playableDirect,
-        recommendedReferer: meta.recommendedReferer,
-      };
-    });
+    return streamList
+      .map((s, idx) => {
+        const cleanLink = sanitizeHttpUrl(s?.link || "");
+        if (!cleanLink) return null;
+        const meta = classifyStreamProvider(cleanLink, s.provide);
+        return {
+          id: s.id || idx + 1,
+          label: `${meta.provider} ${s.reso || "720p"}`,
+          resolution: s.reso || "720p",
+          resolutionRank: Number.parseInt(s.reso, 10) || 720,
+          url: cleanLink,
+          proxyUrl: `/api/anime/stream-proxy?url=${encodeURIComponent(cleanLink)}`,
+          provider: meta.provider,
+          providerId: meta.providerId,
+          type: meta.type,
+          playableDirect: meta.playableDirect,
+          recommendedReferer: meta.recommendedReferer,
+        };
+      })
+      .filter(Boolean);
   }
 }
 
