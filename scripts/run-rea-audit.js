@@ -19,6 +19,7 @@ const sourcePaths = [
   "src/routes/animeRoutes.js",
   "src/routes/streamProxy.js",
   "src/utils/cache.js",
+  "src/utils/qrisSecurity.js",
   "public/js/app.js",
   "public/sw.js",
 ];

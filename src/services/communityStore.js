@@ -35,6 +35,15 @@ function createSeedState() {
     version: 1,
     communityInfo: [
       {
+        id: "info-qris-00",
+        category: "Penyemangat Admin",
+        title: "QRIS Resmi NodataNime: NODATASHOP (ID1025451509315)",
+        body: "Nonton lancar tanpa iklan pop-up? Kamu bisa traktir kopi Admin lewat tombol Traktir Kopi (QRIS). Demi keamanan, selalu pastikan nama merchant yang muncul di m-banking/e-wallet adalah NODATASHOP dengan NMID ID1025451509315.",
+        linkSlug: "",
+        pinned: true,
+        createdAt: "2026-10-27T07:30:00.000Z",
+      },
+      {
         id: "info-pwa-01",
         category: "Aplikasi PWA",
         title: "NodataNime Kini Tersedia Sebagai Aplikasi (PWA)",

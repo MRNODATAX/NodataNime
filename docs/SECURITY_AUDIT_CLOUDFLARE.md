@@ -31,7 +31,8 @@
 | **Layer 4** | Validasi Parameter & Anti-Cache Thrashing | Penolakan `type` ilegal, array pollution, `page=999999`, `q` > 100 karakter, traversal `../` (`400`), serta ketahanan `PINNED_CORE_KEYS` saat cache dibanjiri kueri acak. | **LULUS** |
 | **Layer 5** | Header Keamanan HTTP & CORS | Verifikasi header `Content-Security-Policy`, `Permissions-Policy`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`, serta tiadanya `Access-Control-Allow-Origin` pada `POST`. | **LULUS** |
 | **Layer 6** | Isolasi Cache Service Worker PWA | Verifikasi `nodatanime-pwa-v6.2`, `isAllowedStaticAssetPath()`, dan validasi `application/json` sebelum menyimpan cache `/api/`. | **LULUS** |
-| **Layer 7** | Supply Chain & Konfigurasi Serverless | `npm audit --omit=dev` (`0` CVE dari 98 paket produksi), non-root `USER node` pada `Dockerfile`, serta kompatibilitas penuh `@vercel/express` di `vercel.json`. | **LULUS** |
+| **Layer 7** | Supply Chain & Konfigurasi Serverless | `npm audit --omit=dev` (`0` CVE dari 128 paket produksi), non-root `USER node` pada `Dockerfile`, serta kompatibilitas penuh `@vercel/express` di `vercel.json`. | **LULUS** |
+| **Layer 8** | Anti-Quishing & Anti-QR-Swapping (`NODATASHOP` / `ID1025451509315`) | Pinning kriptografis ganda (Server + WebCrypto Klien): verifikasi SHA-256 berkas poster asli & payload statis, validasi TLV EMVCo (`Tag 59 = NODATASHOP`, `Tag 51.02 = ID1025451509315`, `Tag 26.01 = 936009153004927138`), checksum `CRC-16/CCITT-FALSE`, penolakan URL phishing (`https://`, `javascript:`), pemblokiran parameter injeksi (`?qris=`, `?merchant=`, `?url=`), render QR lokal tanpa API pihak ketiga, dan sanitasi whitelist DOM `<svg>/<path>`. | **LULUS** |
 
 ---
 
@@ -51,3 +52,13 @@
 
 **Q5: Apakah ada item yang berada di luar kode repositori (`NEEDS-VALIDATION`)?**
 > **Jawaban:** Sesuai disiplin `cloudflare/security-audit-skill`, satu item dicatat sebagai `needs_validation` berisiko rendah (`nodatanime:vercel-edge:waf-and-deployment-protection-check`): karena Vercel Serverless menjalankan memori terpisah antar-instans saat trafik melonjak tinggi, Anda dapat mengaktifkan **Vercel Firewall / Attack Challenge atau Rate Limiting Rule** secara opsional di Dashboard Vercel pada rute `POST /api/community/messages` dan `GET /api/anime/stream-proxy` sebagai pelapis tambahan di tingkat CDN Edge.
+
+**Q6: Bagaimana sistem mencegah hacker mengganti/menyuntikkan kode QRIS palsu miliknya sendiri (QR Swapping) atau QR phishing (Quishing)?**
+> **Jawaban:** NodataNime menerapkan **7 lapis pertahanan Anti-QR-Swapping & Anti-Quishing** di `src/utils/qrisSecurity.js` dan `public/js/app.js`:
+> 1. **Immutable Server Pinning (`Object.freeze`)**: Payload dasar QRIS, nama merchant `NODATASHOP`, NMID `ID1025451509315`, PAN `936009153004927138`, dan hash `SHA-256` dikunci permanen di server. Endpoint `GET /api/support/qris` tidak pernah menerima string QR, URL, maupun nama merchant dari luar (hanya angka bulat `amount`), serta menolak parameter injeksi seperti `?qris=`, `?url=`, atau `?merchant=` dengan HTTP `400`.
+> 2. **Zero Third-Party QR API**: Pembuatan kode QR Dinamis dilakukan 100% lokal di server Node.js tanpa memanggil API pembuat QR pihak ketiga (menutup celah MITM / pembajakan domain pihak ketiga).
+> 3. **Dual-Side EMVCo TLV & CRC-16 Verification**: Baik server maupun browser secara independen mengurai struktur TLV EMVCo untuk menolak skema URL (`http://`, `https://`, `javascript:`), memastikan `Tag 59 === "NODATASHOP"` dan `NMID === "ID1025451509315"`, serta mencocokkan checksum `CRC-16/CCITT-FALSE`.
+> 4. **Dual-Side SHA-256 Poster Integrity**: Sebelum poster QRIS resmi (`/assets/qris-nodatashop.jpg`) ditampilkan atau diunduh, server memeriksa `crypto.timingSafeEqual` SHA-256 dan browser memeriksa ulang `crypto.subtle.digest("SHA-256")`. Jika berkas berubah 1 bit saja, tampilan QR langsung diblokir.
+> 5. **Strict SVG DOM Sanitizer & CSP `script-src 'self'`**: Browser hanya mengizinkan elemen vektor `<svg>`, `<path>`, dan `<rect>` murni tanpa skrip/event handler, sementara CSP memblokir injeksi skrip XSS di halaman.
+> 6. **Anti-Clickjacking (`frame-ancestors`) & `CORP: same-origin`**: Mencegah situs penyerang membungkus halaman NodataNime dengan `<iframe>` lalu menempelkan stiker QR palsu transparan di atas tombol/modal QRIS.
+> 7. **Cache Isolation (`Cache-Control: no-store` & Bypass Service Worker)**: Endpoint `/api/support/*` dikecualikan dari cache Service Worker dan CDN agar respons QRIS dinamis tidak pernah dapat diracuni (*cache poisoning*).

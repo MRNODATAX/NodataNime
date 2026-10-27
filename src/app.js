@@ -5,6 +5,7 @@ import express from "express";
 import cors from "cors";
 import compression from "compression";
 import { animeRouter } from "./routes/animeRoutes.js";
+import { PINNED_QRIS_CONFIG, verifyPosterFileIntegrity } from "./utils/qrisSecurity.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -83,8 +84,11 @@ export function createApp() {
     next();
   });
 
-  // Izinkan CORS lintas-origin hanya untuk operasi baca (GET/HEAD/OPTIONS); blokir refleksi CORS pada POST/PUT/DELETE
+  // Izinkan CORS lintas-origin hanya untuk operasi baca katalog publik; kunci endpoint /api/support/* khusus same-origin
   app.use((req, res, next) => {
+    if (req.path && req.path.startsWith("/api/support")) {
+      return next();
+    }
     if (req.method === "GET" || req.method === "HEAD" || req.method === "OPTIONS") {
       return readOnlyCors(req, res, next);
     }
@@ -106,6 +110,19 @@ export function createApp() {
   });
 
   app.use("/api", animeRouter);
+
+  // Verifikasi integritas SHA-256 berkas poster QRIS resmi sebelum disajikan ke browser
+  app.get("/assets/qris-nodatashop.jpg", (_req, res, next) => {
+    try {
+      verifyPosterFileIntegrity(publicDir);
+      res.setHeader("Cross-Origin-Resource-Policy", "same-origin");
+      res.setHeader("X-QRIS-Poster-SHA256", PINNED_QRIS_CONFIG.posterFileSha256);
+      res.setHeader("X-QRIS-NMID", PINNED_QRIS_CONFIG.nmid);
+      next();
+    } catch (err) {
+      next(err);
+    }
+  });
 
   app.use(
     express.static(publicDir, {
