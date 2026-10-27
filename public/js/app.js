@@ -62,17 +62,21 @@ function dismissIntroSplash() {
   if (splashDismissed) return;
   splashDismissed = true;
   const splash = document.getElementById("introSplash");
-  if (!splash) return;
+  if (!splash) {
+    document.body.classList.remove("is-splashing");
+    return;
+  }
 
   const elapsed = performance.now() - bootStartedAt;
-  const minDisplayMs = 820;
+  const minDisplayMs = 760;
   const waitMs = Math.max(0, minDisplayMs - elapsed);
 
   setTimeout(() => {
+    document.body.classList.remove("is-splashing");
     splash.classList.add("is-leaving");
     setTimeout(() => {
       splash.hidden = true;
-    }, 500);
+    }, 460);
   }, waitMs);
 }
 

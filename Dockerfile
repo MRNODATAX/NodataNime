@@ -7,7 +7,7 @@ ENV HOST=0.0.0.0
 ENV PORT=3000
 ENV DATA_DIR=/var/data
 
-# Siapkan direktori volume persisten untuk brankas Admin & Obrolan Komunitas
+# Siapkan direktori volume persisten untuk penyimpanan Obrolan Komunitas
 RUN mkdir -p /var/data && chown -R node:node /var/data /app
 
 COPY --chown=node:node package*.json ./

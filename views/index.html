@@ -16,16 +16,56 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/styles.css?v=6.0" />
+  <style>
+    html, body { margin: 0; width: 100%; max-width: 100%; background: #06080f; color: #f8fafc; overflow-x: hidden; }
+    @supports (overflow-x: clip) { html, body { overflow-x: clip; } }
+    body.is-splashing { overflow: hidden; }
+    .nd-intro-splash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: #03050c;
+    }
+    .nd-intro-logo-stage {
+      position: relative;
+      width: 112px;
+      height: 112px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+  </style>
+  <link rel="stylesheet" href="/css/styles.css?v=6.1" />
 </head>
-<body>
-  <!-- Animasi Pembuka Logo & Nama Brand NodataNime -->
+<body class="is-splashing">
+  <!-- Animasi Pembuka Logo & Nama Brand NodataNime (100% Terpusat Stabil) -->
   <div id="introSplash" class="nd-intro-splash" role="status" aria-live="polite" aria-label="Memuat NodataNime">
     <div class="nd-intro-inner">
       <div class="nd-intro-logo-stage">
-        <span class="nd-intro-orbit" aria-hidden="true"></span>
-        <span class="nd-intro-orbit nd-intro-orbit-alt" aria-hidden="true"></span>
-        <img src="/assets/favicon.svg" alt="Logo NodataNime" width="76" height="76" class="nd-intro-logo" />
+        <svg class="nd-intro-ring-svg" viewBox="0 0 112 112" width="112" height="112" fill="none" aria-hidden="true">
+          <circle cx="56" cy="56" r="51" stroke="rgba(255,255,255,0.10)" stroke-width="2" />
+          <circle cx="56" cy="56" r="51" stroke="url(#ndSplashGrad)" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="106 230" />
+          <defs>
+            <linearGradient id="ndSplashGrad" x1="0" y1="0" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#ff2a4b" />
+              <stop offset="65%" stop-color="#e50914" />
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0.15" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <svg class="nd-intro-ring-svg nd-intro-ring-inner" viewBox="0 0 112 112" width="112" height="112" fill="none" aria-hidden="true">
+          <circle cx="56" cy="56" r="43" stroke="rgba(255,255,255,0.52)" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="62 220" />
+        </svg>
+        <img src="/assets/favicon.svg" alt="Logo NodataNime" width="66" height="66" class="nd-intro-logo" />
       </div>
       <div class="nd-intro-wordmark">
         <span class="nd-intro-name">Nodata<span>Nime</span></span>
@@ -58,7 +98,7 @@
             type="search"
             id="navSearchInput"
             class="nd-search-input"
-            placeholder="Cari anime... (tekan /)"
+            placeholder="Cari anime..."
             autocomplete="off"
           />
           <div id="searchDropdown" class="nd-search-dropdown" hidden></div>
@@ -338,7 +378,7 @@
     <!-- Bar Navigasi Bawah -->
     <nav class="nd-bottom-bar" id="bottomNavBar" aria-label="Navigasi Utama Bawah">
       <button type="button" class="nd-bnav-item active" data-view="home">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M3 10.5 12 3l9 7.5"></path>
           <path d="M5 9.8V21h14V9.8"></path>
         </svg>
@@ -346,7 +386,7 @@
       </button>
 
       <button type="button" class="nd-bnav-item" data-view="catalog" data-type="ongoing">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="10"></circle>
           <polygon points="10 8 16 12 10 16 10 8"></polygon>
         </svg>
@@ -354,7 +394,7 @@
       </button>
 
       <button type="button" class="nd-bnav-item" data-view="genres">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
           <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
           <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
@@ -364,7 +404,7 @@
       </button>
 
       <button type="button" class="nd-bnav-item" data-view="schedule">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="3" y="4" width="18" height="18" rx="2"></rect>
           <line x1="16" y1="2" x2="16" y2="6"></line>
           <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -375,7 +415,7 @@
 
       <button type="button" class="nd-bnav-item" data-view="library">
         <div class="nd-bnav-icon-wrap">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
           </svg>
           <span id="watchlistBadge" class="nd-bnav-badge" hidden>0</span>
@@ -384,7 +424,7 @@
       </button>
 
       <button type="button" class="nd-bnav-item" id="bottomMoreBtn" aria-expanded="false">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <line x1="4" y1="6" x2="20" y2="6"></line>
           <line x1="4" y1="12" x2="20" y2="12"></line>
           <line x1="4" y1="18" x2="20" y2="18"></line>
@@ -417,6 +457,6 @@
   <!-- Toast Container -->
   <div id="toastRoot" class="nd-toast-root" aria-live="polite"></div>
 
-  <script type="module" src="/js/app.js?v=6.0"></script>
+  <script type="module" src="/js/app.js?v=6.1"></script>
 </body>
 </html>

@@ -7,8 +7,24 @@ import compression from "compression";
 import { animeRouter } from "./routes/animeRoutes.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const publicDir = path.join(__dirname, "../public");
-const indexHtmlPath = path.join(__dirname, "../views/index.html");
+
+function resolveExistingPath(candidates) {
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) return candidate;
+  }
+  return candidates[0];
+}
+
+const publicDir = resolveExistingPath([
+  path.join(__dirname, "../public"),
+  path.join(process.cwd(), "public"),
+  path.join(__dirname, "../../public"),
+]);
+const indexHtmlPath = resolveExistingPath([
+  path.join(__dirname, "../views/index.html"),
+  path.join(process.cwd(), "views/index.html"),
+  path.join(__dirname, "../../views/index.html"),
+]);
 const indexHtmlContent = fs.readFileSync(indexHtmlPath, "utf8");
 
 /**

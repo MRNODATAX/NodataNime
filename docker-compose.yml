@@ -12,8 +12,6 @@ services:
       HOST: 0.0.0.0
       PORT: 3000
       DATA_DIR: /var/data
-      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-nodata2026}
     volumes:
       - nodatanime_data:/var/data
 
