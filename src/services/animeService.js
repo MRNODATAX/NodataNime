@@ -1,9 +1,45 @@
-import { appCache } from "../utils/cache.js";
+import { appCache, TtlCache } from "../utils/cache.js";
 import { ylnimeClient } from "../scrapers/ylnimeClient.js";
 import { animeKitaClient } from "../scrapers/animekitaClient.js";
 import { snapshotStore } from "./snapshotStore.js";
 import { communityStore } from "./communityStore.js";
-import { fromEpisodeToken, fromSeriesToken } from "../parsers/ylnimeParser.js";
+import {
+  fromEpisodeToken,
+  fromSeriesToken,
+  toSeriesToken,
+} from "../parsers/ylnimeParser.js";
+
+const searchCardCache = new TtlCache(30 * 60 * 1000, 400, 60);
+
+function rememberSearchCards(items = []) {
+  for (const item of items) {
+    if (!item?.slug) continue;
+    const canonicalToken = toSeriesToken(fromSeriesToken(item.slug));
+    searchCardCache.set(canonicalToken, item);
+  }
+}
+
+function buildDetailFromCachedCard(card) {
+  if (!card) return null;
+  const isMovie = /movie/i.test(card.status);
+  return {
+    title: card.title || card.rawSlug || "Anime",
+    slug: card.slug,
+    rawSlug: card.rawSlug || fromSeriesToken(card.slug),
+    poster: card.poster || "/assets/no-cover.svg",
+    banner: card.banner || card.poster || "/assets/no-cover.svg",
+    score: card.score || "8.0",
+    status: card.status || "Anime",
+    type: isMovie ? "Movie" : "TV",
+    year: "2026",
+    synopsis: `Tonton ${card.title || "anime ini"} subtitle Indonesia kualitas HD di NodataNime.`,
+    totalEpisodes: 0,
+    genres: [],
+    episodes: [],
+    recommendations: snapshotStore.data.rekomendasi.slice(0, 6),
+    sourceUrl: card.sourceUrl || `https://ylnime.com/index.php?series=${encodeURIComponent(card.rawSlug || card.slug)}`,
+  };
+}
 
 /**
  * NodataNime Multi-Tier Scraper Orchestration Service
@@ -160,17 +196,21 @@ export class AnimeService {
     return appCache.remember(`search:${q.toLowerCase()}`, async () => {
       try {
         const liveItems = await ylnimeClient.scrapeSearch(q);
-        const snapItems = snapshotStore.search(q);
-        const seen = new Set(liveItems.map((i) => i.slug));
-        const merged = [
-          ...liveItems,
-          ...snapItems.filter((i) => !seen.has(i.slug)),
-        ];
-        return { dataSource: "live-ylnime", query: q, items: merged };
+        if (liveItems.length > 0) {
+          rememberSearchCards(liveItems);
+          return { dataSource: "live-ylnime", query: q, items: liveItems };
+        }
+        const upstreamOnEmpty = await animeKitaClient.fetchSearch(q).catch(() => []);
+        if (upstreamOnEmpty.length > 0) {
+          rememberSearchCards(upstreamOnEmpty);
+          return { dataSource: "upstream-animekita", query: q, items: upstreamOnEmpty };
+        }
+        return { dataSource: "live-ylnime", query: q, items: [] };
       } catch {
         try {
           const upstreamItems = await animeKitaClient.fetchSearch(q);
           if (upstreamItems.length > 0) {
+            rememberSearchCards(upstreamItems);
             return { dataSource: "upstream-animekita", query: q, items: upstreamItems };
           }
         } catch {
@@ -189,16 +229,28 @@ export class AnimeService {
     const clean = String(slug || "").trim();
     if (!clean) return null;
 
-    return appCache.remember(`detail:${clean}`, async () => {
-      try {
-        const liveDetail = await ylnimeClient.scrapeDetail(clean);
-        return { dataSource: "live-ylnime", ...liveDetail };
-      } catch {
-        const fallback = snapshotStore.getDetail(clean);
-        if (!fallback) return null;
-        return { dataSource: "verified-snapshot", ...fallback };
+    const cachedFullDetail = appCache.get(`detail:${clean}`);
+    if (cachedFullDetail) return cachedFullDetail;
+
+    try {
+      const liveDetail = await ylnimeClient.scrapeDetail(clean);
+      const payload = { dataSource: "live-ylnime", ...liveDetail };
+      appCache.set(`detail:${clean}`, payload);
+      return payload;
+    } catch {
+      const fallback = snapshotStore.getDetail(clean);
+      if (fallback) {
+        const payload = { dataSource: "verified-snapshot", ...fallback };
+        appCache.set(`detail:${clean}`, payload);
+        return payload;
       }
-    });
+      const canonicalToken = toSeriesToken(fromSeriesToken(clean));
+      const cardFallback = buildDetailFromCachedCard(searchCardCache.get(canonicalToken));
+      if (cardFallback) {
+        return { dataSource: "search-card-cache", ...cardFallback };
+      }
+      return null;
+    }
   }
 
   async getEpisode({ token = "", series = "", episode = "", ep = null }) {

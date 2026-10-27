@@ -4,6 +4,7 @@ import {
   toSeriesToken,
   parseHome,
   parseCards,
+  parseSearch,
   parsePagination,
   parseGenres,
   parseSchedule,
@@ -239,7 +240,7 @@ class YlnimeClient {
 
   async scrapeSearch(query) {
     const html = await this.fetchText(`index.php?search=${encodeURIComponent(query)}`);
-    return parseCards(html);
+    return parseSearch(html);
   }
 
   async scrapeDetail(slugOrToken) {
