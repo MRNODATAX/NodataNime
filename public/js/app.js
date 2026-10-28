@@ -259,152 +259,148 @@ setTimeout(dismissIntroSplash, 3800);
 
 /* ===== Live Starry Night Background (GPU Sprite-Atlas & Adaptive Frame Pacing) ===== */
 function createStarSpriteAtlas() {
-  // 0: Layer 1 — Bintang jauh dengan pendar cahaya putih lembut (18x18, rasio gambar ~5.2x radius agar bebas undersampling)
+  // 0: Layer 1 — Bintang jauh titik kecil dengan tepi lembut alami (12x12)
   const sp1 = document.createElement("canvas");
-  sp1.width = 18;
-  sp1.height = 18;
+  sp1.width = 12;
+  sp1.height = 12;
   const c1 = sp1.getContext("2d");
   if (c1) {
-    const halo1 = c1.createRadialGradient(9, 9, 0, 9, 9, 8.6);
-    halo1.addColorStop(0, "rgba(255, 255, 255, 0.96)");
-    halo1.addColorStop(0.34, "rgba(238, 246, 255, 0.52)");
-    halo1.addColorStop(0.68, "rgba(205, 228, 255, 0.16)");
+    const halo1 = c1.createRadialGradient(6, 6, 0, 6, 6, 5.4);
+    halo1.addColorStop(0, "rgba(255, 255, 255, 0.52)");
+    halo1.addColorStop(0.45, "rgba(225, 238, 255, 0.14)");
     halo1.addColorStop(1, "rgba(255, 255, 255, 0)");
     c1.fillStyle = halo1;
     c1.beginPath();
-    c1.arc(9, 9, 8.6, 0, Math.PI * 2);
+    c1.arc(6, 6, 5.4, 0, Math.PI * 2);
     c1.fill();
 
-    c1.fillStyle = "rgba(255, 255, 255, 1)";
+    c1.fillStyle = "rgba(255, 255, 255, 0.96)";
     c1.beginPath();
-    c1.arc(9, 9, 2.7, 0, Math.PI * 2);
+    c1.arc(6, 6, 1.85, 0, Math.PI * 2);
     c1.fill();
   }
 
-  // 1: Layer 2 — Bintang menengah berpendar putih-biru cerah (34x34, rasio gambar ~9.2x radius)
+  // 1: Layer 2 — Bintang menengah berpendar halus & tipis di sekitar titik inti (24x24)
   const sp2 = document.createElement("canvas");
-  sp2.width = 34;
-  sp2.height = 34;
+  sp2.width = 24;
+  sp2.height = 24;
   const c2 = sp2.getContext("2d");
   if (c2) {
-    const glow2 = c2.createRadialGradient(17, 17, 0, 17, 17, 16.5);
-    glow2.addColorStop(0, "rgba(255, 255, 255, 0.92)");
-    glow2.addColorStop(0.24, "rgba(238, 246, 255, 0.62)");
-    glow2.addColorStop(0.55, "rgba(200, 226, 255, 0.25)");
-    glow2.addColorStop(0.82, "rgba(185, 215, 255, 0.08)");
+    const glow2 = c2.createRadialGradient(12, 12, 0, 12, 12, 11.4);
+    glow2.addColorStop(0, "rgba(255, 255, 255, 0.54)");
+    glow2.addColorStop(0.32, "rgba(226, 240, 255, 0.21)");
+    glow2.addColorStop(0.66, "rgba(195, 222, 255, 0.06)");
     glow2.addColorStop(1, "rgba(255, 255, 255, 0)");
     c2.fillStyle = glow2;
     c2.beginPath();
-    c2.arc(17, 17, 16.5, 0, Math.PI * 2);
+    c2.arc(12, 12, 11.4, 0, Math.PI * 2);
     c2.fill();
 
-    c2.fillStyle = "rgba(255, 255, 255, 1)";
+    c2.fillStyle = "rgba(255, 255, 255, 0.98)";
     c2.beginPath();
-    c2.arc(17, 17, 3.8, 0, Math.PI * 2);
+    c2.arc(12, 12, 2.4, 0, Math.PI * 2);
     c2.fill();
   }
 
-  // Helper pembuat bintang Layer 3 utama bercahaya lebar (56x56, rasio gambar ~13.5x radius)
+  // Helper pembuat bintang Layer 3 aksen malam proporsional (38x38, inti kecil tajam + halo tipis transparan)
   function buildBrightStarSprite(withCross) {
     const sp = document.createElement("canvas");
-    sp.width = 56;
-    sp.height = 56;
+    sp.width = 38;
+    sp.height = 38;
     const c = sp.getContext("2d");
     if (!c) return sp;
 
-    const glow = c.createRadialGradient(28, 28, 0, 28, 28, 27.4);
-    glow.addColorStop(0, "rgba(255, 255, 255, 0.98)");
-    glow.addColorStop(0.2, "rgba(242, 249, 255, 0.72)");
-    glow.addColorStop(0.46, "rgba(205, 230, 255, 0.32)");
-    glow.addColorStop(0.76, "rgba(185, 218, 255, 0.1)");
+    const glow = c.createRadialGradient(19, 19, 0, 19, 19, 18.2);
+    glow.addColorStop(0, "rgba(255, 255, 255, 0.58)");
+    glow.addColorStop(0.28, "rgba(228, 242, 255, 0.22)");
+    glow.addColorStop(0.62, "rgba(195, 222, 255, 0.06)");
     glow.addColorStop(1, "rgba(255, 255, 255, 0)");
     c.fillStyle = glow;
     c.beginPath();
-    c.arc(28, 28, 27.4, 0, Math.PI * 2);
+    c.arc(19, 19, 18.2, 0, Math.PI * 2);
     c.fill();
 
     if (withCross) {
-      const horizGrad = c.createLinearGradient(2, 28, 54, 28);
+      const horizGrad = c.createLinearGradient(3, 19, 35, 19);
       horizGrad.addColorStop(0, "rgba(255, 255, 255, 0)");
-      horizGrad.addColorStop(0.32, "rgba(230, 244, 255, 0.42)");
-      horizGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.85)");
-      horizGrad.addColorStop(0.68, "rgba(230, 244, 255, 0.42)");
+      horizGrad.addColorStop(0.36, "rgba(225, 240, 255, 0.2)");
+      horizGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.46)");
+      horizGrad.addColorStop(0.64, "rgba(225, 240, 255, 0.2)");
       horizGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
       c.strokeStyle = horizGrad;
-      c.lineWidth = 2.0;
+      c.lineWidth = 1.25;
       c.lineCap = "round";
       c.beginPath();
-      c.moveTo(2, 28);
-      c.lineTo(54, 28);
+      c.moveTo(3, 19);
+      c.lineTo(35, 19);
       c.stroke();
 
-      const vertGrad = c.createLinearGradient(28, 2, 28, 54);
+      const vertGrad = c.createLinearGradient(19, 3, 19, 35);
       vertGrad.addColorStop(0, "rgba(255, 255, 255, 0)");
-      vertGrad.addColorStop(0.32, "rgba(230, 244, 255, 0.42)");
-      vertGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.85)");
-      vertGrad.addColorStop(0.68, "rgba(230, 244, 255, 0.42)");
+      vertGrad.addColorStop(0.36, "rgba(225, 240, 255, 0.2)");
+      vertGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.46)");
+      vertGrad.addColorStop(0.64, "rgba(225, 240, 255, 0.2)");
       vertGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
       c.strokeStyle = vertGrad;
       c.beginPath();
-      c.moveTo(28, 2);
-      c.lineTo(28, 54);
+      c.moveTo(19, 3);
+      c.lineTo(19, 35);
       c.stroke();
     }
 
     c.fillStyle = "rgba(255, 255, 255, 1)";
     c.beginPath();
-    c.arc(28, 28, 4.4, 0, Math.PI * 2);
+    c.arc(19, 19, 2.55, 0, Math.PI * 2);
     c.fill();
     return sp;
   }
 
-  // Sprite jejak bintang jatuh beresolusi jelas (240x28, digambar skala 1:1 tanpa penipisan sub-pixel)
+  // Sprite jejak bintang jatuh ramping & elegan untuk background (240x20)
   const meteor = document.createElement("canvas");
   meteor.width = 240;
-  meteor.height = 28;
+  meteor.height = 20;
   const cm = meteor.getContext("2d");
   if (cm) {
-    // 1. Halo atmosfer luar biru-putih lembut sepanjang ekor
-    const outerTrail = cm.createLinearGradient(224, 14, 6, 14);
-    outerTrail.addColorStop(0, "rgba(205, 232, 255, 0.62)");
-    outerTrail.addColorStop(0.38, "rgba(185, 220, 255, 0.28)");
+    // 1. Kabut pendar tipis di sekeliling ekor
+    const outerTrail = cm.createLinearGradient(226, 10, 8, 10);
+    outerTrail.addColorStop(0, "rgba(205, 232, 255, 0.28)");
+    outerTrail.addColorStop(0.35, "rgba(185, 220, 255, 0.11)");
     outerTrail.addColorStop(1, "rgba(185, 220, 255, 0)");
     cm.strokeStyle = outerTrail;
-    cm.lineWidth = 9.5;
+    cm.lineWidth = 4.6;
     cm.lineCap = "round";
     cm.beginPath();
-    cm.moveTo(224, 14);
-    cm.lineTo(6, 14);
+    cm.moveTo(226, 10);
+    cm.lineTo(8, 10);
     cm.stroke();
 
-    // 2. Inti jejak putih terang tajam
-    const coreTrail = cm.createLinearGradient(225, 14, 10, 14);
-    coreTrail.addColorStop(0, "rgba(255, 255, 255, 1)");
-    coreTrail.addColorStop(0.28, "rgba(245, 250, 255, 0.86)");
-    coreTrail.addColorStop(0.65, "rgba(220, 238, 255, 0.35)");
+    // 2. Garis ekor putih ramping & halus
+    const coreTrail = cm.createLinearGradient(226, 10, 14, 10);
+    coreTrail.addColorStop(0, "rgba(255, 255, 255, 0.95)");
+    coreTrail.addColorStop(0.28, "rgba(240, 248, 255, 0.56)");
+    coreTrail.addColorStop(0.65, "rgba(215, 235, 255, 0.18)");
     coreTrail.addColorStop(1, "rgba(255, 255, 255, 0)");
     cm.strokeStyle = coreTrail;
-    cm.lineWidth = 3.1;
+    cm.lineWidth = 1.75;
     cm.lineCap = "round";
     cm.beginPath();
-    cm.moveTo(225, 14);
-    cm.lineTo(10, 14);
+    cm.moveTo(226, 10);
+    cm.lineTo(14, 10);
     cm.stroke();
 
-    // 3. Kepala bintang jatuh berpendar terang di ujung depan (x=225, y=14)
-    const headGlow = cm.createRadialGradient(225, 14, 0, 225, 14, 12.5);
-    headGlow.addColorStop(0, "rgba(255, 255, 255, 1)");
-    headGlow.addColorStop(0.32, "rgba(235, 246, 255, 0.78)");
-    headGlow.addColorStop(0.68, "rgba(195, 225, 255, 0.25)");
+    // 3. Kilau titik kepala bintang jatuh yang proporsional (x=226, y=10)
+    const headGlow = cm.createRadialGradient(226, 10, 0, 226, 10, 5.8);
+    headGlow.addColorStop(0, "rgba(255, 255, 255, 0.92)");
+    headGlow.addColorStop(0.38, "rgba(225, 242, 255, 0.36)");
     headGlow.addColorStop(1, "rgba(255, 255, 255, 0)");
     cm.fillStyle = headGlow;
     cm.beginPath();
-    cm.arc(225, 14, 12.5, 0, Math.PI * 2);
+    cm.arc(226, 10, 5.8, 0, Math.PI * 2);
     cm.fill();
 
     cm.fillStyle = "#ffffff";
     cm.beginPath();
-    cm.arc(225, 14, 2.8, 0, Math.PI * 2);
+    cm.arc(226, 10, 1.7, 0, Math.PI * 2);
     cm.fill();
   }
 
@@ -508,23 +504,23 @@ function initStarfield() {
 
   function buildStars() {
     const area = width * height;
-    const count = Math.min(260, Math.max(120, Math.floor(area / 7500)));
+    const count = Math.min(220, Math.max(110, Math.floor(area / 8200)));
     const temp = new Array(count);
 
     for (let idx = 0; idx < count; idx += 1) {
       const tierRand = Math.random();
-      // Distribusi kaya cahaya: 18% Layer 3 (bintang terang + silang), 40% Layer 2 (halo medium), 42% Layer 1 (halo lembut)
-      const layer = tierRand > 0.82 ? 3 : tierRand > 0.42 ? 2 : 1;
+      // Proporsi natural langit malam: 54% titik jauh halus, 35% bintang sedang lembut, 11% bintang aksen
+      const layer = tierRand > 0.89 ? 3 : tierRand > 0.54 ? 2 : 1;
       const radius =
         layer === 3
-          ? 1.95 + Math.random() * 1.25
+          ? 1.45 + Math.random() * 0.75
           : layer === 2
-            ? 1.25 + Math.random() * 0.85
-            : 0.78 + Math.random() * 0.58;
-      const hasCross = layer === 3 && idx % 3 !== 0;
+            ? 0.98 + Math.random() * 0.62
+            : 0.62 + Math.random() * 0.48;
+      const hasCross = layer === 3 && idx % 2 === 0;
       const spriteIdx = layer === 1 ? 0 : layer === 2 ? 1 : hasCross ? 3 : 2;
-      // Ukuran gambar mendekati resolusi asli sprite (rasio < 2x) agar cahaya halo utuh & tidak mengecil
-      const sizeScale = layer === 1 ? 6.2 : layer === 2 ? 9.6 : 13.8;
+      // Ukuran halo proporsional sebagai ambient background (tidak terlalu kecil & tidak menyilaukan konten)
+      const sizeScale = layer === 1 ? 4.2 : layer === 2 ? 6.6 : 9.4;
       const drawSize = radius * sizeScale;
 
       temp[idx] = {
@@ -533,15 +529,15 @@ function initStarfield() {
         drawSize,
         baseAlpha:
           layer === 3
-            ? 0.92 + Math.random() * 0.08
+            ? 0.76 + Math.random() * 0.14
             : layer === 2
-              ? 0.72 + Math.random() * 0.24
-              : 0.46 + Math.random() * 0.34,
-        twinkleSpeed: 0.75 + Math.random() * 2.05,
+              ? 0.54 + Math.random() * 0.25
+              : 0.32 + Math.random() * 0.3,
+        twinkleSpeed: 0.7 + Math.random() * 1.95,
         twinklePhase: Math.random() * Math.PI * 2,
-        driftX: -(0.015 + layer * 0.012),
-        driftY: -(0.025 + layer * 0.018),
-        parallax: layer * 4,
+        driftX: -(0.014 + layer * 0.011),
+        driftY: -(0.022 + layer * 0.016),
+        parallax: layer * 3.6,
         spriteIdx,
       };
     }
@@ -600,19 +596,19 @@ function initStarfield() {
   }
 
   function spawnShootingStar() {
-    if (shootingStars.length >= 3 || width <= 0 || height <= 0) return;
+    if (shootingStars.length >= 2 || width <= 0 || height <= 0) return;
 
-    // Pilih arah diagonal yang selalu melintasi area tengah layar (baik di HP 360px maupun desktop)
-    const goRight = Math.random() < 0.28;
+    // Pilih arah diagonal yang selalu melintasi area tengah layar secara halus
+    const goRight = Math.random() < 0.26;
     const baseAngle = goRight ? Math.PI / 4 : (Math.PI * 3) / 4;
-    const angle = baseAngle + (Math.random() - 0.5) * 0.2;
+    const angle = baseAngle + (Math.random() - 0.5) * 0.18;
     const startX = goRight
-      ? width * (0.05 + Math.random() * 0.48)
-      : width * (0.46 + Math.random() * 0.5);
-    const startY = height * (0.04 + Math.random() * 0.42);
-    const maxTravel = Math.min(width, height) * 0.78;
-    const maxLife = 0.88 + Math.random() * 0.38;
-    const speed = Math.min(560, Math.max(290, maxTravel / maxLife));
+      ? width * (0.06 + Math.random() * 0.46)
+      : width * (0.46 + Math.random() * 0.48);
+    const startY = height * (0.04 + Math.random() * 0.38);
+    const maxTravel = Math.min(width, height) * 0.72;
+    const maxLife = 0.82 + Math.random() * 0.34;
+    const speed = Math.min(520, Math.max(280, maxTravel / maxLife));
 
     shootingStars.push({
       x: startX,
@@ -622,23 +618,22 @@ function initStarfield() {
       angle,
       life: 0,
       maxLife,
-      tailLength: Math.min(185, Math.max(105, Math.min(width, 600) * 0.26 + Math.random() * 45)),
-      thickness: 18 + Math.random() * 5,
+      tailLength: Math.min(142, Math.max(84, Math.min(width, 560) * 0.21 + Math.random() * 34)),
+      thickness: 10.5 + Math.random() * 2.5,
     });
   }
 
   function maybeSpawnShootingStar(nowSec) {
     if (nextShootAt <= 0) {
-      nextShootAt = nowSec + 1.1 + Math.random() * 1.1;
+      nextShootAt = nowSec + 1.5 + Math.random() * 1.2;
       return;
     }
     if (nowSec < nextShootAt) return;
 
     spawnShootingStar();
-    // 22% peluang bintang jatuh kembar beriringan dalam 0.35–0.65 detik
-    const twinBurst = Math.random() < 0.22 && shootingStars.length < 2;
-    const baseGap = reducedMotion ? 5.2 + Math.random() * 3.5 : 2.6 + Math.random() * 2.8;
-    nextShootAt = nowSec + (twinBurst ? 0.38 + Math.random() * 0.28 : baseGap);
+    const twinBurst = Math.random() < 0.14 && shootingStars.length < 2;
+    const baseGap = reducedMotion ? 6.5 + Math.random() * 4.0 : 3.8 + Math.random() * 3.4;
+    nextShootAt = nowSec + (twinBurst ? 0.45 + Math.random() * 0.3 : baseGap);
   }
 
   function isHtmlVideoActivelyPlaying() {
@@ -708,14 +703,14 @@ function initStarfield() {
       }
 
       const progress = sh.life / sh.maxLife;
-      const opacity = Math.min(1, Math.sin(progress * Math.PI) * 0.98);
+      const opacity = Math.min(0.84, Math.sin(progress * Math.PI) * 0.84);
       if (opacity <= 0.01) continue;
 
-      const drawW = sh.tailLength + 16;
+      const drawW = sh.tailLength + 12;
       const drawH = sh.thickness;
       const halfH = drawH * 0.5;
-      // Kepala meteor di kanvas 240px berada di x=225 (rasio 225/240 = 0.9375 dari kiri)
-      const headOffset = drawW * 0.9375;
+      // Kepala meteor di kanvas 240px berada di x=226 (rasio 226/240 = 0.9417 dari kiri)
+      const headOffset = drawW * 0.9417;
 
       ctx.save();
       ctx.translate(sh.x, sh.y);
