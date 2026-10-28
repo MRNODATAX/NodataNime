@@ -225,53 +225,255 @@ function closeSearchDropdown({ collapseMobile = true } = {}) {
 }
 
 /* ===== Opening Brand Logo & Name Splash Controller ===== */
+const INTRO_SPLASH_MIN_MS = 1850;
+const INTRO_SPLASH_FADE_MS = 680;
+let startStarfieldLoop = null;
+
 function dismissIntroSplash() {
   if (splashDismissed) return;
   splashDismissed = true;
   const splash = document.getElementById("introSplash");
   if (!splash) {
     document.body.classList.remove("is-splashing");
+    if (typeof startStarfieldLoop === "function") startStarfieldLoop();
     return;
   }
 
+  const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
   const elapsed = performance.now() - bootStartedAt;
-  const minDisplayMs = 760;
+  const minDisplayMs = prefersReducedMotion ? 320 : INTRO_SPLASH_MIN_MS;
   const waitMs = Math.max(0, minDisplayMs - elapsed);
 
   setTimeout(() => {
     document.body.classList.remove("is-splashing");
     splash.classList.add("is-leaving");
+    if (typeof startStarfieldLoop === "function") startStarfieldLoop();
     setTimeout(() => {
       splash.hidden = true;
-    }, 460);
+    }, INTRO_SPLASH_FADE_MS);
   }, waitMs);
 }
 
-// Jaminan keamanan agar splash tidak pernah menggantung lebih dari 2.2 detik
-setTimeout(dismissIntroSplash, 2200);
+// Jaminan keamanan agar splash estetik tetap tertutup rapi meski koneksi lambat
+setTimeout(dismissIntroSplash, 3800);
 
-/* ===== Live Starry Night Background (Cahaya Putih Bintang Malam) ===== */
+/* ===== Live Starry Night Background (GPU Sprite-Atlas & Adaptive Frame Pacing) ===== */
+function createStarSpriteAtlas() {
+  // 0: Layer 1 — Bintang jauh putih tajam anti-alias (24x24, rasio gambar 4x radius)
+  const sp1 = document.createElement("canvas");
+  sp1.width = 24;
+  sp1.height = 24;
+  const c1 = sp1.getContext("2d");
+  if (c1) {
+    const g1 = c1.createRadialGradient(12, 12, 0, 12, 12, 7.5);
+    g1.addColorStop(0, "rgba(255, 255, 255, 1)");
+    g1.addColorStop(0.72, "rgba(255, 255, 255, 0.92)");
+    g1.addColorStop(1, "rgba(255, 255, 255, 0)");
+    c1.fillStyle = g1;
+    c1.beginPath();
+    c1.arc(12, 12, 7.5, 0, Math.PI * 2);
+    c1.fill();
+  }
+
+  // 1: Layer 2 — Bintang menengah berpendar putih-biru lembut (48x48, rasio gambar 6.4x radius)
+  const sp2 = document.createElement("canvas");
+  sp2.width = 48;
+  sp2.height = 48;
+  const c2 = sp2.getContext("2d");
+  if (c2) {
+    const glow2 = c2.createRadialGradient(24, 24, 0, 24, 24, 23.2);
+    glow2.addColorStop(0, "rgba(255, 255, 255, 0.55)");
+    glow2.addColorStop(0.45, "rgba(220, 235, 255, 0.18)");
+    glow2.addColorStop(1, "rgba(255, 255, 255, 0)");
+    c2.fillStyle = glow2;
+    c2.beginPath();
+    c2.arc(24, 24, 23.2, 0, Math.PI * 2);
+    c2.fill();
+
+    c2.fillStyle = "rgba(255, 255, 255, 1)";
+    c2.beginPath();
+    c2.arc(24, 24, 7.5, 0, Math.PI * 2);
+    c2.fill();
+  }
+
+  // Helper pembuat bintang Layer 3 terang (64x64, rasio gambar 10.4x radius)
+  function buildBrightStarSprite(withCross) {
+    const sp = document.createElement("canvas");
+    sp.width = 64;
+    sp.height = 64;
+    const c = sp.getContext("2d");
+    if (!c) return sp;
+
+    const glow = c.createRadialGradient(32, 32, 0, 32, 32, 31.5);
+    glow.addColorStop(0, "rgba(255, 255, 255, 0.56)");
+    glow.addColorStop(0.45, "rgba(220, 235, 255, 0.19)");
+    glow.addColorStop(1, "rgba(255, 255, 255, 0)");
+    c.fillStyle = glow;
+    c.beginPath();
+    c.arc(32, 32, 31.5, 0, Math.PI * 2);
+    c.fill();
+
+    if (withCross) {
+      const horizGrad = c.createLinearGradient(6.2, 32, 57.8, 32);
+      horizGrad.addColorStop(0, "rgba(255, 255, 255, 0)");
+      horizGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.45)");
+      horizGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
+      c.strokeStyle = horizGrad;
+      c.lineWidth = 2.1;
+      c.lineCap = "round";
+      c.beginPath();
+      c.moveTo(6.2, 32);
+      c.lineTo(57.8, 32);
+      c.stroke();
+
+      const vertGrad = c.createLinearGradient(32, 6.2, 32, 57.8);
+      vertGrad.addColorStop(0, "rgba(255, 255, 255, 0)");
+      vertGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.45)");
+      vertGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
+      c.strokeStyle = vertGrad;
+      c.beginPath();
+      c.moveTo(32, 6.2);
+      c.lineTo(32, 57.8);
+      c.stroke();
+    }
+
+    c.fillStyle = "rgba(255, 255, 255, 1)";
+    c.beginPath();
+    c.arc(32, 32, 6.15, 0, Math.PI * 2);
+    c.fill();
+    return sp;
+  }
+
+  // Sprite jejak bintang jatuh horizontal (160x12) — digambar sekali tanpa createLinearGradient per frame
+  const meteor = document.createElement("canvas");
+  meteor.width = 160;
+  meteor.height = 12;
+  const cm = meteor.getContext("2d");
+  if (cm) {
+    const trailGrad = cm.createLinearGradient(154, 6, 2, 6);
+    trailGrad.addColorStop(0, "rgba(255, 255, 255, 1)");
+    trailGrad.addColorStop(0.28, "rgba(230, 242, 255, 0.55)");
+    trailGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
+    cm.strokeStyle = trailGrad;
+    cm.lineWidth = 2.2;
+    cm.lineCap = "round";
+    cm.beginPath();
+    cm.moveTo(154, 6);
+    cm.lineTo(2, 6);
+    cm.stroke();
+
+    const headGlow = cm.createRadialGradient(154, 6, 0, 154, 6, 5.5);
+    headGlow.addColorStop(0, "rgba(255, 255, 255, 1)");
+    headGlow.addColorStop(1, "rgba(255, 255, 255, 0)");
+    cm.fillStyle = headGlow;
+    cm.beginPath();
+    cm.arc(154, 6, 5.5, 0, Math.PI * 2);
+    cm.fill();
+  }
+
+  return {
+    starSprites: [sp1, sp2, buildBrightStarSprite(false), buildBrightStarSprite(true)],
+    meteorSprite: meteor,
+  };
+}
+
+function paintSkyBackdrop(skyCanvas, w, h) {
+  const bw = Math.max(1, Math.round(w * 0.5));
+  const bh = Math.max(1, Math.round(h * 0.5));
+  skyCanvas.width = bw;
+  skyCanvas.height = bh;
+  const sctx = skyCanvas.getContext("2d", { alpha: false }) || skyCanvas.getContext("2d");
+  if (!sctx) return;
+
+  const baseGrad = sctx.createLinearGradient(0, 0, 0, bh);
+  baseGrad.addColorStop(0, "#04060c");
+  baseGrad.addColorStop(0.55, "#070a14");
+  baseGrad.addColorStop(1, "#04060b");
+  sctx.fillStyle = baseGrad;
+  sctx.fillRect(0, 0, bw, bh);
+
+  // Cahaya langit malam atas (identik dengan radial-gradient CSS body)
+  sctx.save();
+  sctx.translate(bw * 0.5, -bh * 0.1);
+  sctx.scale(bw * 0.85, bh * 0.55);
+  const moonGlow = sctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+  moonGlow.addColorStop(0, "rgba(180, 210, 255, 0.08)");
+  moonGlow.addColorStop(0.65, "rgba(180, 210, 255, 0)");
+  moonGlow.addColorStop(1, "rgba(180, 210, 255, 0)");
+  sctx.fillStyle = moonGlow;
+  sctx.beginPath();
+  sctx.arc(0, 0, 1, 0, Math.PI * 2);
+  sctx.fill();
+  sctx.restore();
+
+  // Pendar aksen tipis merah-malam di kanan atas
+  const accentRadius = Math.max(bw, bh) * 0.4;
+  const accentGlow = sctx.createRadialGradient(bw * 0.85, bh * 0.15, 0, bw * 0.85, bh * 0.15, accentRadius);
+  accentGlow.addColorStop(0, "rgba(255, 42, 75, 0.06)");
+  accentGlow.addColorStop(1, "rgba(255, 42, 75, 0)");
+  sctx.fillStyle = accentGlow;
+  sctx.fillRect(0, 0, bw, bh);
+}
+
+function detectStarfieldPerfProfile() {
+  const cores = Number(navigator.hardwareConcurrency) || 4;
+  const mem = Number(navigator.deviceMemory) || 4;
+  const saveData = Boolean(navigator.connection?.saveData);
+  const coarsePointer = Boolean(window.matchMedia?.("(pointer: coarse)")?.matches);
+  const isLowPower = saveData || cores <= 4 || mem <= 4;
+
+  return {
+    isLowPower,
+    coarsePointer,
+    maxDpr: isLowPower ? 1.2 : 1.5,
+    idleFrameIntervalMs: isLowPower ? 1000 / 24 : 1000 / 30,
+    meteorFrameIntervalMs: isLowPower ? 1000 / 32 : 1000 / 45,
+    videoPlayingIntervalMs: 1000 / 15,
+  };
+}
+
 function initStarfield() {
   const canvas = document.getElementById("starfieldCanvas");
   if (!canvas) return;
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext("2d", { alpha: false }) || canvas.getContext("2d");
   if (!ctx) return;
 
-  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  const reducedMotion = Boolean(window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches);
+  const perf = detectStarfieldPerfProfile();
+  const { starSprites, meteorSprite } = createStarSpriteAtlas();
+  const skyBgCanvas = document.createElement("canvas");
+
   let width = 0;
   let height = 0;
   let dpr = 1;
-  let stars = [];
-  let shootingStars = [];
+  let starCount = 0;
+  let starX = new Float32Array(0);
+  let starY = new Float32Array(0);
+  let starDrawSize = new Float32Array(0);
+  let starHalfSize = new Float32Array(0);
+  let starBaseAlpha = new Float32Array(0);
+  let starTwinkleSpeed = new Float32Array(0);
+  let starTwinklePhase = new Float32Array(0);
+  let starDriftX = new Float32Array(0);
+  let starDriftY = new Float32Array(0);
+  let starParallax = new Float32Array(0);
+  let starSpriteIdx = new Uint8Array(0);
+
+  const shootingStars = [];
   let animFrameId = null;
+  let loopEnabled = false;
   let pointerX = 0;
   let pointerY = 0;
   let lastShootAt = 0;
+  let prevPaintTs = 0;
+  let resizeTimer = null;
 
   function buildStars() {
     const area = width * height;
     const count = Math.min(260, Math.max(120, Math.floor(area / 7500)));
-    stars = Array.from({ length: count }, (_, idx) => {
+    const temp = new Array(count);
+
+    for (let idx = 0; idx < count; idx += 1) {
       const tierRand = Math.random();
       const layer = tierRand > 0.9 ? 3 : tierRand > 0.52 ? 2 : 1;
       const radius =
@@ -280,29 +482,80 @@ function initStarfield() {
           : layer === 2
             ? 1.0 + Math.random() * 0.75
             : 0.55 + Math.random() * 0.55;
+      const hasCross = layer === 3 && idx % 2 === 0;
+      const spriteIdx = layer === 1 ? 0 : layer === 2 ? 1 : hasCross ? 3 : 2;
+      const sizeScale = layer === 1 ? 4.0 : layer === 2 ? 6.4 : 10.4;
+      const drawSize = radius * sizeScale;
 
-      return {
+      temp[idx] = {
         x: Math.random() * width,
         y: Math.random() * height,
-        radius,
-        layer,
-        baseAlpha: layer === 3 ? 0.85 : layer === 2 ? 0.55 + Math.random() * 0.3 : 0.28 + Math.random() * 0.35,
+        drawSize,
+        baseAlpha:
+          layer === 3
+            ? 0.85
+            : layer === 2
+              ? 0.55 + Math.random() * 0.3
+              : 0.28 + Math.random() * 0.35,
         twinkleSpeed: 0.7 + Math.random() * 2.1,
         twinklePhase: Math.random() * Math.PI * 2,
         driftX: -(0.015 + layer * 0.012),
         driftY: -(0.025 + layer * 0.018),
-        hasCross: layer === 3 && idx % 2 === 0,
+        parallax: layer * 4,
+        spriteIdx,
       };
-    });
+    }
+
+    // Urutkan berdasarkan tekstur sprite agar batching GPU lebih rapat
+    temp.sort((a, b) => a.spriteIdx - b.spriteIdx);
+
+    starCount = count;
+    starX = new Float32Array(count);
+    starY = new Float32Array(count);
+    starDrawSize = new Float32Array(count);
+    starHalfSize = new Float32Array(count);
+    starBaseAlpha = new Float32Array(count);
+    starTwinkleSpeed = new Float32Array(count);
+    starTwinklePhase = new Float32Array(count);
+    starDriftX = new Float32Array(count);
+    starDriftY = new Float32Array(count);
+    starParallax = new Float32Array(count);
+    starSpriteIdx = new Uint8Array(count);
+
+    for (let i = 0; i < count; i += 1) {
+      const s = temp[i];
+      starX[i] = s.x;
+      starY[i] = s.y;
+      starDrawSize[i] = s.drawSize;
+      starHalfSize[i] = s.drawSize * 0.5;
+      starBaseAlpha[i] = s.baseAlpha;
+      starTwinkleSpeed[i] = s.twinkleSpeed;
+      starTwinklePhase[i] = s.twinklePhase;
+      starDriftX[i] = s.driftX;
+      starDriftY[i] = s.driftY;
+      starParallax[i] = s.parallax;
+      starSpriteIdx[i] = s.spriteIdx;
+    }
   }
 
-  function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    width = window.innerWidth;
-    height = window.innerHeight;
+  function resize(forceRebuild = false) {
+    const nextW = Math.max(1, window.innerWidth || 360);
+    const rawH = Math.max(
+      window.innerHeight || 640,
+      Math.round(document.documentElement?.clientHeight || 0)
+    );
+    // Abaikan perubahan tinggi kecil akibat address-bar browser mobile saat scroll
+    if (!forceRebuild && width > 0 && Math.abs(nextW - width) < 2 && Math.abs(rawH - height) < 130) {
+      return;
+    }
+
+    dpr = Math.min(window.devicePixelRatio || 1, perf.maxDpr);
+    width = nextW;
+    height = perf.coarsePointer ? rawH + 72 : rawH;
     canvas.width = Math.floor(width * dpr);
     canvas.height = Math.floor(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    paintSkyBackdrop(skyBgCanvas, width, height);
     buildStars();
   }
 
@@ -322,116 +575,170 @@ function initStarfield() {
       y: startY,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
+      angle,
       life: 0,
       maxLife: 0.65 + Math.random() * 0.35,
       tailLength: 75 + Math.random() * 55,
     });
   }
 
-  let prevTs = performance.now();
+  function isHtmlVideoActivelyPlaying() {
+    const vid = document.getElementById("ndVideoEl");
+    return Boolean(vid && !vid.paused && !vid.ended && vid.readyState >= 2);
+  }
 
-  function drawFrame(ts) {
-    const dt = Math.min(0.05, (ts - prevTs) / 1000);
-    prevTs = ts;
-    const nowSec = ts / 1000;
+  function paintStarfieldScene(nowSec, dt, advanceMotion) {
+    ctx.globalAlpha = 1;
+    ctx.drawImage(skyBgCanvas, 0, 0, width, height);
 
-    ctx.clearRect(0, 0, width, height);
+    const stepScale = advanceMotion ? dt * 60 : 0;
+    let lastAlpha = 1;
 
-    for (const s of stars) {
-      if (!reducedMotion) {
-        s.x += s.driftX;
-        s.y += s.driftY;
-        if (s.x < -6) s.x = width + 6;
-        if (s.y < -6) s.y = height + 6;
+    for (let i = 0; i < starCount; i += 1) {
+      let sx = starX[i];
+      let sy = starY[i];
+
+      if (stepScale > 0) {
+        sx += starDriftX[i] * stepScale;
+        sy += starDriftY[i] * stepScale;
+        if (sx < -6) sx = width + 6;
+        if (sy < -6) sy = height + 6;
+        starX[i] = sx;
+        starY[i] = sy;
       }
 
-      const parallaxFactor = s.layer * 4;
-      const drawX = (s.x + pointerX * parallaxFactor + width) % width;
-      const drawY = (s.y + pointerY * parallaxFactor + height) % height;
+      const pFactor = starParallax[i];
+      let drawX = sx + pointerX * pFactor;
+      let drawY = sy + pointerY * pFactor;
+      if (drawX < 0) drawX += width;
+      else if (drawX >= width) drawX -= width;
+      if (drawY < 0) drawY += height;
+      else if (drawY >= height) drawY -= height;
 
       const twinkle = reducedMotion
         ? 1
-        : 0.62 + 0.38 * Math.sin(nowSec * s.twinkleSpeed + s.twinklePhase);
-      const alpha = Math.min(1, s.baseAlpha * twinkle);
+        : 0.62 + 0.38 * Math.sin(nowSec * starTwinkleSpeed[i] + starTwinklePhase[i]);
+      const rawAlpha = starBaseAlpha[i] * twinkle;
+      const qAlpha = rawAlpha >= 0.99 ? 1 : ((rawAlpha * 50 + 0.5) | 0) * 0.02;
 
-      if (s.layer >= 2) {
-        const glowRadius = s.radius * (s.layer === 3 ? 5.2 : 3.1);
-        const grad = ctx.createRadialGradient(drawX, drawY, 0, drawX, drawY, glowRadius);
-        grad.addColorStop(0, `rgba(255, 255, 255, ${(alpha * 0.55).toFixed(3)})`);
-        grad.addColorStop(0.45, `rgba(220, 235, 255, ${(alpha * 0.18).toFixed(3)})`);
-        grad.addColorStop(1, "rgba(255, 255, 255, 0)");
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(drawX, drawY, glowRadius, 0, Math.PI * 2);
-        ctx.fill();
+      if (qAlpha <= 0.01) continue;
+      if (qAlpha !== lastAlpha) {
+        ctx.globalAlpha = qAlpha;
+        lastAlpha = qAlpha;
       }
 
-      ctx.fillStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
-      ctx.beginPath();
-      ctx.arc(drawX, drawY, s.radius, 0, Math.PI * 2);
-      ctx.fill();
-
-      if (s.hasCross && alpha > 0.62) {
-        const arm = s.radius * 4.2;
-        ctx.strokeStyle = `rgba(255, 255, 255, ${(alpha * 0.38).toFixed(3)})`;
-        ctx.lineWidth = 0.75;
-        ctx.beginPath();
-        ctx.moveTo(drawX - arm, drawY);
-        ctx.lineTo(drawX + arm, drawY);
-        ctx.moveTo(drawX, drawY - arm);
-        ctx.lineTo(drawX, drawY + arm);
-        ctx.stroke();
-      }
+      const size = starDrawSize[i];
+      const half = starHalfSize[i];
+      ctx.drawImage(starSprites[starSpriteIdx[i]], drawX - half, drawY - half, size, size);
     }
 
-    maybeSpawnShootingStar(nowSec);
+    if (advanceMotion) {
+      maybeSpawnShootingStar(nowSec);
+    }
+
     for (let i = shootingStars.length - 1; i >= 0; i -= 1) {
       const sh = shootingStars[i];
-      sh.life += dt;
-      if (sh.life >= sh.maxLife) {
-        shootingStars.splice(i, 1);
-        continue;
+      if (advanceMotion) {
+        sh.life += dt;
+        if (sh.life >= sh.maxLife) {
+          shootingStars.splice(i, 1);
+          continue;
+        }
+        sh.x += sh.vx * dt;
+        sh.y += sh.vy * dt;
       }
-      sh.x += sh.vx * dt;
-      sh.y += sh.vy * dt;
 
       const progress = sh.life / sh.maxLife;
-      const opacity = Math.sin(progress * Math.PI) * 0.85;
-      const norm = Math.hypot(sh.vx, sh.vy) || 1;
-      const tailX = sh.x - (sh.vx / norm) * sh.tailLength;
-      const tailY = sh.y - (sh.vy / norm) * sh.tailLength;
+      const opacity = Math.sin(progress * Math.PI) * 0.88;
+      if (opacity <= 0.01) continue;
 
-      const lineGrad = ctx.createLinearGradient(sh.x, sh.y, tailX, tailY);
-      lineGrad.addColorStop(0, `rgba(255, 255, 255, ${opacity.toFixed(3)})`);
-      lineGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
-
-      ctx.strokeStyle = lineGrad;
-      ctx.lineWidth = 1.6;
-      ctx.beginPath();
-      ctx.moveTo(sh.x, sh.y);
-      ctx.lineTo(tailX, tailY);
-      ctx.stroke();
+      ctx.save();
+      ctx.translate(sh.x, sh.y);
+      ctx.rotate(sh.angle);
+      ctx.globalAlpha = opacity;
+      lastAlpha = opacity;
+      ctx.drawImage(meteorSprite, -sh.tailLength, -3, sh.tailLength + 4, 6);
+      ctx.restore();
     }
 
-    if (!reducedMotion && !document.hidden) {
-      animFrameId = requestAnimationFrame(drawFrame);
-    }
+    ctx.globalAlpha = 1;
   }
 
-  resize();
-  drawFrame(performance.now());
+  function drawFrame(ts) {
+    animFrameId = null;
+    if (!loopEnabled || reducedMotion || document.hidden) return;
 
-  window.addEventListener("resize", resize);
+    // Hemat penuh saat pengguna sedang menonton fullscreen penuh
+    if (document.fullscreenElement) {
+      animFrameId = requestAnimationFrame(drawFrame);
+      return;
+    }
+
+    const targetInterval =
+      state.cinemaMode || isHtmlVideoActivelyPlaying()
+        ? perf.videoPlayingIntervalMs
+        : shootingStars.length > 0
+          ? perf.meteorFrameIntervalMs
+          : perf.idleFrameIntervalMs;
+
+    const elapsedMs = ts - prevPaintTs;
+    if (prevPaintTs > 0 && elapsedMs < targetInterval) {
+      animFrameId = requestAnimationFrame(drawFrame);
+      return;
+    }
+
+    const dt = prevPaintTs > 0 ? Math.min(0.08, elapsedMs / 1000) : 0.016;
+    prevPaintTs = ts;
+    paintStarfieldScene(ts * 0.001, dt, true);
+
+    animFrameId = requestAnimationFrame(drawFrame);
+  }
+
+  resize(true);
+  // Gambar 1 frame statis awal agar langit berbintang langsung siap di balik splash pembuka
+  paintStarfieldScene(performance.now() * 0.001, 0, false);
+
+  startStarfieldLoop = () => {
+    if (loopEnabled || reducedMotion) return;
+    loopEnabled = true;
+    if (!document.hidden && !animFrameId) {
+      prevPaintTs = performance.now();
+      animFrameId = requestAnimationFrame(drawFrame);
+    }
+  };
+
+  if (splashDismissed && document.getElementById("introSplash")?.classList.contains("is-leaving")) {
+    startStarfieldLoop();
+  } else if (!document.getElementById("introSplash")) {
+    startStarfieldLoop();
+  }
+
   window.addEventListener(
-    "pointermove",
-    (e) => {
-      if (width > 0 && height > 0) {
-        pointerX = (e.clientX / width - 0.5) * 1.4;
-        pointerY = (e.clientY / height - 0.5) * 1.4;
-      }
+    "resize",
+    () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        resize(false);
+        if (!loopEnabled || reducedMotion) {
+          paintStarfieldScene(performance.now() * 0.001, 0, false);
+        }
+      }, 160);
     },
     { passive: true }
   );
+
+  if (!perf.coarsePointer) {
+    window.addEventListener(
+      "pointermove",
+      (e) => {
+        if (width > 0 && height > 0) {
+          pointerX = (e.clientX / width - 0.5) * 1.4;
+          pointerY = (e.clientY / height - 0.5) * 1.4;
+        }
+      },
+      { passive: true }
+    );
+  }
 
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
@@ -439,8 +746,8 @@ function initStarfield() {
         cancelAnimationFrame(animFrameId);
         animFrameId = null;
       }
-    } else if (!reducedMotion && !animFrameId) {
-      prevTs = performance.now();
+    } else if (loopEnabled && !reducedMotion && !animFrameId) {
+      prevPaintTs = performance.now();
       animFrameId = requestAnimationFrame(drawFrame);
     }
   });
@@ -980,6 +1287,7 @@ function renderAnimeCard(item, options = {}) {
           alt="${title}"
           class="nd-card-poster"
           loading="lazy"
+          decoding="async"
           referrerpolicy="no-referrer"
         />
         ${topBadge ? `<span class="nd-badge-top-left">${topBadge}</span>` : ""}
@@ -3280,12 +3588,26 @@ window.addEventListener("popstate", () => {
   routeCurrentUrl();
 });
 
-/* ===== Boot ===== */
-initStarfield();
+/* ===== Boot (Prioritaskan Render Konten Utama, Defer Background & Data Sekunder) ===== */
 initCommunityControls();
 initQrisSupportModal();
 initAdminContactModal();
 initPwa();
 updateWatchlistBadge();
-loadCommunityData(true);
+
+// Jalankan rute utama lebih dulu agar API & DOM langsung dirender di balik animasi pembuka
 routeCurrentUrl();
+
+// Inisialisasi sprite-atlas bintang di frame berikutnya agar tidak menghambat fetch utama
+requestAnimationFrame(() => {
+  setTimeout(initStarfield, 0);
+});
+
+// Tunda muat awal obrolan komunitas ke waktu senggang agar tidak berebut bandwidth beranda
+const scheduleIdleBoot =
+  typeof window.requestIdleCallback === "function"
+    ? (fn) => window.requestIdleCallback(fn, { timeout: 900 })
+    : (fn) => setTimeout(fn, 420);
+scheduleIdleBoot(() => {
+  loadCommunityData(true);
+});

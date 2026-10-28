@@ -54,13 +54,26 @@
     radial-gradient(circle at 50% 42%, rgba(255, 42, 75, 0.16), transparent 46%),
     radial-gradient(ellipse 75% 55% at 50% 0%, rgba(190, 215, 255, 0.12), transparent 62%),
     #03050c;
-  transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.45s ease;
+  transition: opacity 0.68s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.68s ease;
+  will-change: opacity;
 }
 
 .nd-intro-splash.is-leaving {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+}
+
+.nd-intro-splash.is-leaving .nd-intro-inner {
+  transform: translateY(-6px) scale(1.03);
+  opacity: 0;
+}
+
+.nd-intro-splash.is-leaving .nd-intro-progress-bar {
+  width: 100%;
+  animation: none;
+  transform: translateX(0);
+  transition: width 0.32s ease;
 }
 
 .nd-intro-inner {
@@ -71,6 +84,7 @@
   gap: 18px;
   text-align: center;
   max-width: calc(100vw - 40px);
+  transition: transform 0.64s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.56s ease;
 }
 
 .nd-intro-logo-stage {
@@ -93,11 +107,11 @@
   display: block;
   transform-origin: 50% 50%;
   will-change: transform;
-  animation: ndOrbitSpin 1.45s linear infinite;
+  animation: ndOrbitSpin 1.95s linear infinite;
 }
 
 .nd-intro-ring-inner {
-  animation: ndOrbitSpinReverse 2.15s linear infinite;
+  animation: ndOrbitSpinReverse 2.85s linear infinite;
 }
 
 .nd-intro-logo {
@@ -109,8 +123,10 @@
   border-radius: 17px;
   box-shadow:
     0 12px 34px rgba(229, 9, 20, 0.45),
-    0 0 24px rgba(255, 255, 255, 0.12);
-  animation: ndLogoPop 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    0 0 24px rgba(255, 255, 255, 0.14);
+  animation:
+    ndLogoPop 0.85s cubic-bezier(0.16, 1, 0.3, 1) both,
+    ndLogoBreath 2.1s 0.85s ease-in-out infinite;
 }
 
 .nd-intro-wordmark {
@@ -118,7 +134,7 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  animation: ndWordReveal 0.65s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: ndWordReveal 0.88s 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .nd-intro-name {
@@ -131,7 +147,7 @@
 
 .nd-intro-name span {
   color: var(--accent-bright);
-  text-shadow: 0 0 24px rgba(255, 42, 75, 0.55);
+  text-shadow: 0 0 26px rgba(255, 42, 75, 0.62);
 }
 
 .nd-intro-tagline {
@@ -139,24 +155,25 @@
   font-weight: 700;
   letter-spacing: 0.22em;
   color: var(--text-secondary);
+  animation: ndWordReveal 0.82s 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .nd-intro-progress {
-  width: 168px;
+  width: 176px;
   height: 3px;
   border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.1);
   overflow: hidden;
-  animation: ndWordReveal 0.55s 0.16s ease both;
+  animation: ndWordReveal 0.72s 0.52s ease both;
 }
 
 .nd-intro-progress-bar {
   display: block;
-  width: 42%;
+  width: 44%;
   height: 100%;
   border-radius: var(--radius-pill);
   background: linear-gradient(90deg, var(--accent), var(--accent-bright), #ffffff);
-  animation: ndSplashSweep 1.05s ease-in-out infinite;
+  animation: ndSplashSweep 1.35s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 
 @keyframes ndOrbitSpin {
@@ -172,7 +189,7 @@
 @keyframes ndLogoPop {
   from {
     opacity: 0;
-    transform: scale(0.84);
+    transform: scale(0.8);
   }
   to {
     opacity: 1;
@@ -180,10 +197,19 @@
   }
 }
 
+@keyframes ndLogoBreath {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.045);
+  }
+}
+
 @keyframes ndWordReveal {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -247,15 +273,20 @@ body.is-splashing {
   overflow: hidden;
 }
 
-/* ===== Live Starry Night Background ===== */
+/* ===== Live Starry Night Background (GPU-Isolated Compositor Layer) ===== */
 .nd-starfield {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100lvh;
   pointer-events: none;
   z-index: 0;
   display: block;
+  contain: strict;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 a {
@@ -1551,12 +1582,12 @@ textarea {
 }
 
 .nd-card {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
+  background: rgba(15, 19, 30, 0.92);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   overflow: hidden;
   cursor: pointer;
+  contain: layout paint style;
   transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
   display: flex;
   flex-direction: column;
