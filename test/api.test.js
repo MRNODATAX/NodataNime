@@ -348,4 +348,32 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
     );
     assert.equal(hasAdminTgInfo, true);
   });
+
+  it("optimizes starry night background via GPU sprite-atlas & non-blocking boot while preserving all star layers and aesthetic intro splash", async () => {
+    const indexHtml = fs.readFileSync(path.join(rootDir, "views/index.html"), "utf8");
+    const stylesCss = fs.readFileSync(path.join(rootDir, "public/css/styles.css"), "utf8");
+    const clientJs = fs.readFileSync(path.join(rootDir, "public/js/app.js"), "utf8");
+
+    // 1. Elemen background bintang & splash logo tetap utuh (tidak dihapus/dikurangi)
+    assert.match(indexHtml, /<canvas id="starfieldCanvas" class="nd-starfield"/);
+    assert.match(indexHtml, /id="introSplash"/);
+
+    // 2. Sprite-atlas offscreen, typed-array SoA, adaptive frame pacing, dan tanpa createRadialGradient di dalam loop frame
+    assert.match(clientJs, /function createStarSpriteAtlas\(\)/);
+    assert.match(clientJs, /function detectStarfieldPerfProfile\(\)/);
+    assert.match(clientJs, /new Float32Array\(/);
+    const paintSceneMatch = clientJs.match(/function paintStarfieldScene\([\s\S]*?function drawFrame\(/);
+    assert.ok(paintSceneMatch, "paintStarfieldScene harus terdefinisi");
+    assert.doesNotMatch(paintSceneMatch[0], /createRadialGradient|createLinearGradient/);
+
+    // 3. Durasi estetik animasi logo pembuka (~1.85s + smooth fade) & prioritas routeCurrentUrl sebelum initStarfield
+    assert.match(clientJs, /INTRO_SPLASH_MIN_MS\s*=\s*1850/);
+    assert.match(stylesCss, /\.nd-starfield\s*\{[\s\S]*?contain:\s*strict/);
+    const cardBlock = stylesCss.match(/\.nd-card\s*\{[^}]*\}/);
+    assert.ok(cardBlock && !/backdrop-filter/.test(cardBlock[0]), ".nd-card tidak boleh memicu blur per-kartu di atas canvas bintang");
+    assert.ok(
+      clientJs.lastIndexOf("routeCurrentUrl();") < clientJs.lastIndexOf("setTimeout(initStarfield, 0);"),
+      "routeCurrentUrl wajib dieksekusi lebih awal daripada initStarfield saat boot"
+    );
+  });
 });

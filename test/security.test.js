@@ -289,7 +289,7 @@ describe("Cloudflare Security Audit Skill — Multi-Layer Hardening Suite (Layer
     // Verifikasi Service Worker & vercel.json
     const swCode = fs.readFileSync(path.join(rootDir, "public/sw.js"), "utf8");
     assert.ok(swCode.includes("isAllowedStaticAssetPath"));
-    assert.ok(swCode.includes("nodatanime-pwa-v6.5"));
+    assert.ok(swCode.includes("nodatanime-pwa-v6.6"));
     assert.ok(swCode.includes('/api/support/'));
 
     const vercelCfg = JSON.parse(fs.readFileSync(path.join(rootDir, "vercel.json"), "utf8"));
