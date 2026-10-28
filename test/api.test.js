@@ -358,9 +358,12 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
     assert.match(indexHtml, /<canvas id="starfieldCanvas" class="nd-starfield"/);
     assert.match(indexHtml, /id="introSplash"/);
 
-    // 2. Sprite-atlas offscreen, typed-array SoA, adaptive frame pacing, dan tanpa createRadialGradient di dalam loop frame
+    // 2. Sprite-atlas offscreen (termasuk halo bintang semua layer & meteorSprite jelas), typed-array SoA, penjadwalan nextShootAt, dan tanpa createRadialGradient di dalam loop frame
     assert.match(clientJs, /function createStarSpriteAtlas\(\)/);
     assert.match(clientJs, /function detectStarfieldPerfProfile\(\)/);
+    assert.match(clientJs, /function spawnShootingStar\(\)/);
+    assert.match(clientJs, /nextShootAt/);
+    assert.match(clientJs, /meteor\.width\s*=\s*240/);
     assert.match(clientJs, /new Float32Array\(/);
     const paintSceneMatch = clientJs.match(/function paintStarfieldScene\([\s\S]*?function drawFrame\(/);
     assert.ok(paintSceneMatch, "paintStarfieldScene harus terdefinisi");
