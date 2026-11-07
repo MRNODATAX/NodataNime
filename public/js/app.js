@@ -26,6 +26,8 @@ const SVG_ICONS = {
   coffee: `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h1a4 4 0 1 1 0 8h-1"></path><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path><line x1="6" y1="2" x2="6" y2="4"></line><line x1="10" y1="2" x2="10" y2="4"></line><line x1="14" y1="2" x2="14" y2="4"></line></svg>`,
   shield: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>`,
   telegram: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`,
+  skipIntro: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="4 5 13 12 4 19 4 5"></polygon><polygon points="13 5 22 12 13 19 13 5"></polygon></svg>`,
+  undo: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>`,
 };
 
 /* ===== Official Admin Telegram Pinning (@nodata_store) ===== */
@@ -1448,6 +1450,8 @@ export function navigate(params = {}, push = true) {
   routeCurrentUrl();
 }
 
+let activeWatchSkipIntroHandler = null;
+
 async function routeCurrentUrl() {
   stopHeroCarousel();
   const params = new URLSearchParams(window.location.search);
@@ -1472,6 +1476,7 @@ async function routeCurrentUrl() {
   if (!(episode || (series && ep))) {
     state.currentWatch = null;
     state.currentWatchServer = "";
+    activeWatchSkipIntroHandler = null;
   }
   if (!series || episode || ep) {
     state.currentDetail = null;
@@ -2316,47 +2321,53 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
           <div class="nd-video-frame" id="videoFrame">
             <div class="nd-watermark">NodataNime</div>
             <div id="resumeContainer"></div>
+            <div id="skipIntroContainer"></div>
             <div id="seekFlashContainer"></div>
             <div id="videoMount" style="width:100%;height:100%;"></div>
           </div>
 
           <div class="nd-player-controls-bar">
-            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div class="nd-player-nav-group">
               <button
                 type="button"
-                class="nd-btn nd-btn-secondary"
-                style="padding:8px 14px;font-size:0.82rem;"
+                class="nd-btn nd-btn-secondary nd-player-nav-btn"
                 ${data.navigation?.prevEpisodeId ? `data-play-ep="${esc(data.navigation.prevEpisodeId)}" data-play-series="${esc(data.seriesSlug)}"` : "disabled"}
               >
                 Ep Sebelumnya
               </button>
               <button
                 type="button"
-                class="nd-btn nd-btn-secondary"
-                style="padding:8px 14px;font-size:0.82rem;"
+                class="nd-btn nd-btn-secondary nd-player-nav-btn"
                 data-open-series="${esc(data.seriesSlug)}"
               >
                 Semua Episode
               </button>
               <button
                 type="button"
-                class="nd-btn nd-btn-primary"
-                style="padding:8px 14px;font-size:0.82rem;"
+                class="nd-btn nd-btn-primary nd-player-nav-btn"
                 ${data.navigation?.nextEpisodeId ? `data-play-ep="${esc(data.navigation.nextEpisodeId)}" data-play-series="${esc(data.seriesSlug)}"` : "disabled"}
               >
                 Ep Selanjutnya
               </button>
             </div>
 
-            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div class="nd-player-tools-group">
+              <button
+                type="button"
+                class="nd-pill-btn nd-skip-intro-pill"
+                id="skipIntroBarBtn"
+                title="Lompati lagu pembuka anime +90 detik (Pintasan: tombol S)"
+              >
+                ${SVG_ICONS.skipIntro}<span>Lewati Intro +90d</span>
+              </button>
               <button type="button" class="nd-pill-btn ${state.autoNext ? "active" : ""}" id="toggleAutoNextBtn">
                 Auto-Next: ${state.autoNext ? "ON" : "OFF"}
               </button>
               <button type="button" class="nd-pill-btn" id="toggleCinemaBtn">
-                ${SVG_ICONS.cinema}Mode Bioskop
+                ${SVG_ICONS.cinema}<span>Mode Bioskop</span>
               </button>
               <button type="button" class="nd-pill-btn nd-report-pill-btn" id="watchReportIssueBtn" data-open-admin-contact="stream">
-                ${SVG_ICONS.flag}Lapor Kendala / Eror
+                ${SVG_ICONS.flag}<span>Lapor Kendala / Eror</span>
               </button>
             </div>
           </div>
@@ -2450,7 +2461,200 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
     </div>
   `;
 
+  const INTRO_SKIP_SECONDS = 90;
+  const INTRO_WINDOW_MAX_SEC = 165;
+  let introSkippedOnce = false;
+  let overlayDismissedByUser = false;
+  let lastPreSkipTime = null;
+  let skipOverlayIdleTimer = null;
+  let skipUndoTimer = null;
+  let currentStreamSupportsSkip = false;
+
+  function clearSkipIntroTimers() {
+    clearTimeout(skipOverlayIdleTimer);
+    skipOverlayIdleTimer = null;
+    clearTimeout(skipUndoTimer);
+    skipUndoTimer = null;
+  }
+
+  function renderDefaultSkipIntroOverlay() {
+    const skipBox = document.getElementById("skipIntroContainer");
+    if (!skipBox) return;
+    if (!currentStreamSupportsSkip) {
+      skipBox.innerHTML = "";
+      return;
+    }
+
+    skipBox.innerHTML = `
+      <div class="nd-skip-intro-float is-hidden" id="skipIntroFloat" data-mode="skip">
+        <button type="button" class="nd-skip-intro-float-btn" id="skipIntroOverlayBtn" aria-label="Lewati intro 90 detik">
+          ${SVG_ICONS.skipIntro}
+          <span>Lewati Intro</span>
+          <strong class="nd-skip-badge">+90d</strong>
+          <kbd class="nd-skip-kbd">S</kbd>
+        </button>
+        <button type="button" class="nd-skip-intro-close" id="skipIntroDismissBtn" aria-label="Sembunyikan tombol lewati intro">
+          &times;
+        </button>
+      </div>
+    `;
+
+    document.getElementById("skipIntroOverlayBtn")?.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      triggerSkipIntroJump();
+    });
+
+    document.getElementById("skipIntroDismissBtn")?.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      overlayDismissedByUser = true;
+      syncSkipIntroOverlayVisibility();
+    });
+  }
+
+  function armSkipOverlayIdleHide() {
+    clearTimeout(skipOverlayIdleTimer);
+    const floatEl = document.getElementById("skipIntroFloat");
+    if (!floatEl || floatEl.dataset.mode === "undo") return;
+    floatEl.classList.remove("is-idle-faded");
+    const vid = document.getElementById("ndVideoEl");
+    if (vid && !vid.paused && !vid.ended) {
+      skipOverlayIdleTimer = setTimeout(() => {
+        const currentFloat = document.getElementById("skipIntroFloat");
+        if (currentFloat && currentFloat.dataset.mode === "skip") {
+          currentFloat.classList.add("is-idle-faded");
+        }
+      }, 6500);
+    }
+  }
+
+  function syncSkipIntroOverlayVisibility(wakeFromActivity = false) {
+    const floatEl = document.getElementById("skipIntroFloat");
+    if (!floatEl) return;
+    if (floatEl.dataset.mode === "undo") return;
+
+    const resumeBox = document.getElementById("resumeContainer");
+    const hasActiveResumeBanner = Boolean(resumeBox && resumeBox.children.length > 0);
+    const vid = document.getElementById("ndVideoEl");
+    if (!vid || !currentStreamSupportsSkip || hasActiveResumeBanner || introSkippedOnce || overlayDismissedByUser) {
+      floatEl.classList.add("is-hidden");
+      return;
+    }
+
+    const curSec = Number(vid.currentTime) || 0;
+    const tooShortClip = Number.isFinite(vid.duration) && vid.duration > 0 && vid.duration <= 105;
+    if (tooShortClip || curSec >= INTRO_WINDOW_MAX_SEC) {
+      floatEl.classList.add("is-hidden");
+      return;
+    }
+
+    floatEl.classList.remove("is-hidden");
+    if (wakeFromActivity) {
+      armSkipOverlayIdleHide();
+    }
+  }
+
+  function showSkipUndoChip(prevTimeSec) {
+    clearSkipIntroTimers();
+    const skipBox = document.getElementById("skipIntroContainer");
+    if (!skipBox) return;
+
+    skipBox.innerHTML = `
+      <div class="nd-skip-intro-float" id="skipIntroFloat" data-mode="undo">
+        <span class="nd-skip-undo-label">Intro +90d dilewati</span>
+        <button type="button" class="nd-skip-undo-btn" id="undoSkipIntroBtn">
+          ${SVG_ICONS.undo}
+          <span>Urungkan</span>
+        </button>
+      </div>
+    `;
+
+    document.getElementById("undoSkipIntroBtn")?.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      const vid = document.getElementById("ndVideoEl");
+      if (vid && Number.isFinite(prevTimeSec)) {
+        const restored = Math.max(0, prevTimeSec);
+        vid.currentTime = restored;
+        saveProgress(data.episodeId, restored);
+        flashSeek(`Kembali ke ${formatSeconds(restored)}`, "left");
+      }
+      introSkippedOnce = false;
+      overlayDismissedByUser = false;
+      clearSkipIntroTimers();
+      renderDefaultSkipIntroOverlay();
+      syncSkipIntroOverlayVisibility(true);
+    });
+
+    skipUndoTimer = setTimeout(() => {
+      renderDefaultSkipIntroOverlay();
+      syncSkipIntroOverlayVisibility(false);
+    }, 4500);
+  }
+
+  function executeSkipOnLoadedVideo(videoEl) {
+    const prevTime = Number(videoEl.currentTime) || 0;
+    const hasDuration = Number.isFinite(videoEl.duration) && videoEl.duration > 0;
+    const maxSafe = hasDuration ? Math.max(0, videoEl.duration - 2) : prevTime + INTRO_SKIP_SECONDS;
+    const nextTime = Math.min(maxSafe, Math.max(0, prevTime + INTRO_SKIP_SECONDS));
+
+    lastPreSkipTime = prevTime;
+    introSkippedOnce = true;
+
+    const resumeBox = document.getElementById("resumeContainer");
+    if (resumeBox) resumeBox.innerHTML = "";
+
+    videoEl.currentTime = nextTime;
+    saveProgress(data.episodeId, nextTime);
+    if (videoEl.paused) {
+      videoEl.play().catch(() => {});
+    }
+
+    flashSeek(`Intro +${INTRO_SKIP_SECONDS}d (${formatSeconds(nextTime)})`, "right");
+    showSkipUndoChip(prevTime);
+  }
+
+  function triggerSkipIntroJump() {
+    if (!currentStreamSupportsSkip) {
+      showToast("Fitur Lewati Intro +90d aktif pada server MP4 langsung & Proxy Range.");
+      return;
+    }
+
+    const videoEl = document.getElementById("ndVideoEl");
+    if (!videoEl) return;
+
+    if (videoEl.readyState >= 1) {
+      executeSkipOnLoadedVideo(videoEl);
+      return;
+    }
+
+    showToast("Memuat stream & melompati intro +90 detik...");
+    videoEl.addEventListener(
+      "loadedmetadata",
+      () => {
+        executeSkipOnLoadedVideo(videoEl);
+      },
+      { once: true }
+    );
+    videoEl.play().catch(() => {
+      try {
+        videoEl.load();
+      } catch {
+        // Biarkan browser melanjutkan pemuatan metadata standar
+      }
+    });
+  }
+
+  activeWatchSkipIntroHandler = triggerSkipIntroJump;
+
+  function syncSkipBarBtnState(enabled) {
+    currentStreamSupportsSkip = Boolean(enabled);
+    const barBtn = document.getElementById("skipIntroBarBtn");
+    if (!barBtn) return;
+    barBtn.classList.toggle("is-embed-disabled", !currentStreamSupportsSkip);
+    barBtn.setAttribute("aria-disabled", currentStreamSupportsSkip ? "false" : "true");
+  }
+
   function mountStream(index, useProxy = false, autoFallbackTried = false) {
+    clearSkipIntroTimers();
     currentStreamIndex = index;
     const stream = activePool[index];
     state.currentWatchServer = stream
@@ -2460,6 +2664,8 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
     if (!mount) return;
 
     if (!stream) {
+      syncSkipBarBtnState(false);
+      renderDefaultSkipIntroOverlay();
       mount.innerHTML = `
         <div class="nd-player-unavailable">
           <img
@@ -2492,15 +2698,20 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
     const rawCandidateUrl = useProxy && stream.proxyUrl ? stream.proxyUrl : stream.url;
     const srcUrl = safeUrl(rawCandidateUrl, "");
     if (!srcUrl) {
+      syncSkipBarBtnState(false);
+      renderDefaultSkipIntroOverlay();
       mount.innerHTML = `<div class="nd-player-unavailable"><strong>URL stream diblokir oleh kebijakan keamanan klien.</strong></div>`;
       return;
     }
 
     if (stream.type === "embed") {
+      syncSkipBarBtnState(false);
+      renderDefaultSkipIntroOverlay();
       mount.innerHTML = `<iframe src="${esc(srcUrl)}" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen referrerpolicy="no-referrer"></iframe>`;
       return;
     }
 
+    syncSkipBarBtnState(true);
     mount.innerHTML = `
       <video
         id="ndVideoEl"
@@ -2532,11 +2743,39 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
         videoEl.currentTime = savedSec;
         videoEl.play().catch(() => {});
         resumeContainer.innerHTML = "";
+        syncSkipIntroOverlayVisibility(true);
       });
       document.getElementById("resumeNoBtn")?.addEventListener("click", () => {
         resumeContainer.innerHTML = "";
+        syncSkipIntroOverlayVisibility(true);
       });
     }
+
+    renderDefaultSkipIntroOverlay();
+    syncSkipIntroOverlayVisibility(true);
+
+    videoEl.addEventListener("loadedmetadata", () => {
+      syncSkipIntroOverlayVisibility(true);
+    });
+
+    videoEl.addEventListener("play", () => {
+      syncSkipIntroOverlayVisibility(true);
+    });
+
+    videoEl.addEventListener("pause", () => {
+      clearTimeout(skipOverlayIdleTimer);
+      document.getElementById("skipIntroFloat")?.classList.remove("is-idle-faded");
+      syncSkipIntroOverlayVisibility(false);
+    });
+
+    videoEl.addEventListener("seeked", () => {
+      const isUndoActive = document.getElementById("skipIntroFloat")?.dataset.mode === "undo";
+      if (!isUndoActive && (Number(videoEl.currentTime) || 0) < 20) {
+        introSkippedOnce = false;
+        overlayDismissedByUser = false;
+      }
+      syncSkipIntroOverlayVisibility(true);
+    });
 
     let lastSaved = 0;
     videoEl.addEventListener("timeupdate", () => {
@@ -2544,6 +2783,7 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
         lastSaved = videoEl.currentTime;
         saveProgress(data.episodeId, videoEl.currentTime);
       }
+      syncSkipIntroOverlayVisibility(false);
     });
 
     videoEl.addEventListener("ended", () => {
@@ -2576,6 +2816,15 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
   }
 
   mountStream(0, false, false);
+
+  const videoFrameEl = document.getElementById("videoFrame");
+  const wakeSkipOverlay = () => syncSkipIntroOverlayVisibility(true);
+  videoFrameEl?.addEventListener("pointermove", wakeSkipOverlay, { passive: true });
+  videoFrameEl?.addEventListener("touchstart", wakeSkipOverlay, { passive: true });
+
+  document.getElementById("skipIntroBarBtn")?.addEventListener("click", () => {
+    triggerSkipIntroJump();
+  });
 
   document.getElementById("streamServerButtons")?.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-stream-idx]");
@@ -3074,8 +3323,28 @@ document.addEventListener("keydown", (e) => {
   }
 
   const videoEl = document.getElementById("ndVideoEl");
-  if (videoEl && tag !== "INPUT" && tag !== "TEXTAREA") {
-    if (e.key === "ArrowRight") {
+  const hasBlockingOverlay =
+    (notifPanel && !notifPanel.hidden) ||
+    (bottomMoreSheet && !bottomMoreSheet.hidden) ||
+    Boolean(document.getElementById("qrisModalBackdrop") && !document.getElementById("qrisModalBackdrop").hidden) ||
+    Boolean(document.getElementById("adminContactBackdrop") && !document.getElementById("adminContactBackdrop").hidden);
+
+  if (
+    videoEl &&
+    !hasBlockingOverlay &&
+    tag !== "INPUT" &&
+    tag !== "TEXTAREA" &&
+    tag !== "SELECT" &&
+    !e.ctrlKey &&
+    !e.metaKey &&
+    !e.altKey
+  ) {
+    if (e.key === "s" || e.key === "S" || (e.key === "ArrowRight" && e.shiftKey)) {
+      e.preventDefault();
+      if (typeof activeWatchSkipIntroHandler === "function") {
+        activeWatchSkipIntroHandler();
+      }
+    } else if (e.key === "ArrowRight") {
       videoEl.currentTime = Math.min(videoEl.duration || Infinity, videoEl.currentTime + 10);
       flashSeek("+10 dtk", "right");
     } else if (e.key === "ArrowLeft") {
@@ -3085,13 +3354,15 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+let seekFlashTimer = null;
 function flashSeek(label, side) {
   const box = document.getElementById("seekFlashContainer");
   if (!box) return;
+  clearTimeout(seekFlashTimer);
   box.innerHTML = `<div class="nd-seek-flash ${side}">${esc(label)}</div>`;
-  setTimeout(() => {
+  seekFlashTimer = setTimeout(() => {
     box.innerHTML = "";
-  }, 600);
+  }, 850);
 }
 
 /* ===== Anti-Quishing & Anti-QR-Swapping Modal Controller ===== */
