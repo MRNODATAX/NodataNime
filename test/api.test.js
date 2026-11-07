@@ -400,4 +400,30 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
     assert.match(stylesCss, /\.nd-player-nav-group\s*\{[\s\S]*?repeat\(3,\s*minmax\(0,\s*1fr\)\)/);
     assert.doesNotMatch(stylesCss, /grid-template-columns:\s*1fr\s*;/);
   });
+
+  it("maintains decluttered v7.0 streaming hierarchy (Unified Watch Dock, anti-collision card badges, numbered episode cells, & 2-column callout grid)", async () => {
+    const stylesCss = fs.readFileSync(path.join(rootDir, "public/css/styles.css"), "utf8");
+    const clientJs = fs.readFileSync(path.join(rootDir, "public/js/app.js"), "utf8");
+
+    // 1. Unified Cinema Watch Dock (video frame + flush control strip + inline server rows)
+    assert.match(clientJs, /class="nd-watch-dock"/);
+    assert.match(clientJs, /class="nd-watch-header"/);
+    assert.match(clientJs, /class="nd-server-row"/);
+    assert.match(clientJs, /id="watchEpList"/);
+    assert.match(stylesCss, /\.nd-watch-dock\s*\{/);
+    assert.match(stylesCss, /\.nd-server-row\s*\{/);
+
+    // 2. Anti-collision poster badge flex header + concise episode formatter
+    assert.match(clientJs, /function compactCardBadge\(/);
+    assert.match(clientJs, /function formatEpisodeItemDisplay\(/);
+    assert.match(clientJs, /class="nd-card-badges-top"/);
+    assert.match(clientJs, /class="nd-ep-num-badge"/);
+    assert.match(stylesCss, /\.nd-card-badges-top\s*\{/);
+    assert.match(stylesCss, /\.nd-ep-num-badge\s*\{/);
+
+    // 3. Unified 2-column callout grid (QRIS Support + Contact Admin side-by-side on desktop, minmax(0, 1fr) on mobile)
+    assert.match(clientJs, /class="nd-callout-grid/);
+    assert.match(stylesCss, /\.nd-callout-grid\s*\{[\s\S]*?repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
+    assert.doesNotMatch(stylesCss, /grid-template-columns:\s*1fr\s*;/);
+  });
 });
