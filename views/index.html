@@ -47,7 +47,7 @@
       flex-shrink: 0;
     }
   </style>
-  <link rel="stylesheet" href="/css/styles.css?v=7.0" />
+  <link rel="stylesheet" href="/css/styles.css?v=7.1" />
 </head>
 <body class="is-splashing">
   <!-- Animasi Pembuka Logo & Nama Brand NodataNime (100% Terpusat Stabil) -->
@@ -772,9 +772,82 @@
     </div>
   </div>
 
+  <!-- Modal Peringatan Konsumsi Kuota Data Internet (1080p Full HD) -->
+  <div id="highDataWarnBackdrop" class="nd-qris-backdrop" hidden>
+    <div id="highDataWarnModal" class="nd-qris-modal nd-data-warn-modal" role="dialog" aria-modal="true" aria-labelledby="highDataWarnTitle">
+      <div class="nd-qris-modal-header">
+        <div class="nd-qris-title-wrap">
+          <span class="nd-qris-title-icon nd-data-warn-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </span>
+          <div>
+            <h2 id="highDataWarnTitle" class="nd-qris-title">Peringatan Konsumsi Data (1080p)</h2>
+            <p class="nd-qris-subtitle">Resolusi <strong>1080p Full HD</strong> akan memboroskan kuota data internet lebih cepat dibanding 720p.</p>
+          </div>
+        </div>
+        <button type="button" id="highDataWarnCloseBtn" class="nd-icon-btn nd-icon-btn-sm" aria-label="Tutup peringatan kuota data">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="nd-qris-modal-body">
+        <div class="nd-data-target-row">
+          <span>Server tujuan:</span>
+          <strong id="highDataTargetLabel">Server 1080p</strong>
+        </div>
+
+        <div class="nd-data-compare-grid">
+          <div class="nd-data-tier-card is-recommended">
+            <span class="nd-data-tier-badge">Hemat &amp; Jernih</span>
+            <strong>720p HD</strong>
+            <span class="nd-data-tier-size">~350 MB / episode</span>
+            <small>Tajam di layar HP &amp; laptop, stabil di ≥ 3 Mbps</small>
+          </div>
+          <div class="nd-data-tier-card is-heavy">
+            <span class="nd-data-tier-badge">Boros Kuota</span>
+            <strong>1080p Full HD</strong>
+            <span class="nd-data-tier-size">~700 MB+ / episode</span>
+            <small>Hingga 2× lipat kuota &amp; butuh sinyal ≥ 5 Mbps</small>
+          </div>
+        </div>
+
+        <div id="highDataNetAlert" class="nd-data-net-alert" hidden>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+            <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+            <line x1="12" y1="20" x2="12.01" y2="20"></line>
+          </svg>
+          <span id="highDataNetAlertText">Jaringan seluler / penghemat data terdeteksi.</span>
+        </div>
+
+        <label class="nd-data-session-opt" for="highDataDontAskCheck">
+          <input type="checkbox" id="highDataDontAskCheck" />
+          <span>Jangan ingatkan lagi selama sesi ini</span>
+        </label>
+
+        <div class="nd-data-warn-actions">
+          <button type="button" id="highDataStayBtn" class="nd-btn nd-btn-primary nd-data-stay-btn">
+            <span id="highDataStayBtnLabel">Tetap di 720p (Hemat Kuota)</span>
+          </button>
+          <button type="button" id="highDataConfirmBtn" class="nd-btn nd-btn-secondary nd-data-confirm-btn">
+            <span>Lanjut Pakai 1080p</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Container -->
   <div id="toastRoot" class="nd-toast-root" aria-live="polite"></div>
 
-  <script type="module" src="/js/app.js?v=7.0"></script>
+  <script type="module" src="/js/app.js?v=7.1"></script>
 </body>
 </html>

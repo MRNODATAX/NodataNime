@@ -202,9 +202,37 @@ describe("OBL-03: YLnime Episode HTML & yl_ep_json=1 Stream Extractor", () => {
     assert.equal(normalized.streams[0].provider, "Animeverse S3");
     assert.equal(normalized.streams[0].resolution, "1080p");
     assert.equal(normalized.streams[0].playableDirect, true);
+    // Ketika 720p tidak tersedia namun 480p tersedia, defaultStream harus memilih 480p agar tetap hemat kuota (< 1080p)
+    assert.equal(normalized.defaultResolution, "480p");
+    assert.equal(normalized.defaultStreamUrl, "https://s3.animeverse.id/video/ep21-480.mp4");
     const pxl = normalized.streams.find((s) => s.provider === "Pixeldrain Cloud");
     assert.equal(pxl.playableDirect, false);
     assert.equal(normalized.navigation.prevEpisodeId, "al-153297-20");
     assert.equal(normalized.navigation.nextEpisodeId, "al-153297-22");
+  });
+
+  it("prioritizes playable 720p as defaultStream when 360p/480p/720p/1080p mirrors are present", () => {
+    const normalized = normalizeEpisodeStreams({
+      episodeId: "al-153297-22",
+      seriesSlug: "slime-s4-sub-indo",
+      title: "Slime Season 4 Episode 22",
+      animeTitle: "Slime Season 4",
+      jsonResponses: [
+        {
+          ok: true,
+          streams: [
+            { reso: "1080p", link: "https://s3.animeverse.id/video/ep22-1080.mp4", provide: 871, id: 1 },
+            { reso: "720p", link: "https://s3.animeverse.id/video/ep22-720.mp4", provide: 871, id: 2 },
+            { reso: "480p", link: "https://s3.animeverse.id/video/ep22-480.mp4", provide: 871, id: 3 },
+            { reso: "360p", link: "https://s3.animeverse.id/video/ep22-360.mp4", provide: 871, id: 4 },
+          ],
+        },
+      ],
+      inlineStreams: [],
+    });
+
+    assert.equal(normalized.streams[0].resolution, "1080p");
+    assert.equal(normalized.defaultResolution, "720p");
+    assert.equal(normalized.defaultStreamUrl, "https://s3.animeverse.id/video/ep22-720.mp4");
   });
 });

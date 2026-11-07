@@ -298,7 +298,7 @@ export class SnapshotStore {
       jsonResponses: [
         {
           ok: rawStreams.length > 0,
-          reso_dipakai: "1080p",
+          reso_dipakai: "720p",
           streams: rawStreams,
           prev_ep: prevEp,
           next_ep: nextEp,

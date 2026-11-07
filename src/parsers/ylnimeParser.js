@@ -729,7 +729,14 @@ export function normalizeEpisodeStreams({
   const primaryJson = validJsons[0] || jsonResponses.find((r) => r) || null;
   const prevEp = primaryJson?.prev_ep ?? fallbackPrevEp ?? null;
   const nextEp = primaryJson?.next_ep ?? fallbackNextEp ?? null;
-  const defaultStream = streams.find((s) => s.playableDirect) || streams[0] || null;
+  const playableCandidates = streams.filter((s) => s.playableDirect);
+  const defaultStream =
+    playableCandidates.find((s) => s.resolutionRank === 720) ||
+    playableCandidates.find((s) => s.resolutionRank < 1080) ||
+    playableCandidates[0] ||
+    streams.find((s) => s.resolutionRank === 720) ||
+    streams[0] ||
+    null;
 
   const rawSeries = fromSeriesToken(seriesSlug);
 

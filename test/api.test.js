@@ -426,4 +426,34 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
     assert.match(stylesCss, /\.nd-callout-grid\s*\{[\s\S]*?repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
     assert.doesNotMatch(stylesCss, /grid-template-columns:\s*1fr\s*;/);
   });
+
+  it("defaults episode playback to 720p (or <1080p fallback) and warns before switching to high-data 1080p servers", async () => {
+    const indexHtml = fs.readFileSync(path.join(rootDir, "views/index.html"), "utf8");
+    const stylesCss = fs.readFileSync(path.join(rootDir, "public/css/styles.css"), "utf8");
+    const clientJs = fs.readFileSync(path.join(rootDir, "public/js/app.js"), "utf8");
+
+    // 1. Markup modal peringatan kuota 1080p tersedia dengan opsi jangan ingatkan selama sesi ini
+    assert.match(indexHtml, /id="highDataWarnBackdrop"/);
+    assert.match(indexHtml, /id="highDataWarnModal"/);
+    assert.match(indexHtml, /id="highDataDontAskCheck"/);
+    assert.match(indexHtml, /id="highDataStayBtn"/);
+    assert.match(indexHtml, /id="highDataConfirmBtn"/);
+    assert.match(indexHtml, /Jangan ingatkan lagi selama sesi ini/);
+
+    // 2. Logika pemilih default 720p -> <1080p -> fallback & intersep klik 1080p + simpan timestamp video
+    assert.match(clientJs, /function pickInitialDefaultStreamIndex\(/);
+    assert.match(clientJs, /function pickNextFallbackStreamIndex\(/);
+    assert.match(clientJs, /function isHighDataStream\(/);
+    assert.match(clientJs, /function openHighDataWarningModal\(/);
+    assert.match(clientJs, /function initHighDataWarningModal\(/);
+    assert.match(clientJs, /SKIP_1080P_WARN:\s*"nodatanime_skip_1080p_warn_v1"/);
+    assert.match(clientJs, /class="nd-fhd-tag">FHD<\/span>/);
+    assert.match(clientJs, /preservePlayback:\s*true/);
+
+    // 3. CSS responsif aman (minmax(0, 1fr), tanpa bare 1fr)
+    assert.match(stylesCss, /\.nd-data-warn-modal\s*\{/);
+    assert.match(stylesCss, /\.nd-data-compare-grid\s*\{[\s\S]*?repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
+    assert.match(stylesCss, /\.nd-fhd-tag\s*\{/);
+    assert.doesNotMatch(stylesCss, /grid-template-columns:\s*1fr\s*;/);
+  });
 });
