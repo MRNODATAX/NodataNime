@@ -1,8 +1,8 @@
 /**
- * NodataNime v7.0 — Client-Side Streaming & PWA Application
+ * NodataNime v7.1 — Client-Side Streaming & PWA Application
  * Menggunakan URL relatif `/api/*` sepenuhnya agar kompatibel di semua domain & Live Preview.
  * Dilengkapi Opening Brand Splash, Live Starry Night Background, 100% Vector SVG Bottom Navbar,
- * Unified Cinema Watch Dock (Miruro/HiAnime/Netflix UX), Obrolan & Info Komunitas 2-Tab, serta PWA penuh.
+ * Unified Cinema Watch Dock, Auto-720p Smart Default & 1080p Data-Usage Guard, serta PWA penuh.
  */
 
 const STORAGE_KEYS = {
@@ -11,6 +11,10 @@ const STORAGE_KEYS = {
   PROGRESS: "nodatanime_progress_v1",
   AUTONEXT: "nodatanime_autonext_v1",
   CHAT_NICK: "nodatanime_chat_nick_v1",
+};
+
+const SESSION_KEYS = {
+  SKIP_1080P_WARN: "nodatanime_skip_1080p_warn_v1",
 };
 
 const SVG_ICONS = {
@@ -71,6 +75,70 @@ function formatEpisodeItemDisplay(ep = {}, animeTitle = "", fallbackIdx = 0) {
     displayTitle: cleaned,
     metaLabel: String(ep.date || "Sub Indo HD").trim(),
   };
+}
+
+/* ===== Smart 720p Default Selection & 1080p High-Data Detection ===== */
+function getStreamResolutionRank(stream = {}) {
+  const explicit = Number.parseInt(stream?.resolutionRank, 10);
+  if (Number.isFinite(explicit) && explicit > 0) return explicit;
+  const text = `${stream?.resolution || ""} ${stream?.label || ""}`;
+  const match = text.match(/\b(\d{3,4})\s*p\b/i);
+  if (match) {
+    const parsed = Number.parseInt(match[1], 10);
+    if (Number.isFinite(parsed) && parsed > 0) return parsed;
+  }
+  if (/\b4k\b|\buhd\b/i.test(text)) return 2160;
+  if (/\bfhd\b|\bfull\s*hd\b/i.test(text)) return 1080;
+  return 720;
+}
+
+function isHighDataStream(stream = {}) {
+  return getStreamResolutionRank(stream) >= 1080;
+}
+
+function pickInitialDefaultStreamIndex(pool = []) {
+  if (!Array.isArray(pool) || pool.length === 0) return 0;
+
+  // Prioritas 1: Server 720p HD (tajam & hemat kuota)
+  const exact720Idx = pool.findIndex((s) => getStreamResolutionRank(s) === 720);
+  if (exact720Idx !== -1) return exact720Idx;
+
+  // Prioritas 2: Resolusi hemat kuota di bawah 1080p terdekat (mis. 480p lalu 360p)
+  let bestUnder1080Idx = -1;
+  let bestUnder1080Rank = -1;
+  for (let i = 0; i < pool.length; i += 1) {
+    const rank = getStreamResolutionRank(pool[i]);
+    if (rank < 1080 && rank > bestUnder1080Rank) {
+      bestUnder1080Rank = rank;
+      bestUnder1080Idx = i;
+    }
+  }
+  if (bestUnder1080Idx !== -1) return bestUnder1080Idx;
+
+  // Prioritas 3: Hanya jika seluruh mirror di episode ini beresolusi >= 1080p
+  return 0;
+}
+
+function pickNextFallbackStreamIndex(pool = [], triedIndices = new Set()) {
+  if (!Array.isArray(pool) || pool.length === 0) return -1;
+
+  const candidates = [];
+  for (let i = 0; i < pool.length; i += 1) {
+    if (!triedIndices.has(i)) {
+      candidates.push({ index: i, rank: getStreamResolutionRank(pool[i]) });
+    }
+  }
+  if (!candidates.length) return -1;
+
+  const exact720 = candidates.find((c) => c.rank === 720);
+  if (exact720) return exact720.index;
+
+  const under1080 = candidates
+    .filter((c) => c.rank < 1080)
+    .sort((a, b) => b.rank - a.rank);
+  if (under1080.length) return under1080[0].index;
+
+  return candidates[0].index;
 }
 
 /* ===== Official Admin Telegram Pinning (@nodata_store) ===== */
@@ -1485,6 +1553,7 @@ export function navigate(params = {}, push = true) {
   setCinemaMode(false);
   closeMoreSheet();
   closeCommunityPanel();
+  closeHighDataWarningModal();
   closeSearchDropdown({ collapseMobile: true });
 
   if (navSearchInput && !params.search && !params.q) {
@@ -2365,7 +2434,10 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
   const playableStreams = (data.streams || []).filter((s) => s.type === "mp4");
   const allStreams = data.streams || [];
   const activePool = playableStreams.length ? playableStreams : allStreams;
-  let currentStreamIndex = 0;
+  const initialStreamIndex = pickInitialDefaultStreamIndex(activePool);
+  let currentStreamIndex = initialStreamIndex;
+  let currentUseProxy = false;
+  let triedFallbackIndices = new Set();
 
   const currentEpDisplay = formatEpisodeItemDisplay(
     { title: data.title, number: data.episodeNumber },
@@ -2474,23 +2546,34 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
                   <span class="nd-server-label">${SVG_ICONS.server}<span>Server</span></span>
                   <div class="nd-server-group" id="streamServerButtons">
                     ${activePool
-                      .map(
-                        (s, i) => `
+                      .map((s, i) => {
+                        const highData = isHighDataStream(s);
+                        return `
                         <button
                           type="button"
-                          class="nd-pill-btn nd-server-chip ${i === 0 ? "active" : ""}"
+                          class="nd-pill-btn nd-server-chip ${i === initialStreamIndex ? "active" : ""} ${highData ? "is-high-data" : ""}"
                           data-stream-idx="${i}"
                           data-use-proxy="0"
+                          ${highData ? 'title="Resolusi 1080p Full HD — memakai kuota data internet lebih besar"' : ""}
                         >
-                          ${esc(s.label)}
+                          <span>${esc(s.label)}</span>
+                          ${highData ? '<span class="nd-fhd-tag">FHD</span>' : ""}
                         </button>
-                      `
-                      )
+                      `;
+                      })
                       .join("")}
                     ${
-                      playableStreams[0] && playableStreams[0].proxyUrl
-                        ? `<button type="button" class="nd-pill-btn nd-server-chip" data-stream-idx="0" data-use-proxy="1">
-                            ${SVG_ICONS.zap}<span>Proxy (${esc(playableStreams[0].resolution)})</span>
+                      activePool[initialStreamIndex] &&
+                      activePool[initialStreamIndex].type === "mp4" &&
+                      activePool[initialStreamIndex].proxyUrl
+                        ? `<button
+                            type="button"
+                            class="nd-pill-btn nd-server-chip"
+                            id="proxyServerBtn"
+                            data-stream-idx="${initialStreamIndex}"
+                            data-use-proxy="1"
+                          >
+                            ${SVG_ICONS.zap}<span id="proxyServerBtnLabel">Proxy (${esc(activePool[initialStreamIndex].resolution || "720p")})</span>
                           </button>`
                         : ""
                     }
@@ -2504,13 +2587,21 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
                     <span class="nd-server-label">${SVG_ICONS.download}<span>Unduh</span></span>
                     <div class="nd-server-group">
                       ${validDownloads
-                        .map(
-                          (dl) => `
-                          <a href="${esc(safeUrl(dl.url, "#"))}" target="_blank" rel="noopener noreferrer" class="nd-link-more nd-dl-chip">
+                        .map((dl) => {
+                          const dlHighData = isHighDataStream(dl);
+                          return `
+                          <a
+                            href="${esc(safeUrl(dl.url, "#"))}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="nd-link-more nd-dl-chip ${dlHighData ? "is-high-data" : ""}"
+                            ${dlHighData ? 'title="Unduhan 1080p Full HD — ukuran file lebih besar"' : ""}
+                          >
                             ${SVG_ICONS.download}<span>${esc(dl.label)}</span>
+                            ${dlHighData ? '<span class="nd-fhd-tag">FHD</span>' : ""}
                           </a>
-                        `
-                        )
+                        `;
+                        })
                         .join("")}
                     </div>
                   </div>
@@ -2794,9 +2885,36 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
     barBtn.setAttribute("aria-disabled", currentStreamSupportsSkip ? "false" : "true");
   }
 
-  function mountStream(index, useProxy = false, autoFallbackTried = false) {
+  function syncProxyButtonTarget(idx) {
+    const proxyBtn = document.getElementById("proxyServerBtn");
+    const proxyLabel = document.getElementById("proxyServerBtnLabel");
+    const candidate = activePool[idx];
+    if (!proxyBtn || !candidate || candidate.type !== "mp4" || !candidate.proxyUrl) return;
+    proxyBtn.dataset.streamIdx = String(idx);
+    if (proxyLabel) {
+      proxyLabel.textContent = `Proxy (${candidate.resolution || "720p"})`;
+    }
+  }
+
+  function mountStream(index, useProxy = false, options = {}) {
+    const { preservePlayback = false, isAutoFallback = false } = options;
     clearSkipIntroTimers();
+
+    const prevVideoEl = preservePlayback ? document.getElementById("ndVideoEl") : null;
+    const carryTime =
+      prevVideoEl && Number.isFinite(prevVideoEl.currentTime) && prevVideoEl.currentTime > 1
+        ? prevVideoEl.currentTime
+        : 0;
+    const carryWasPlaying = Boolean(prevVideoEl && !prevVideoEl.paused && !prevVideoEl.ended);
+
     currentStreamIndex = index;
+    currentUseProxy = Boolean(useProxy);
+    if (!isAutoFallback) {
+      triedFallbackIndices = new Set([index]);
+    } else {
+      triedFallbackIndices.add(index);
+    }
+
     const stream = activePool[index];
     state.currentWatchServer = stream
       ? `${stream.label}${useProxy ? " (Proxy Range)" : ""}`
@@ -2868,28 +2986,46 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
     const videoEl = document.getElementById("ndVideoEl");
     if (!videoEl) return;
 
-    const savedSec = getSavedProgress(data.episodeId);
     const resumeContainer = document.getElementById("resumeContainer");
-    if (savedSec > 15 && resumeContainer) {
-      resumeContainer.innerHTML = `
-        <div class="nd-resume-banner">
-          <span class="nd-resume-copy">Terakhir ditonton di <strong>${formatSeconds(savedSec)}</strong></span>
-          <div class="nd-resume-actions">
-            <button type="button" class="nd-btn nd-btn-primary nd-resume-btn" id="resumeYesBtn">Lanjutkan</button>
-            <button type="button" class="nd-btn nd-btn-secondary nd-resume-btn" id="resumeNoBtn">Tutup</button>
+    if (carryTime > 1) {
+      if (resumeContainer) resumeContainer.innerHTML = "";
+      videoEl.addEventListener(
+        "loadedmetadata",
+        () => {
+          const safeTarget =
+            Number.isFinite(videoEl.duration) && videoEl.duration > 2
+              ? Math.min(carryTime, Math.max(0, videoEl.duration - 1))
+              : carryTime;
+          videoEl.currentTime = safeTarget;
+          if (carryWasPlaying) {
+            videoEl.play().catch(() => {});
+          }
+        },
+        { once: true }
+      );
+    } else {
+      const savedSec = getSavedProgress(data.episodeId);
+      if (savedSec > 15 && resumeContainer) {
+        resumeContainer.innerHTML = `
+          <div class="nd-resume-banner">
+            <span class="nd-resume-copy">Terakhir ditonton di <strong>${formatSeconds(savedSec)}</strong></span>
+            <div class="nd-resume-actions">
+              <button type="button" class="nd-btn nd-btn-primary nd-resume-btn" id="resumeYesBtn">Lanjutkan</button>
+              <button type="button" class="nd-btn nd-btn-secondary nd-resume-btn" id="resumeNoBtn">Tutup</button>
+            </div>
           </div>
-        </div>
-      `;
-      document.getElementById("resumeYesBtn")?.addEventListener("click", () => {
-        videoEl.currentTime = savedSec;
-        videoEl.play().catch(() => {});
-        resumeContainer.innerHTML = "";
-        syncSkipIntroOverlayVisibility(true);
-      });
-      document.getElementById("resumeNoBtn")?.addEventListener("click", () => {
-        resumeContainer.innerHTML = "";
-        syncSkipIntroOverlayVisibility(true);
-      });
+        `;
+        document.getElementById("resumeYesBtn")?.addEventListener("click", () => {
+          videoEl.currentTime = savedSec;
+          videoEl.play().catch(() => {});
+          resumeContainer.innerHTML = "";
+          syncSkipIntroOverlayVisibility(true);
+        });
+        document.getElementById("resumeNoBtn")?.addEventListener("click", () => {
+          resumeContainer.innerHTML = "";
+          syncSkipIntroOverlayVisibility(true);
+        });
+      }
     }
 
     renderDefaultSkipIntroOverlay();
@@ -2935,13 +3071,16 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
     });
 
     videoEl.addEventListener("error", () => {
-      if (!autoFallbackTried && index + 1 < activePool.length) {
-        showToast(`Mengalihkan otomatis ke ${activePool[index + 1].label}...`);
-        highlightServerBtn(index + 1, false);
-        mountStream(index + 1, false, true);
+      const nextFallbackIdx = pickNextFallbackStreamIndex(activePool, triedFallbackIndices);
+      if (triedFallbackIndices.size <= 2 && nextFallbackIdx !== -1) {
+        const nextStream = activePool[nextFallbackIdx];
+        showToast(`Mengalihkan otomatis ke ${nextStream.label}...`);
+        syncProxyButtonTarget(nextFallbackIdx);
+        highlightServerBtn(nextFallbackIdx, false);
+        mountStream(nextFallbackIdx, false, { preservePlayback: true, isAutoFallback: true });
       } else {
         showToast(
-          "Server video sedang gangguan. Coba tombol Proxy Range atau klik 'Lapor Kendala / Eror' ke Admin."
+          "Server video sedang gangguan. Coba tombol Proxy atau klik 'Lapor Kendala' ke Admin."
         );
       }
     });
@@ -2949,14 +3088,18 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
 
   function highlightServerBtn(idx, useProxy) {
     document.querySelectorAll("#streamServerButtons .nd-pill-btn").forEach((btn) => {
-      const match =
-        Number(btn.dataset.streamIdx) === idx &&
-        (btn.dataset.useProxy === "1") === Boolean(useProxy);
+      const isProxyChip = btn.dataset.useProxy === "1";
+      const match = isProxyChip
+        ? Boolean(useProxy)
+        : !useProxy && Number(btn.dataset.streamIdx) === idx;
       btn.classList.toggle("active", match);
     });
   }
 
-  mountStream(0, false, false);
+  mountStream(initialStreamIndex, false, { preservePlayback: false });
+  if (activePool.length > 0 && isHighDataStream(activePool[initialStreamIndex])) {
+    showToast("Episode ini hanya menyediakan mirror 1080p Full HD.");
+  }
 
   const videoFrameEl = document.getElementById("videoFrame");
   const wakeSkipOverlay = () => syncSkipIntroOverlayVisibility(true);
@@ -2972,8 +3115,32 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
     if (!btn) return;
     const idx = Number(btn.dataset.streamIdx || 0);
     const useProxy = btn.dataset.useProxy === "1";
-    highlightServerBtn(idx, useProxy);
-    mountStream(idx, useProxy, true);
+    if (idx === currentStreamIndex && useProxy === currentUseProxy) return;
+
+    const targetStream = activePool[idx];
+    const applySwitch = () => {
+      if (!useProxy) {
+        syncProxyButtonTarget(idx);
+      }
+      highlightServerBtn(idx, useProxy);
+      mountStream(idx, useProxy, { preservePlayback: true });
+    };
+
+    if (targetStream && isHighDataStream(targetStream) && !shouldSkipHighDataWarning()) {
+      const currentStream = activePool[currentStreamIndex];
+      const currentResoLabel =
+        currentStream && !isHighDataStream(currentStream)
+          ? currentStream.resolution || "720p"
+          : "720p";
+      openHighDataWarningModal({
+        targetLabel: `${targetStream.label}${useProxy ? " (Proxy)" : ""}`,
+        stayResolutionLabel: currentResoLabel,
+        onConfirm: applySwitch,
+      });
+      return;
+    }
+
+    applySwitch();
   });
 
   document.getElementById("toggleAutoNextBtn")?.addEventListener("click", (e) => {
@@ -3460,6 +3627,7 @@ document.addEventListener("keydown", (e) => {
     }
     closeCommunityPanel();
     closeMoreSheet();
+    closeHighDataWarningModal();
     setCinemaMode(false);
     return;
   }
@@ -3469,7 +3637,8 @@ document.addEventListener("keydown", (e) => {
     (notifPanel && !notifPanel.hidden) ||
     (bottomMoreSheet && !bottomMoreSheet.hidden) ||
     Boolean(document.getElementById("qrisModalBackdrop") && !document.getElementById("qrisModalBackdrop").hidden) ||
-    Boolean(document.getElementById("adminContactBackdrop") && !document.getElementById("adminContactBackdrop").hidden);
+    Boolean(document.getElementById("adminContactBackdrop") && !document.getElementById("adminContactBackdrop").hidden) ||
+    Boolean(document.getElementById("highDataWarnBackdrop") && !document.getElementById("highDataWarnBackdrop").hidden);
 
   if (
     videoEl &&
@@ -4060,6 +4229,122 @@ function initAdminContactModal() {
   });
 }
 
+/* ===== 1080p High Data Consumption Warning Modal Controller ===== */
+let pendingHighDataSwitchAction = null;
+
+function shouldSkipHighDataWarning() {
+  try {
+    return sessionStorage.getItem(SESSION_KEYS.SKIP_1080P_WARN) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function setSkipHighDataWarningSession(enabled) {
+  try {
+    if (enabled) {
+      sessionStorage.setItem(SESSION_KEYS.SKIP_1080P_WARN, "1");
+    } else {
+      sessionStorage.removeItem(SESSION_KEYS.SKIP_1080P_WARN);
+    }
+  } catch {
+    // Abaikan jika browser membatasi sessionStorage pada mode privat ketat
+  }
+}
+
+function detectNetworkDataHint() {
+  const conn =
+    navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  if (!conn) return "";
+  if (conn.saveData === true) {
+    return "Mode Penghemat Data aktif di perangkatmu — disarankan tetap di 720p agar kuota tidak cepat habis.";
+  }
+  const eff = String(conn.effectiveType || "").toLowerCase();
+  const netType = String(conn.type || "").toLowerCase();
+  if (netType === "cellular") {
+    return "Koneksi data seluler terdeteksi — streaming 1080p menggunakan hampir 2× lebih banyak kuota internet.";
+  }
+  if (eff === "slow-2g" || eff === "2g" || eff === "3g") {
+    return `Kecepatan jaringan terbatas (${eff.toUpperCase()}) terdeteksi — 1080p berisiko memicu buffering.`;
+  }
+  return "";
+}
+
+function closeHighDataWarningModal() {
+  const backdrop = document.getElementById("highDataWarnBackdrop");
+  if (backdrop) backdrop.hidden = true;
+  pendingHighDataSwitchAction = null;
+}
+
+function openHighDataWarningModal({
+  targetLabel = "Server 1080p",
+  stayResolutionLabel = "720p",
+  onConfirm = null,
+} = {}) {
+  const backdrop = document.getElementById("highDataWarnBackdrop");
+  if (!backdrop) {
+    if (typeof onConfirm === "function") onConfirm();
+    return;
+  }
+
+  closeCommunityPanel();
+  closeMoreSheet();
+  pendingHighDataSwitchAction = typeof onConfirm === "function" ? onConfirm : null;
+
+  const targetEl = document.getElementById("highDataTargetLabel");
+  if (targetEl) targetEl.textContent = targetLabel;
+
+  const stayLabelEl = document.getElementById("highDataStayBtnLabel");
+  if (stayLabelEl) {
+    stayLabelEl.textContent = `Tetap di ${stayResolutionLabel} (Hemat Kuota)`;
+  }
+
+  const netAlertEl = document.getElementById("highDataNetAlert");
+  const netAlertTextEl = document.getElementById("highDataNetAlertText");
+  const netHint = detectNetworkDataHint();
+  if (netAlertEl && netAlertTextEl) {
+    if (netHint) {
+      netAlertTextEl.textContent = netHint;
+      netAlertEl.hidden = false;
+    } else {
+      netAlertEl.hidden = true;
+    }
+  }
+
+  const dontAskCheck = document.getElementById("highDataDontAskCheck");
+  if (dontAskCheck) dontAskCheck.checked = false;
+
+  backdrop.hidden = false;
+  document.getElementById("highDataStayBtn")?.focus();
+}
+
+function initHighDataWarningModal() {
+  const backdrop = document.getElementById("highDataWarnBackdrop");
+  const closeBtn = document.getElementById("highDataWarnCloseBtn");
+  const stayBtn = document.getElementById("highDataStayBtn");
+  const confirmBtn = document.getElementById("highDataConfirmBtn");
+  const dontAskCheck = document.getElementById("highDataDontAskCheck");
+
+  closeBtn?.addEventListener("click", closeHighDataWarningModal);
+  stayBtn?.addEventListener("click", closeHighDataWarningModal);
+
+  backdrop?.addEventListener("click", (e) => {
+    if (e.target === backdrop) closeHighDataWarningModal();
+  });
+
+  confirmBtn?.addEventListener("click", () => {
+    if (dontAskCheck?.checked) {
+      setSkipHighDataWarningSession(true);
+    }
+    const action = pendingHighDataSwitchAction;
+    closeHighDataWarningModal();
+    if (typeof action === "function") {
+      action();
+      showToast("Beralih ke 1080p Full HD (konsumsi data lebih tinggi).");
+    }
+  });
+}
+
 window.addEventListener("popstate", () => {
   routeCurrentUrl();
 });
@@ -4068,6 +4353,7 @@ window.addEventListener("popstate", () => {
 initCommunityControls();
 initQrisSupportModal();
 initAdminContactModal();
+initHighDataWarningModal();
 initPwa();
 updateWatchlistBadge();
 
