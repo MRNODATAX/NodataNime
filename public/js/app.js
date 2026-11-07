@@ -1,8 +1,8 @@
 /**
- * NodataNime v6.0 — Client-Side Streaming & PWA Application
+ * NodataNime v7.0 — Client-Side Streaming & PWA Application
  * Menggunakan URL relatif `/api/*` sepenuhnya agar kompatibel di semua domain & Live Preview.
  * Dilengkapi Opening Brand Splash, Live Starry Night Background, 100% Vector SVG Bottom Navbar,
- * Obrolan & Info Komunitas Interaktif 2-Tab, serta Integrasi PWA penuh.
+ * Unified Cinema Watch Dock (Miruro/HiAnime/Netflix UX), Obrolan & Info Komunitas 2-Tab, serta PWA penuh.
  */
 
 const STORAGE_KEYS = {
@@ -14,21 +14,64 @@ const STORAGE_KEYS = {
 };
 
 const SVG_ICONS = {
-  play: `<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6,4 20,12 6,20"></polygon></svg>`,
-  star: `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`,
-  cinema: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`,
-  flag: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>`,
-  zap: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
-  volume: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`,
-  download: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`,
+  play: `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6,4 20,12 6,20"></polygon></svg>`,
+  star: `<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`,
+  cinema: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`,
+  flag: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>`,
+  zap: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
+  server: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="7" rx="2"></rect><rect x="2" y="14" width="20" height="7" rx="2"></rect><line x1="6" y1="6.5" x2="6.01" y2="6.5"></line><line x1="6" y1="17.5" x2="6.01" y2="17.5"></line></svg>`,
+  chevronLeft: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>`,
+  chevronRight: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>`,
+  gridList: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>`,
+  volume: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`,
+  download: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`,
   external: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`,
   reply: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 17 4 12 9 7"></polyline><path d="M20 18v-2a4 4 0 0 0-4-4H4"></path></svg>`,
-  coffee: `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h1a4 4 0 1 1 0 8h-1"></path><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path><line x1="6" y1="2" x2="6" y2="4"></line><line x1="10" y1="2" x2="10" y2="4"></line><line x1="14" y1="2" x2="14" y2="4"></line></svg>`,
-  shield: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>`,
-  telegram: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`,
-  skipIntro: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="4 5 13 12 4 19 4 5"></polygon><polygon points="13 5 22 12 13 19 13 5"></polygon></svg>`,
+  coffee: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h1a4 4 0 1 1 0 8h-1"></path><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path><line x1="6" y1="2" x2="6" y2="4"></line><line x1="10" y1="2" x2="10" y2="4"></line><line x1="14" y1="2" x2="14" y2="4"></line></svg>`,
+  shield: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>`,
+  telegram: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`,
+  skipIntro: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="4 5 13 12 4 19 4 5"></polygon><polygon points="13 5 22 12 13 19 13 5"></polygon></svg>`,
   undo: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>`,
 };
+
+function compactCardBadge(rawLabel = "") {
+  const clean = String(rawLabel || "")
+    .replace(/\bsubtitle\s+indonesia\b/gi, "")
+    .replace(/\bsub\s+indo\b/gi, "")
+    .trim();
+  if (!clean) return "";
+  const epMatch = clean.match(/^(?:episode|ep\.?)\s*(\d+(?:\.\d+)?)/i);
+  if (epMatch) return `Ep ${epMatch[1]}`;
+  return clean.length > 14 ? `${clean.slice(0, 13).trim()}…` : clean;
+}
+
+function formatEpisodeItemDisplay(ep = {}, animeTitle = "", fallbackIdx = 0) {
+  const rawTitle = String(ep.title || "").trim();
+  const explicitNum =
+    ep.number !== undefined && ep.number !== null && String(ep.number).trim() !== ""
+      ? String(ep.number).trim()
+      : "";
+  const parsedMatch = rawTitle.match(/(?:episode|ep\.?)\s*(\d+(?:\.\d+)?)/i);
+  const epNumStr = explicitNum || (parsedMatch ? parsedMatch[1] : String(fallbackIdx + 1));
+  const paddedNum = /^\d+$/.test(epNumStr) && epNumStr.length < 2 ? epNumStr.padStart(2, "0") : epNumStr;
+
+  let cleaned = rawTitle
+    .replace(/\bsubtitle\s+indonesia\b/gi, "")
+    .replace(/\bsub\s+indo\b/gi, "")
+    .trim();
+  if (animeTitle) {
+    const escapedSeries = String(animeTitle).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    cleaned = cleaned.replace(new RegExp(`^${escapedSeries}\\s*[-–—:]*\\s*`, "i"), "").trim();
+  }
+  if (!cleaned || /^(?:episode|ep\.?)\s*\d+(?:\.\d+)?$/i.test(cleaned)) {
+    cleaned = `Episode ${epNumStr}`;
+  }
+  return {
+    badgeNum: paddedNum,
+    displayTitle: cleaned,
+    metaLabel: String(ep.date || "Sub Indo HD").trim(),
+  };
+}
 
 /* ===== Official Admin Telegram Pinning (@nodata_store) ===== */
 const PINNED_ADMIN_CONTACT = Object.freeze({
@@ -1332,10 +1375,20 @@ function renderAnimeCard(item, options = {}) {
   const title = esc(item.title || "Anime");
   const slug = esc(item.slug || item.rawSlug || "");
   const epId = directEpisode ? esc(item.episodeId || "") : "";
-  const topBadge = esc(item.episode || item.label || "");
+  const rawTopBadge = item.episode || item.label || "";
+  const topBadge = esc(compactCardBadge(rawTopBadge));
   const score = esc(item.score || "");
-  const status = esc(item.status || "Sub Indo");
-  const views = item.views ? `${esc(item.views)} views` : status;
+  const rawStatus = String(item.status || "Sub Indo").trim();
+  const bottomTag = item.releaseDay
+    ? esc(item.releaseDay)
+    : rawStatus && !/^sub\s*indo$/i.test(rawStatus)
+      ? esc(rawStatus)
+      : "";
+  const subMeta = item.views
+    ? `${esc(item.views)} tayangan`
+    : bottomTag && bottomTag === esc(rawStatus)
+      ? "Sub Indo HD"
+      : esc(rawStatus || "Sub Indo");
 
   return `
     <article
@@ -1355,9 +1408,15 @@ function renderAnimeCard(item, options = {}) {
           decoding="async"
           referrerpolicy="no-referrer"
         />
-        ${topBadge ? `<span class="nd-badge-top-left">${topBadge}</span>` : ""}
-        ${score ? `<span class="nd-badge-top-right">${SVG_ICONS.star} ${score}</span>` : ""}
-        ${status ? `<span class="nd-badge-bottom">${status}</span>` : ""}
+        ${
+          topBadge || score
+            ? `<div class="nd-card-badges-top">
+                ${topBadge ? `<span class="nd-badge-top-left">${topBadge}</span>` : "<span></span>"}
+                ${score ? `<span class="nd-badge-top-right">${SVG_ICONS.star}<span>${score}</span></span>` : ""}
+              </div>`
+            : ""
+        }
+        ${bottomTag ? `<span class="nd-badge-bottom">${bottomTag}</span>` : ""}
         <div class="nd-card-play">
           <div class="nd-play-circle">
             ${SVG_ICONS.play}
@@ -1366,7 +1425,7 @@ function renderAnimeCard(item, options = {}) {
       </div>
       <div class="nd-card-body">
         <div class="nd-card-title">${title}</div>
-        <div class="nd-card-sub">${views}</div>
+        <div class="nd-card-sub">${subMeta}</div>
       </div>
     </article>
   `;
@@ -1570,6 +1629,7 @@ async function routeCurrentUrl() {
 function renderHeroSlide(banners, idx) {
   const b = banners[idx] || banners[0];
   if (!b) return "";
+  const epShort = compactCardBadge(b.episode || "");
   return `
     <img
       src="${esc(safeUrl(b.banner || b.poster, "/assets/no-cover.svg"))}"
@@ -1581,9 +1641,9 @@ function renderHeroSlide(banners, idx) {
     <div class="nd-hero-content">
       <div class="nd-hero-badges">
         <span class="nd-pill-crimson">${esc(b.status || "Sedang Tayang")}</span>
-        ${b.episode ? `<span class="nd-pill-glass">${esc(b.episode)}</span>` : ""}
-        ${b.score ? `<span class="nd-pill-glass">${SVG_ICONS.star} ${esc(b.score)}</span>` : ""}
-        ${(b.genres || []).slice(0, 3).map((g) => `<span class="nd-pill-glass">${esc(g)}</span>`).join("")}
+        ${epShort ? `<span class="nd-pill-glass">${esc(epShort)}</span>` : ""}
+        ${b.score ? `<span class="nd-pill-glass nd-pill-score">${SVG_ICONS.star}<span>${esc(b.score)}</span></span>` : ""}
+        ${(b.genres || []).slice(0, 2).map((g) => `<span class="nd-pill-glass nd-hero-genre-pill">${esc(g)}</span>`).join("")}
       </div>
       <h1 class="nd-hero-title">${esc(b.title)}</h1>
       <p class="nd-hero-synopsis">${esc(b.synopsis || "")}</p>
@@ -1595,10 +1655,10 @@ function renderHeroSlide(banners, idx) {
           data-watch-ep="${esc(b.episodeId || "")}"
         >
           ${SVG_ICONS.play}
-          Tonton Sekarang
+          <span>Tonton Sekarang</span>
         </button>
         <button type="button" class="nd-btn nd-btn-secondary" data-open-series="${esc(b.slug)}">
-          Detail &amp; Episode
+          <span>Detail &amp; Episode</span>
         </button>
       </div>
     </div>
@@ -1755,7 +1815,7 @@ async function renderHomeView() {
 
         <!-- Sidebar Top 10 Anime -->
         <aside class="nd-top-box">
-          <h2 class="nd-section-title" style="font-size:1.12rem;">Top 10 Anime Terpopuler</h2>
+          <h2 class="nd-section-title nd-top-box-title">Top 10 Populer</h2>
           <div class="nd-tabs-mini" id="topRankTabs">
             <button type="button" class="nd-tab-mini active" data-rank-tab="today">Hari Ini</button>
             <button type="button" class="nd-tab-mini" data-rank-tab="yesterday">Kemarin</button>
@@ -1768,8 +1828,10 @@ async function renderHomeView() {
         </aside>
       </div>
 
-      ${renderSupportAdminBanner()}
-      ${renderContactAdminBanner("general")}
+      <div class="nd-callout-grid">
+        ${renderSupportAdminBanner()}
+        ${renderContactAdminBanner("general")}
+      </div>
     </div>
   `;
 
@@ -2115,10 +2177,18 @@ async function renderDetailView(slug) {
       ? `Terbaru Ep ${maxEpNum} • ${episodes.length} Tersedia`
       : `${episodes.length} Episode`;
 
+  const firstEpMeta = firstEp ? formatEpisodeItemDisplay(firstEp, data.title, 0) : null;
+  const latestEpMeta = latestEp
+    ? formatEpisodeItemDisplay(latestEp, data.title, Math.max(0, episodes.length - 1))
+    : null;
+
   appRoot.innerHTML = `
     <div class="nd-container">
-      <div style="margin-bottom:14px;">
-        <button type="button" class="nd-link-more" data-jump-view="home">Kembali ke Beranda</button>
+      <div class="nd-detail-back-row">
+        <button type="button" class="nd-link-more nd-back-pill" data-jump-view="home">
+          ${SVG_ICONS.chevronLeft}
+          <span>Kembali ke Beranda</span>
+        </button>
       </div>
 
       <section class="nd-detail-hero">
@@ -2135,17 +2205,17 @@ async function renderDetailView(slug) {
             class="nd-detail-poster"
             referrerpolicy="no-referrer"
           />
-          <div>
+          <div class="nd-detail-info">
             <h1 class="nd-detail-title">${esc(data.title)}</h1>
             <div class="nd-detail-meta">
-              <span class="nd-score-badge">${SVG_ICONS.star} ${esc(data.score || "8.5")} Match</span>
+              <span class="nd-score-badge">${SVG_ICONS.star}<span>${esc(data.score || "8.5")} Match</span></span>
               <span class="nd-pill-crimson">${esc(data.status || "Ongoing")}</span>
               <span class="nd-pill-glass">${esc(data.type || "TV")}</span>
               <span class="nd-pill-glass">${esc(data.year || "2026")}</span>
               <span class="nd-pill-glass">${esc(epCountLabel)}</span>
             </div>
 
-            <div class="nd-pills-row" style="margin-bottom:16px;">
+            <div class="nd-pills-row nd-detail-genres">
               ${(data.genres || [])
                 .map(
                   (g) =>
@@ -2156,19 +2226,19 @@ async function renderDetailView(slug) {
 
             <p class="nd-detail-synopsis">${esc(data.synopsis || "Sinopsis belum tersedia.")}</p>
 
-            <div class="nd-hero-actions">
+            <div class="nd-hero-actions nd-detail-actions">
               ${
                 latestEp
                   ? `<button type="button" class="nd-btn nd-btn-primary" data-play-ep="${esc(latestEp.episodeId)}" data-play-series="${esc(data.slug)}">
                       ${SVG_ICONS.play}
-                      Tonton Terbaru (${esc(latestEp.title)})
+                      <span>Tonton Ep ${esc(latestEpMeta.badgeNum)} (Terbaru)</span>
                     </button>`
                   : ""
               }
               ${
                 firstEp && firstEp.episodeId !== latestEp?.episodeId
                   ? `<button type="button" class="nd-btn nd-btn-secondary" data-play-ep="${esc(firstEp.episodeId)}" data-play-series="${esc(data.slug)}">
-                      Mulai dari ${esc(firstEp.title)}
+                      <span>Mulai Ep ${esc(firstEpMeta.badgeNum)}</span>
                     </button>`
                   : ""
               }
@@ -2177,7 +2247,7 @@ async function renderDetailView(slug) {
               </button>
               <button type="button" class="nd-btn nd-btn-telegram-outline" data-open-admin-contact="anime">
                 ${SVG_ICONS.telegram}
-                <span>Lapor / Req ke Admin</span>
+                <span>Lapor / Req</span>
               </button>
             </div>
           </div>
@@ -2186,8 +2256,8 @@ async function renderDetailView(slug) {
 
       <section class="nd-ep-box">
         <div class="nd-ep-toolbar">
-          <h2 class="nd-section-title" style="margin:0;">Daftar Episode (${episodes.length})</h2>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <h2 class="nd-section-title">Daftar Episode (${episodes.length})</h2>
+          <div class="nd-ep-toolbar-controls">
             <input type="search" id="epFilterInput" class="nd-ep-search" placeholder="Filter nomor / judul episode..." />
             <button type="button" class="nd-link-more" id="epSortBtn" data-order="desc">Urutan: Terbaru</button>
           </div>
@@ -2229,25 +2299,29 @@ async function renderDetailView(slug) {
       );
     }
     grid.innerHTML = list
-      .map(
-        (ep) => `
+      .map((ep, idx) => {
+        const meta = formatEpisodeItemDisplay(ep, data.title, idx);
+        return `
         <button
           type="button"
           class="nd-ep-item ${isEpisodeWatched(ep.episodeId) ? "watched" : ""}"
           data-play-ep="${esc(ep.episodeId)}"
           data-play-series="${esc(data.slug)}"
         >
-          <div>
-            <div class="nd-ep-name">${esc(ep.title)}</div>
-            <div class="nd-ep-date">${esc(ep.date || "Sub Indo HD")}</div>
+          <div class="nd-ep-item-main">
+            <span class="nd-ep-num-badge">${esc(meta.badgeNum)}</span>
+            <div class="nd-ep-item-copy">
+              <div class="nd-ep-name">${esc(meta.displayTitle)}</div>
+              <div class="nd-ep-date">${esc(meta.metaLabel)}</div>
+            </div>
           </div>
-          <div style="display:inline-flex;align-items:center;gap:7px;">
+          <div class="nd-ep-item-trail">
             ${ep.hasVerifiedStream ? '<span class="nd-ep-ready-pill">HD</span>' : ""}
-            <span style="color:var(--accent-bright);display:inline-flex;">${SVG_ICONS.play}</span>
+            <span class="nd-ep-play-icon">${SVG_ICONS.play}</span>
           </div>
         </button>
-      `
-      )
+      `;
+      })
       .join("");
   };
 
@@ -2270,11 +2344,12 @@ async function renderDetailView(slug) {
   });
 }
 
-/* ===== 9. Watch Video Player View (Anti Salah Anime 100%) ===== */
+/* ===== 9. Watch Video Player View (Unified Cinema Dock — Anti Salah Anime 100%) ===== */
 function setCinemaMode(enabled) {
   state.cinemaMode = Boolean(enabled);
   if (cinemaOverlay) cinemaOverlay.hidden = !state.cinemaMode;
   if (bottomDockWrap) bottomDockWrap.classList.toggle("cinema-dimmed", state.cinemaMode);
+  document.getElementById("toggleCinemaBtn")?.classList.toggle("active", state.cinemaMode);
 }
 
 async function renderWatchView({ series = "", episode = "", ep = "" }) {
@@ -2292,7 +2367,12 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
   const activePool = playableStreams.length ? playableStreams : allStreams;
   let currentStreamIndex = 0;
 
-  const epShortLabel = (data.title || "").split("—").pop()?.trim() || data.episodeId;
+  const currentEpDisplay = formatEpisodeItemDisplay(
+    { title: data.title, number: data.episodeNumber },
+    data.animeTitle,
+    0
+  );
+  const epShortLabel = (data.title || "").split("—").pop()?.trim() || currentEpDisplay.displayTitle || data.episodeId;
   if (data.episodeId) {
     recordWatchHistory({
       seriesSlug: data.seriesSlug,
@@ -2305,161 +2385,222 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
     });
   }
 
+  const validDownloads = (data.downloadLinks || []).filter((dl) => Boolean(safeUrl(dl?.url, "")));
+  const sidebarEpisodes = data.episodes || [];
+
   appRoot.innerHTML = `
     <div class="nd-container">
-      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;">
-        <div style="display:flex;align-items:center;gap:8px;font-size:0.86rem;color:var(--text-secondary);">
-          <button type="button" class="nd-link-more" data-open-series="${esc(data.seriesSlug)}">Detail ${esc(data.animeTitle)}</button>
-          <span>/</span>
-          <strong style="color:#fff;">${esc(data.title)}</strong>
+      <header class="nd-watch-header">
+        <div class="nd-watch-header-main">
+          <button type="button" class="nd-link-more nd-back-pill" data-open-series="${esc(data.seriesSlug)}">
+            ${SVG_ICONS.chevronLeft}
+            <span>Detail Seri</span>
+          </button>
+          <div class="nd-watch-title-stack">
+            <button type="button" class="nd-watch-series-kicker" data-open-series="${esc(data.seriesSlug)}">
+              ${esc(data.animeTitle || "Anime")}
+            </button>
+            <h1 class="nd-watch-ep-heading">${esc(currentEpDisplay.displayTitle || data.title)}</h1>
+          </div>
         </div>
-        <span class="nd-tech-pill">${activePool.length ? "Sub Indo • Multi-Server" : "Menunggu Sinkronisasi Mirror"}</span>
-      </div>
+        <span class="nd-tech-pill nd-watch-status-pill">
+          <span class="nd-status-dot ${activePool.length ? "is-live" : ""}"></span>
+          <span>${activePool.length ? "Sub Indo • Multi-Server" : "Sinkronisasi Mirror"}</span>
+        </span>
+      </header>
 
       <div class="nd-watch-layout">
         <div class="nd-player-stage">
-          <div class="nd-video-frame" id="videoFrame">
-            <div class="nd-watermark">NodataNime</div>
-            <div id="resumeContainer"></div>
-            <div id="skipIntroContainer"></div>
-            <div id="seekFlashContainer"></div>
-            <div id="videoMount" style="width:100%;height:100%;"></div>
-          </div>
-
-          <div class="nd-player-controls-bar">
-            <div class="nd-player-nav-group">
-              <button
-                type="button"
-                class="nd-btn nd-btn-secondary nd-player-nav-btn"
-                ${data.navigation?.prevEpisodeId ? `data-play-ep="${esc(data.navigation.prevEpisodeId)}" data-play-series="${esc(data.seriesSlug)}"` : "disabled"}
-              >
-                Ep Sebelumnya
-              </button>
-              <button
-                type="button"
-                class="nd-btn nd-btn-secondary nd-player-nav-btn"
-                data-open-series="${esc(data.seriesSlug)}"
-              >
-                Semua Episode
-              </button>
-              <button
-                type="button"
-                class="nd-btn nd-btn-primary nd-player-nav-btn"
-                ${data.navigation?.nextEpisodeId ? `data-play-ep="${esc(data.navigation.nextEpisodeId)}" data-play-series="${esc(data.seriesSlug)}"` : "disabled"}
-              >
-                Ep Selanjutnya
-              </button>
+          <div class="nd-watch-dock">
+            <div class="nd-video-frame" id="videoFrame">
+              <div class="nd-watermark">NodataNime</div>
+              <div id="resumeContainer"></div>
+              <div id="skipIntroContainer"></div>
+              <div id="seekFlashContainer"></div>
+              <div id="videoMount" class="nd-video-mount"></div>
             </div>
 
-            <div class="nd-player-tools-group">
-              <button
-                type="button"
-                class="nd-pill-btn nd-skip-intro-pill"
-                id="skipIntroBarBtn"
-                title="Lompati lagu pembuka anime +90 detik (Pintasan: tombol S)"
-              >
-                ${SVG_ICONS.skipIntro}<span>Lewati Intro +90d</span>
-              </button>
-              <button type="button" class="nd-pill-btn ${state.autoNext ? "active" : ""}" id="toggleAutoNextBtn">
-                Auto-Next: ${state.autoNext ? "ON" : "OFF"}
-              </button>
-              <button type="button" class="nd-pill-btn" id="toggleCinemaBtn">
-                ${SVG_ICONS.cinema}<span>Mode Bioskop</span>
-              </button>
-              <button type="button" class="nd-pill-btn nd-report-pill-btn" id="watchReportIssueBtn" data-open-admin-contact="stream">
-                ${SVG_ICONS.flag}<span>Lapor Kendala / Eror</span>
-              </button>
-            </div>
-          </div>
-
-          ${
-            activePool.length
-              ? `
-            <div class="nd-server-panel">
-              <div style="font-weight:700;font-size:0.88rem;color:#fff;">Pilih Server &amp; Resolusi Streaming:</div>
-              <div class="nd-server-group" id="streamServerButtons">
-                ${activePool
-                  .map(
-                    (s, i) => `
-                    <button
-                      type="button"
-                      class="nd-pill-btn ${i === 0 ? "active" : ""}"
-                      data-stream-idx="${i}"
-                      data-use-proxy="0"
-                    >
-                      ${esc(s.label)}
-                    </button>
-                  `
-                  )
-                  .join("")}
-                ${
-                  playableStreams[0] && playableStreams[0].proxyUrl
-                    ? `<button type="button" class="nd-pill-btn" data-stream-idx="0" data-use-proxy="1">
-                        ${SVG_ICONS.zap}Proxy Range (${esc(playableStreams[0].resolution)})
-                      </button>`
-                    : ""
-                }
+            <div class="nd-player-controls-bar">
+              <div class="nd-player-tools-group">
+                <button
+                  type="button"
+                  class="nd-pill-btn nd-skip-intro-pill"
+                  id="skipIntroBarBtn"
+                  title="Lompati lagu pembuka anime +90 detik (Pintasan: tombol S)"
+                >
+                  ${SVG_ICONS.skipIntro}<span>Lewati Intro +90d</span>
+                </button>
+                <button type="button" class="nd-pill-btn nd-autonext-pill ${state.autoNext ? "active" : ""}" id="toggleAutoNextBtn">
+                  <span class="nd-toggle-dot"></span><span>Auto-Next: ${state.autoNext ? "ON" : "OFF"}</span>
+                </button>
+                <button type="button" class="nd-pill-btn" id="toggleCinemaBtn">
+                  ${SVG_ICONS.cinema}<span>Mode Bioskop</span>
+                </button>
+                <button type="button" class="nd-pill-btn nd-report-pill-btn" id="watchReportIssueBtn" data-open-admin-contact="stream">
+                  ${SVG_ICONS.flag}<span>Lapor Kendala</span>
+                </button>
               </div>
 
-              ${
-                (data.downloadLinks || []).length
-                  ? `
-                <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border-subtle);">
-                  <div style="font-weight:700;font-size:0.84rem;color:var(--text-secondary);margin-bottom:8px;">Tautan Unduh Langsung (Direct Download):</div>
-                  <div class="nd-server-group">
-                    ${(data.downloadLinks || [])
-                      .filter((dl) => Boolean(safeUrl(dl?.url, "")))
+              <div class="nd-player-nav-group">
+                <button
+                  type="button"
+                  class="nd-btn nd-btn-secondary nd-player-nav-btn"
+                  ${data.navigation?.prevEpisodeId ? `data-play-ep="${esc(data.navigation.prevEpisodeId)}" data-play-series="${esc(data.seriesSlug)}"` : "disabled"}
+                >
+                  ${SVG_ICONS.chevronLeft}<span>Ep Sblm</span>
+                </button>
+                <button
+                  type="button"
+                  class="nd-btn nd-btn-secondary nd-player-nav-btn"
+                  data-open-series="${esc(data.seriesSlug)}"
+                >
+                  ${SVG_ICONS.gridList}<span>Semua Ep</span>
+                </button>
+                <button
+                  type="button"
+                  class="nd-btn nd-btn-primary nd-player-nav-btn"
+                  ${data.navigation?.nextEpisodeId ? `data-play-ep="${esc(data.navigation.nextEpisodeId)}" data-play-series="${esc(data.seriesSlug)}"` : "disabled"}
+                >
+                  <span>Ep Lanjut</span>${SVG_ICONS.chevronRight}
+                </button>
+              </div>
+            </div>
+
+            ${
+              activePool.length
+                ? `
+              <div class="nd-server-panel">
+                <div class="nd-server-row">
+                  <span class="nd-server-label">${SVG_ICONS.server}<span>Server</span></span>
+                  <div class="nd-server-group" id="streamServerButtons">
+                    ${activePool
                       .map(
-                        (dl) => `
-                        <a href="${esc(safeUrl(dl.url, "#"))}" target="_blank" rel="noopener noreferrer" class="nd-link-more">
-                          ${SVG_ICONS.download}${esc(dl.label)}
-                        </a>
+                        (s, i) => `
+                        <button
+                          type="button"
+                          class="nd-pill-btn nd-server-chip ${i === 0 ? "active" : ""}"
+                          data-stream-idx="${i}"
+                          data-use-proxy="0"
+                        >
+                          ${esc(s.label)}
+                        </button>
                       `
                       )
                       .join("")}
+                    ${
+                      playableStreams[0] && playableStreams[0].proxyUrl
+                        ? `<button type="button" class="nd-pill-btn nd-server-chip" data-stream-idx="0" data-use-proxy="1">
+                            ${SVG_ICONS.zap}<span>Proxy (${esc(playableStreams[0].resolution)})</span>
+                          </button>`
+                        : ""
+                    }
                   </div>
                 </div>
-              `
-                  : ""
-              }
-            </div>
-          `
-              : ""
-          }
 
-          ${renderSupportAdminBanner()}
-          ${renderContactAdminBanner("stream")}
+                ${
+                  validDownloads.length
+                    ? `
+                  <div class="nd-server-row nd-server-row-dl">
+                    <span class="nd-server-label">${SVG_ICONS.download}<span>Unduh</span></span>
+                    <div class="nd-server-group">
+                      ${validDownloads
+                        .map(
+                          (dl) => `
+                          <a href="${esc(safeUrl(dl.url, "#"))}" target="_blank" rel="noopener noreferrer" class="nd-link-more nd-dl-chip">
+                            ${SVG_ICONS.download}<span>${esc(dl.label)}</span>
+                          </a>
+                        `
+                        )
+                        .join("")}
+                    </div>
+                  </div>
+                `
+                    : ""
+                }
+              </div>
+            `
+                : ""
+            }
+          </div>
+
+          <div class="nd-callout-grid nd-watch-callouts">
+            ${renderSupportAdminBanner()}
+            ${renderContactAdminBanner("stream")}
+          </div>
         </div>
 
-        <aside class="nd-ep-box" style="margin-bottom:0;">
-          <h2 class="nd-section-title" style="font-size:1.05rem;margin-bottom:14px;">Episode ${esc(data.animeTitle)}</h2>
-          <div class="nd-ep-grid" style="grid-template-columns:1fr;max-height:540px;">
-            ${(data.episodes || [])
-              .map(
-                (item) => `
-                <button
-                  type="button"
-                  class="nd-ep-item ${item.episodeId === data.episodeId ? "active" : ""} ${isEpisodeWatched(item.episodeId) ? "watched" : ""}"
-                  data-play-ep="${esc(item.episodeId)}"
-                  data-play-series="${esc(data.seriesSlug)}"
-                >
-                  <div>
-                    <div class="nd-ep-name">${esc(item.title)}</div>
-                    <div class="nd-ep-date">${esc(item.date || "HD")}</div>
-                  </div>
-                  <div style="display:inline-flex;align-items:center;gap:6px;">
-                    ${item.hasVerifiedStream && item.episodeId !== data.episodeId ? '<span class="nd-ep-ready-pill">HD</span>' : ""}
-                    <span style="display:inline-flex;">${item.episodeId === data.episodeId ? SVG_ICONS.volume : SVG_ICONS.play}</span>
-                  </div>
-                </button>
-              `
-              )
-              .join("")}
+        <aside class="nd-ep-box nd-watch-ep-sidebar">
+          <div class="nd-watch-sidebar-head">
+            <div class="nd-watch-sidebar-title-row">
+              <h2 class="nd-section-title nd-watch-sidebar-title">Daftar Episode</h2>
+              <span class="nd-tech-pill">${sidebarEpisodes.length} Ep</span>
+            </div>
+            ${
+              sidebarEpisodes.length > 6
+                ? `<input type="search" id="watchEpFilterInput" class="nd-ep-search nd-watch-ep-search" placeholder="Cari nomor episode..." aria-label="Cari nomor episode" />`
+                : ""
+            }
           </div>
+          <div class="nd-watch-ep-list" id="watchEpList"></div>
         </aside>
       </div>
     </div>
   `;
+
+  const renderSidebarEpisodes = (filterText = "") => {
+    const listRoot = document.getElementById("watchEpList");
+    if (!listRoot) return;
+    const q = String(filterText || "").trim().toLowerCase();
+    const filtered = q
+      ? sidebarEpisodes.filter(
+          (item) =>
+            String(item.title || "").toLowerCase().includes(q) ||
+            String(item.number || "").toLowerCase().includes(q)
+        )
+      : sidebarEpisodes;
+
+    if (!filtered.length) {
+      listRoot.innerHTML = `<div class="nd-muted-center">Episode "${esc(filterText)}" tidak ditemukan.</div>`;
+      return;
+    }
+
+    listRoot.innerHTML = filtered
+      .map((item, idx) => {
+        const isCurrent = item.episodeId === data.episodeId;
+        const watched = isEpisodeWatched(item.episodeId);
+        const epMeta = formatEpisodeItemDisplay(item, data.animeTitle, idx);
+        return `
+          <button
+            type="button"
+            class="nd-ep-item nd-watch-ep-item ${isCurrent ? "active" : ""} ${watched ? "watched" : ""}"
+            data-play-ep="${esc(item.episodeId)}"
+            data-play-series="${esc(data.seriesSlug)}"
+          >
+            <div class="nd-ep-item-main">
+              <span class="nd-ep-num-badge">${esc(epMeta.badgeNum)}</span>
+              <div class="nd-ep-item-copy">
+                <div class="nd-ep-name">${esc(epMeta.displayTitle)}</div>
+                <div class="nd-ep-date">${esc(epMeta.metaLabel)}</div>
+              </div>
+            </div>
+            <div class="nd-ep-item-trail">
+              ${item.hasVerifiedStream && !isCurrent ? '<span class="nd-ep-ready-pill">HD</span>' : ""}
+              <span class="nd-ep-play-icon">${isCurrent ? SVG_ICONS.volume : SVG_ICONS.play}</span>
+            </div>
+          </button>
+        `;
+      })
+      .join("");
+  };
+
+  renderSidebarEpisodes("");
+  document.getElementById("watchEpFilterInput")?.addEventListener("input", (ev) => {
+    renderSidebarEpisodes(ev.currentTarget.value);
+  });
+  requestAnimationFrame(() => {
+    const activeEpEl = document.querySelector("#watchEpList .nd-ep-item.active");
+    activeEpEl?.scrollIntoView({ block: "nearest" });
+  });
 
   const INTRO_SKIP_SECONDS = 90;
   const INTRO_WINDOW_MAX_SEC = 165;
@@ -2732,10 +2873,10 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
     if (savedSec > 15 && resumeContainer) {
       resumeContainer.innerHTML = `
         <div class="nd-resume-banner">
-          <span style="font-size:0.84rem;">Terakhir ditonton di <strong style="color:var(--gold);">${formatSeconds(savedSec)}</strong></span>
-          <div style="display:flex;gap:8px;">
-            <button type="button" class="nd-btn nd-btn-primary" style="padding:6px 12px;font-size:0.78rem;" id="resumeYesBtn">Lanjutkan</button>
-            <button type="button" class="nd-btn nd-btn-secondary" style="padding:6px 12px;font-size:0.78rem;" id="resumeNoBtn">Tutup</button>
+          <span class="nd-resume-copy">Terakhir ditonton di <strong>${formatSeconds(savedSec)}</strong></span>
+          <div class="nd-resume-actions">
+            <button type="button" class="nd-btn nd-btn-primary nd-resume-btn" id="resumeYesBtn">Lanjutkan</button>
+            <button type="button" class="nd-btn nd-btn-secondary nd-resume-btn" id="resumeNoBtn">Tutup</button>
           </div>
         </div>
       `;
@@ -2838,8 +2979,9 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
   document.getElementById("toggleAutoNextBtn")?.addEventListener("click", (e) => {
     state.autoNext = !state.autoNext;
     localStorage.setItem(STORAGE_KEYS.AUTONEXT, state.autoNext ? "1" : "0");
-    e.currentTarget.classList.toggle("active", state.autoNext);
-    e.currentTarget.textContent = `Auto-Next: ${state.autoNext ? "ON" : "OFF"}`;
+    const btn = e.currentTarget;
+    btn.classList.toggle("active", state.autoNext);
+    btn.innerHTML = `<span class="nd-toggle-dot"></span><span>Auto-Next: ${state.autoNext ? "ON" : "OFF"}</span>`;
   });
 
   document.getElementById("toggleCinemaBtn")?.addEventListener("click", () => {

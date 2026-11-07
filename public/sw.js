@@ -1,4 +1,4 @@
-const CACHE_VERSION = "nodatanime-pwa-v6.9";
+const CACHE_VERSION = "nodatanime-pwa-v7.0";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const API_CACHE = `${CACHE_VERSION}-api`;
 
@@ -6,8 +6,8 @@ const PRECACHE_URLS = [
   "/",
   "/offline.html",
   "/manifest.webmanifest",
-  "/css/styles.css?v=6.9",
-  "/js/app.js?v=6.9",
+  "/css/styles.css?v=7.0",
+  "/js/app.js?v=7.0",
   "/assets/favicon.svg",
   "/assets/no-cover.svg",
   "/assets/icon-192.png",
