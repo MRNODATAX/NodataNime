@@ -379,4 +379,25 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
       "routeCurrentUrl wajib dieksekusi lebih awal daripada initStarfield saat boot"
     );
   });
+
+  it("provides +90s Skip Intro (Lewati Intro +90d) on both video overlay and player control bar for desktop & mobile", async () => {
+    const stylesCss = fs.readFileSync(path.join(rootDir, "public/css/styles.css"), "utf8");
+    const clientJs = fs.readFileSync(path.join(rootDir, "public/js/app.js"), "utf8");
+
+    // 1. Konstanta 90 detik, tombol floating di atas player, tombol bar di bawah player, fitur Urungkan (Undo), & pintasan keyboard S
+    assert.match(clientJs, /const INTRO_SKIP_SECONDS\s*=\s*90/);
+    assert.match(clientJs, /id="skipIntroContainer"/);
+    assert.match(clientJs, /id="skipIntroOverlayBtn"/);
+    assert.match(clientJs, /id="skipIntroBarBtn"/);
+    assert.match(clientJs, /id="undoSkipIntroBtn"/);
+    assert.match(clientJs, /Lewati Intro \+90d/);
+    assert.match(clientJs, /function triggerSkipIntroJump\(\)/);
+
+    // 2. Adaptasi responsif desktop & mobile (grid 2 kolom aman minmax(0, 1fr), tanpa bare 1fr, sembunyikan badge kbd di layar sentuh)
+    assert.match(stylesCss, /\.nd-skip-intro-float\s*\{/);
+    assert.match(stylesCss, /\.nd-skip-intro-pill\s*\{/);
+    assert.match(stylesCss, /\.nd-player-tools-group\s*\{[\s\S]*?repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
+    assert.match(stylesCss, /\.nd-player-nav-group\s*\{[\s\S]*?repeat\(3,\s*minmax\(0,\s*1fr\)\)/);
+    assert.doesNotMatch(stylesCss, /grid-template-columns:\s*1fr\s*;/);
+  });
 });
