@@ -2586,12 +2586,13 @@ function setCinemaMode(enabled) {
   document.getElementById("toggleCinemaBtn")?.classList.toggle("active", state.cinemaMode);
 }
 
-async function renderWatchView({ series = "", episode = "", ep = "" }) {
+async function renderWatchView({ series = "", episode = "", ep = "", refresh = false }) {
   renderSkeleton();
   const qs = new URLSearchParams();
   if (series) qs.set("series", series);
   if (episode) qs.set("episode", episode);
   if (ep) qs.set("ep", ep);
+  if (refresh) qs.set("refresh", "1");
 
   const { data } = await apiGet(`/api/anime/episode?${qs.toString()}`);
   state.currentWatch = data;
@@ -3103,9 +3104,12 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
             Mirror video langsung untuk episode ini belum tersinkron di cache lokal (kami tidak mengalihkan ke anime lain agar tontonan tetap akurat).
           </p>
           <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px;">
+            <button type="button" id="retryLiveStreamBtn" class="nd-btn nd-btn-primary" style="padding:9px 16px;font-size:0.82rem;">
+              ${SVG_ICONS.zap} Muat Ulang Server Live
+            </button>
             ${
               safeUrl(data.sourceUrl, "")
-                ? `<a href="${esc(safeUrl(data.sourceUrl, "#"))}" target="_blank" rel="noopener noreferrer" class="nd-btn nd-btn-primary" style="padding:9px 16px;font-size:0.82rem;">
+                ? `<a href="${esc(safeUrl(data.sourceUrl, "#"))}" target="_blank" rel="noopener noreferrer" class="nd-btn nd-btn-secondary" style="padding:9px 16px;font-size:0.82rem;">
                     ${SVG_ICONS.external} Buka Sumber Episode Ini
                   </a>`
                 : ""
@@ -3116,6 +3120,15 @@ async function renderWatchView({ series = "", episode = "", ep = "" }) {
           </div>
         </div>
       `;
+      document.getElementById("retryLiveStreamBtn")?.addEventListener("click", () => {
+        showToast("Memuat ulang server stream live...");
+        renderWatchView({
+          series: series || data.seriesSlug,
+          episode: episode || data.episodeId,
+          ep,
+          refresh: true,
+        });
+      });
       return;
     }
 

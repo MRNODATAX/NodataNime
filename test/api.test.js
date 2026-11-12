@@ -525,4 +525,68 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
     assert.match(stylesCss, /\.nd-detail-banner-strip\s*\{/);
     assert.doesNotMatch(stylesCss, /grid-template-columns:\s*1fr\s*;/);
   });
+
+  it("recovers episode streams via Tier-2 AnimeKita adapter on YLnime timeout and never caches empty failed streams (v7.3)", async () => {
+    const { appCache } = await import("../src/utils/cache.js");
+    const { animeKitaClient } = await import("../src/scrapers/animekitaClient.js");
+    const clientJs = fs.readFileSync(path.join(rootDir, "public/js/app.js"), "utf8");
+
+    // 1. Ketika YLnime offline & AnimeKita offline, episode tanpa stream lokal TIDAK diracuni ke dalam appCache
+    const offlineRes = await fetch(
+      `${baseUrl}/api/anime/episode?series=maougun-saikyou-no-majutsushi-wa-ningen-datta&episode=al-149137-5`
+    );
+    assert.equal(offlineRes.status, 200);
+    const offlineBody = await offlineRes.json();
+    assert.equal(offlineBody.data.streamAvailable, false);
+    assert.equal(offlineBody.data.title, "Maougun Saikyou no Majutsushi wa Ningen datta — Episode 5");
+    assert.equal(
+      appCache.get("ep:maougun-saikyou-no-majutsushi-wa-ningen-datta:al-149137-5:"),
+      undefined,
+      "Episode gagal/kosong tidak boleh dikunci di cache 5 menit"
+    );
+
+    // 2. Ketika Tier-2 AnimeKita menyediakan stream untuk al-149137-5, percobaan berikutnya (atau refresh=1) langsung berhasil memutar 720p!
+    const origFetchPayload = animeKitaClient.fetchEpisodePayload.bind(animeKitaClient);
+    animeKitaClient.fetchEpisodePayload = async (epId) => {
+      assert.equal(epId, "al-149137-5");
+      return {
+        rawStreams: [
+          {
+            id: 1,
+            reso: "1080p",
+            link: "https://sjkt.animekita.org/Maougun/Maougun.E05.1080p.mp4",
+            provide: 15,
+          },
+          {
+            id: 2,
+            reso: "720p",
+            link: "https://sjkt.animekita.org/Maougun/Maougun.E05.720p.mp4",
+            provide: 15,
+          },
+        ],
+        prevEp: "al-149137-4",
+        nextEp: "al-149137-6",
+      };
+    };
+
+    try {
+      const recoveredRes = await fetch(
+        `${baseUrl}/api/anime/episode?series=maougun-saikyou-no-majutsushi-wa-ningen-datta&episode=al-149137-5&refresh=1`
+      );
+      assert.equal(recoveredRes.status, 200);
+      const recoveredBody = await recoveredRes.json();
+      assert.equal(recoveredBody.source, "upstream-animekita");
+      assert.equal(recoveredBody.data.streamAvailable, true);
+      assert.equal(recoveredBody.data.defaultResolution, "720p");
+      assert.equal(recoveredBody.data.streams.length, 2);
+      assert.equal(recoveredBody.data.navigation.prevEpisodeId, "al-149137-4");
+      assert.equal(recoveredBody.data.navigation.nextEpisodeId, "al-149137-6");
+    } finally {
+      animeKitaClient.fetchEpisodePayload = origFetchPayload;
+    }
+
+    // 3. Tombol Muat Ulang Server Live tersedia di frontend
+    assert.match(clientJs, /id="retryLiveStreamBtn"/);
+    assert.match(clientJs, /refresh:\s*true/);
+  });
 });

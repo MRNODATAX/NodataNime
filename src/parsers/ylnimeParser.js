@@ -715,15 +715,17 @@ export function parseEpisodeHtml(html, fallbackSeriesSlug = "", fallbackEpisodeI
     });
   }
 
-  // Ekstraksi inline `const streams = [...]` dari tag <script>
+  // Ekstraksi inline `const streams = [...]` dari tag <script> maupun tag <video>/<source>
   let inlineStreams = [];
   $("script").each((_, scriptEl) => {
     const content = $(scriptEl).html() || "";
-    const match = content.match(/(?:const|let|var)\s+streams\s*=\s*(\[[\s\S]*?\])\s*;/);
+    const match = content.match(
+      /(?:(?:const|let|var)\s+|window\.)(?:streams|initialStreams|epStreams)\s*=\s*(\[[\s\S]*?\])\s*;?/
+    );
     if (match && match[1]) {
       try {
         const parsed = JSON.parse(match[1]);
-        if (Array.isArray(parsed)) {
+        if (Array.isArray(parsed) && parsed.length > 0) {
           inlineStreams = parsed;
         }
       } catch {
@@ -731,6 +733,18 @@ export function parseEpisodeHtml(html, fallbackSeriesSlug = "", fallbackEpisodeI
       }
     }
   });
+
+  if (inlineStreams.length === 0) {
+    $("video[src], video source[src]").each((_, mediaEl) => {
+      const src = sanitizeHttpUrl($(mediaEl).attr("src") || "");
+      if (src) {
+        const reso = $(mediaEl).attr("size")
+          ? `${$(mediaEl).attr("size")}p`
+          : $(mediaEl).attr("label") || "720p";
+        inlineStreams.push({ reso, link: src });
+      }
+    });
+  }
 
   // Ekstraksi navigasi Prev / Next dari tautan HTML jika ada
   let prevEp = null;

@@ -7,6 +7,7 @@ import { artworkResolver } from "./artworkResolver.js";
 import {
   fromEpisodeToken,
   fromSeriesToken,
+  normalizeEpisodeStreams,
   toSeriesToken,
 } from "../parsers/ylnimeParser.js";
 
@@ -297,7 +298,7 @@ export class AnimeService {
     }
   }
 
-  async getEpisode({ token = "", series = "", episode = "", ep = null }) {
+  async getEpisode({ token = "", series = "", episode = "", ep = null, refresh = false }) {
     let seriesSlug = String(series || "").trim();
     let episodeId = String(episode || "").trim();
 
@@ -308,49 +309,156 @@ export class AnimeService {
     }
 
     const epNum = ep != null && ep !== "" ? Number(ep) : null;
-    const cacheKey = `ep:${fromSeriesToken(seriesSlug)}:${episodeId}:${epNum ?? ""}`;
+    const rawSeriesSlug = fromSeriesToken(seriesSlug);
+    const cacheKey = `ep:${rawSeriesSlug}:${episodeId}:${epNum ?? ""}`;
 
-    return appCache.remember(cacheKey, async () => {
-      try {
-        const [liveEp, detail] = await Promise.all([
-          ylnimeClient.scrapeEpisode({
-            seriesSlug,
-            episodeId,
-            epNumber: epNum,
-          }),
-          seriesSlug ? this.getDetail(seriesSlug).catch(() => null) : Promise.resolve(null),
-        ]);
-        const snapArtwork = artworkResolver.lookupSnapshotArtwork({
-          slug: seriesSlug,
-          title: liveEp?.animeTitle || detail?.title,
-        });
-        return {
-          dataSource: "live-ylnime",
-          ...liveEp,
-          poster: detail?.poster || snapArtwork?.poster || "/assets/no-cover.svg",
-          banner: detail?.banner || snapArtwork?.banner || detail?.poster || "/assets/no-cover.svg",
-          episodes: detail?.episodes || [],
-        };
-      } catch {
-        const snapEp = snapshotStore.getEpisode({
-          seriesSlug,
-          episodeId,
-          epNumber: epNum,
-        });
-        const enrichedArtwork = artworkResolver.enrichCardSync({
-          slug: seriesSlug,
-          title: snapEp.animeTitle,
-          poster: snapEp.poster,
-          banner: snapEp.banner,
-        });
-        return {
-          dataSource: "verified-snapshot",
-          ...snapEp,
-          poster: enrichedArtwork.poster,
-          banner: enrichedArtwork.banner,
-        };
+    if (refresh) {
+      ylnimeClient.cooldownUntil = 0;
+      ylnimeClient.consecutiveTimeouts = 0;
+      animeKitaClient.cooldownUntil = 0;
+    } else {
+      const cachedEp = appCache.get(cacheKey);
+      if (cachedEp && cachedEp.streamAvailable && Array.isArray(cachedEp.streams) && cachedEp.streams.length > 0) {
+        return cachedEp;
       }
+    }
+
+    const detail = seriesSlug ? await this.getDetail(seriesSlug).catch(() => null) : null;
+    let resolvedEpisodeId = episodeId ? fromSeriesToken(episodeId) : "";
+    if (!resolvedEpisodeId && detail && Array.isArray(detail.episodes) && detail.episodes.length > 0) {
+      const matched =
+        epNum != null
+          ? detail.episodes.find((e) => Number(e.number) === epNum)
+          : detail.episodes[0];
+      if (matched?.episodeId) {
+        resolvedEpisodeId = matched.episodeId;
+      }
+    }
+
+    const matchedDetailEp =
+      detail && resolvedEpisodeId
+        ? (detail.episodes || []).find((e) => e.episodeId === resolvedEpisodeId) || null
+        : null;
+
+    let detailPrevEp = null;
+    let detailNextEp = null;
+    if (detail && matchedDetailEp) {
+      const idx = detail.episodes.findIndex((e) => e.episodeId === matchedDetailEp.episodeId);
+      if (idx !== -1) {
+        if (idx + 1 < detail.episodes.length) detailPrevEp = detail.episodes[idx + 1].episodeId;
+        if (idx - 1 >= 0) detailNextEp = detail.episodes[idx - 1].episodeId;
+      }
+    }
+
+    const buildArtworkFields = (animeTitleHint = "") => {
+      const snapArtwork = artworkResolver.lookupSnapshotArtwork({
+        slug: seriesSlug,
+        title: animeTitleHint || detail?.title,
+      });
+      const poster = detail?.poster || snapArtwork?.poster || "/assets/no-cover.svg";
+      const banner = detail?.banner || snapArtwork?.banner || poster;
+      return { poster, banner };
+    };
+
+    // Tier 1: Live YLnime Scraper (2-stage session-safe multi-resolusi + inline HTML fallback)
+    try {
+      const liveEp = await ylnimeClient.scrapeEpisode({
+        seriesSlug,
+        episodeId: resolvedEpisodeId || episodeId,
+        epNumber: epNum,
+      });
+      const { poster, banner } = buildArtworkFields(liveEp?.animeTitle);
+      const payload = {
+        dataSource: "live-ylnime",
+        ...liveEp,
+        episodeFound: true,
+        streamAvailable: liveEp.streams.length > 0,
+        poster,
+        banner,
+        episodes: detail?.episodes || [],
+      };
+      if (payload.streamAvailable) {
+        appCache.set(cacheKey, payload);
+      }
+      return payload;
+    } catch {
+      // Lanjut ke Tier 2 Upstream AnimeKita
+    }
+
+    // Tier 2: Upstream AnimeKita Episode Stream Adapter (`series/episode/data.php`)
+    if (resolvedEpisodeId) {
+      try {
+        const upstreamEp = await animeKitaClient.fetchEpisodePayload(resolvedEpisodeId);
+        if (upstreamEp.rawStreams.length > 0) {
+          const epSuffix = matchedDetailEp?.title || (epNum != null ? `Episode ${epNum}` : resolvedEpisodeId);
+          const animeTitle = detail?.title || rawSeriesSlug || "Anime";
+          const normalized = normalizeEpisodeStreams({
+            episodeId: resolvedEpisodeId,
+            seriesSlug: detail?.rawSlug || rawSeriesSlug,
+            title: `${animeTitle} — ${epSuffix}`,
+            animeTitle,
+            jsonResponses: [
+              {
+                ok: true,
+                reso_dipakai: "720p",
+                streams: upstreamEp.rawStreams,
+                prev_ep: upstreamEp.prevEp ?? detailPrevEp,
+                next_ep: upstreamEp.nextEp ?? detailNextEp,
+              },
+            ],
+            fallbackPrevEp: detailPrevEp,
+            fallbackNextEp: detailNextEp,
+          });
+          if (normalized.streams.length > 0) {
+            const { poster, banner } = buildArtworkFields(animeTitle);
+            const payload = {
+              dataSource: "upstream-animekita",
+              ...normalized,
+              episodeFound: true,
+              streamAvailable: true,
+              poster,
+              banner,
+              episodes: detail?.episodes || [],
+            };
+            appCache.set(cacheKey, payload);
+            return payload;
+          }
+        }
+      } catch {
+        // Lanjut ke Tier 3 Snapshot
+      }
+    }
+
+    // Tier 3: Verified Local Snapshot (JANGAN di-cache jika stream kosong agar retry langsung mencoba live kembali)
+    const snapEp = snapshotStore.getEpisode({
+      seriesSlug,
+      episodeId: resolvedEpisodeId || episodeId,
+      epNumber: epNum,
     });
+    const effectiveAnimeTitle = detail?.title || snapEp.animeTitle;
+    const effectiveEpSuffix =
+      matchedDetailEp?.title ||
+      (epNum != null ? `Episode ${epNum}` : resolvedEpisodeId || episodeId);
+    const enrichedArtwork = artworkResolver.enrichCardSync({
+      slug: seriesSlug,
+      title: effectiveAnimeTitle,
+      poster: detail?.poster || snapEp.poster,
+      banner: detail?.banner || snapEp.banner,
+    });
+    const fallbackPayload = {
+      dataSource: "verified-snapshot",
+      ...snapEp,
+      title: detail?.title ? `${detail.title} — ${effectiveEpSuffix}` : snapEp.title,
+      animeTitle: effectiveAnimeTitle,
+      episodeFound: Boolean(snapEp.episodeFound || matchedDetailEp),
+      poster: enrichedArtwork.poster,
+      banner: enrichedArtwork.banner,
+      episodes: detail?.episodes?.length ? detail.episodes : snapEp.episodes || [],
+    };
+    if (fallbackPayload.streamAvailable) {
+      appCache.set(cacheKey, fallbackPayload);
+    }
+    return fallbackPayload;
   }
 
   async getCommunity() {
