@@ -3,24 +3,6 @@
   "source": "https://ylnime.com",
   "banners": [
     {
-      "title": "Tensei shitara Slime Datta Ken Season 4",
-      "slug": "slime-s4-sub-indo",
-      "rawSlug": "slime-s4-sub-indo",
-      "banner": "/assets/no-cover.svg",
-      "poster": "/assets/no-cover.svg",
-      "synopsis": "Rimuru Tempest dan Federasi Jura Tempest menghadapi babak konspirasi baru dari klan Rozzo dan Kekaisaran Timur demi mewujudkan dunia tempat manusia dan monster hidup berdampingan.",
-      "genres": [
-        "Action",
-        "Adventure",
-        "Fantasy",
-        "Isekai"
-      ],
-      "status": "Sedang Tayang",
-      "score": "8.8",
-      "episode": "Ep 21",
-      "episodeId": "al-153297-21"
-    },
-    {
       "title": "One Piece",
       "slug": "1piece-sub-indo",
       "rawSlug": "1piece-sub-indo",
@@ -39,11 +21,81 @@
       "episodeId": "al-150441-1180"
     },
     {
+      "title": "Kusuriya no Hitorigoto Season 3",
+      "slug": "kusuriya-no-hitorigoto-s3",
+      "rawSlug": "kusuriya-no-hitorigoto-s3",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195516-B5M0cPaQbQXI.jpg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1028/160277.jpg",
+      "synopsis": "Maomao dan Jinshi kembali terseret dalam intrik racun, wabah misterius, serta rahasia politik baru di balik tembok istana kekaisaran.",
+      "genres": [
+        "Drama",
+        "Mystery",
+        "Historical"
+      ],
+      "status": "Sedang Tayang",
+      "score": "8.9",
+      "episode": "Ep 4",
+      "episodeId": "al-154210-4"
+    },
+    {
+      "title": "Black Clover 2nd Season",
+      "slug": "black-clover-s2-sub-indo",
+      "rawSlug": "black-clover-s2-sub-indo",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195604-lQpCzTziSA17.jpg",
+      "poster": "https://cdn.myanimelist.net/images/anime/2/88336l.jpg",
+      "synopsis": "Asta dan para Ksatria Sihir Kerajaan Clover melancarkan penyerbuan penentuan ke Kerajaan Spade demi menyelamatkan para kapten skuad.",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Comedy",
+        "Fantasy"
+      ],
+      "status": "Sedang Tayang",
+      "score": "8.7",
+      "episode": "Ep 3",
+      "episodeId": "al-154261-3"
+    },
+    {
+      "title": "Detective Conan",
+      "slug": "detective-conan",
+      "rawSlug": "detective-conan",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/235-MTmiz0uB0fMd.jpg",
+      "poster": "https://assets.animekita.org/cover/2026/05/18/series-149020-anilist-235-131016-3aefd890.jpg",
+      "synopsis": "Shinichi Kudo yang menyusut menjadi Conan Edogawa terus memecahkan teka-teki kasus mustahil sembari melacak jejak Organisasi Hitam.",
+      "genres": [
+        "Adventure",
+        "Comedy",
+        "Mystery"
+      ],
+      "status": "Sedang Tayang",
+      "score": "8.4",
+      "episode": "Ep 1196",
+      "episodeId": "al-149020-1196"
+    },
+    {
+      "title": "Tensei shitara Slime Datta Ken Season 4",
+      "slug": "slime-s4-sub-indo",
+      "rawSlug": "slime-s4-sub-indo",
+      "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+      "synopsis": "Rimuru Tempest dan Federasi Jura Tempest menghadapi babak konspirasi baru dari klan Rozzo dan Kekaisaran Timur demi mewujudkan dunia tempat manusia dan monster hidup berdampingan.",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Fantasy",
+        "Isekai"
+      ],
+      "status": "Sedang Tayang",
+      "score": "8.8",
+      "episode": "Ep 21",
+      "episodeId": "al-153297-21"
+    },
+    {
       "title": "Solo Leveling Season 2: Arise from the Shadow",
       "slug": "solo-leveling-s2-sub-indo",
       "rawSlug": "solo-leveling-s2-sub-indo",
-      "banner": "/assets/no-cover.svg",
-      "poster": "/assets/no-cover.svg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
       "synopsis": "Setelah membangkitkan pasukan bayangan sebagai Shadow Monarch, Sung Jin-Woo menaklukkan Demon Castle dan menghadapi ancaman semut raksasa Pulau Jeju yang mengguncang para Hunter S-Rank.",
       "genres": [
         "Action",
@@ -59,8 +111,8 @@
       "title": "Bleach: Sennen Kessen-hen - Kashin-tan",
       "slug": "bleach-sennen-kessen-hen-kashin-tan",
       "rawSlug": "bleach-sennen-kessen-hen-kashin-tan",
-      "banner": "/assets/no-cover.svg",
-      "poster": "/assets/no-cover.svg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
       "synopsis": "Pertempuran puncak antara Gotei 13 dan Schutzstaffel Yhwach di Istana Soul King mencapai klimaks berdarah yang menentukan nasib tiga dunia.",
       "genres": [
         "Action",
@@ -72,23 +124,6 @@
       "score": "9.0",
       "episode": "Ep 9",
       "episodeId": "al-154222-9"
-    },
-    {
-      "title": "Kusuriya no Hitorigoto Season 3",
-      "slug": "kusuriya-no-hitorigoto-s3",
-      "rawSlug": "kusuriya-no-hitorigoto-s3",
-      "banner": "/assets/no-cover.svg",
-      "poster": "/assets/no-cover.svg",
-      "synopsis": "Maomao dan Jinshi kembali terseret dalam intrik racun, wabah misterius, serta rahasia politik baru di balik tembok istana kekaisaran.",
-      "genres": [
-        "Drama",
-        "Mystery",
-        "Historical"
-      ],
-      "status": "Sedang Tayang",
-      "score": "8.9",
-      "episode": "Ep 4",
-      "episodeId": "al-154210-4"
     }
   ],
   "topAnime": {
@@ -99,79 +134,89 @@
         "slug": "1piece-sub-indo",
         "rawSlug": "1piece-sub-indo",
         "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-        "views": "306,964"
+        "views": "306,964",
+        "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg"
       },
       {
         "rank": 2,
         "title": "Solo Leveling Season 2",
         "slug": "solo-leveling-s2-sub-indo",
         "rawSlug": "solo-leveling-s2-sub-indo",
-        "poster": "/assets/no-cover.svg",
-        "views": "215,430"
+        "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+        "views": "215,430",
+        "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg"
       },
       {
         "rank": 3,
         "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
         "slug": "steel-ball-run-jojo",
         "rawSlug": "steel-ball-run-jojo",
-        "poster": "/assets/no-cover.svg",
-        "views": "152,800"
+        "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+        "views": "152,800",
+        "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg"
       },
       {
         "rank": 4,
         "title": "Tensei shitara Slime Datta Ken Season 4",
         "slug": "slime-s4-sub-indo",
         "rawSlug": "slime-s4-sub-indo",
-        "poster": "/assets/no-cover.svg",
-        "views": "128,450"
+        "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+        "views": "128,450",
+        "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg"
       },
       {
         "rank": 5,
         "title": "Detective Conan",
         "slug": "detective-conan",
         "rawSlug": "detective-conan",
-        "poster": "/assets/no-cover.svg",
-        "views": "110,415"
+        "poster": "https://assets.animekita.org/cover/2026/05/18/series-149020-anilist-235-131016-3aefd890.jpg",
+        "views": "110,415",
+        "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/235-MTmiz0uB0fMd.jpg"
       },
       {
         "rank": 6,
         "title": "Bleach: Sennen Kessen-hen - Kashin-tan",
         "slug": "bleach-sennen-kessen-hen-kashin-tan",
         "rawSlug": "bleach-sennen-kessen-hen-kashin-tan",
-        "poster": "/assets/no-cover.svg",
-        "views": "94,210"
+        "poster": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
+        "views": "94,210",
+        "banner": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg"
       },
       {
         "rank": 7,
         "title": "Black Clover 2nd Season",
         "slug": "black-clover-s2-sub-indo",
         "rawSlug": "black-clover-s2-sub-indo",
-        "poster": "/assets/no-cover.svg",
-        "views": "88,120"
+        "poster": "https://cdn.myanimelist.net/images/anime/2/88336l.jpg",
+        "views": "88,120",
+        "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195604-lQpCzTziSA17.jpg"
       },
       {
         "rank": 8,
         "title": "Kusuriya no Hitorigoto Season 3",
         "slug": "kusuriya-no-hitorigoto-s3",
         "rawSlug": "kusuriya-no-hitorigoto-s3",
-        "poster": "/assets/no-cover.svg",
-        "views": "72,300"
+        "poster": "https://cdn.myanimelist.net/images/anime/1028/160277.jpg",
+        "views": "72,300",
+        "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195516-B5M0cPaQbQXI.jpg"
       },
       {
         "rank": 9,
         "title": "Tokyo Revengers: Santen Sensou-hen",
         "slug": "tokyo-revengers-s4",
         "rawSlug": "tokyo-revengers-s4",
-        "poster": "/assets/no-cover.svg",
-        "views": "64,905"
+        "poster": "https://cdn.myanimelist.net/images/anime/1321/159720.jpg",
+        "views": "64,905",
+        "banner": "https://cdn.myanimelist.net/images/anime/1321/159720.jpg"
       },
       {
         "rank": 10,
         "title": "Tougen Anki: Nikko・Kegon no Taki-hen",
         "slug": "tougen-anki-s2",
         "rawSlug": "tougen-anki-s2",
-        "poster": "/assets/no-cover.svg",
-        "views": "43,720"
+        "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204650-nvK5CuG60WGY.jpg",
+        "views": "43,720",
+        "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204650-nvK5CuG60WGY.jpg"
       }
     ],
     "yesterday": [
@@ -181,15 +226,17 @@
         "slug": "1piece-sub-indo",
         "rawSlug": "1piece-sub-indo",
         "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-        "views": "298,112"
+        "views": "298,112",
+        "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg"
       },
       {
         "rank": 2,
         "title": "Tensei shitara Slime Datta Ken Season 4",
         "slug": "slime-s4-sub-indo",
         "rawSlug": "slime-s4-sub-indo",
-        "poster": "/assets/no-cover.svg",
-        "views": "139,800"
+        "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+        "views": "139,800",
+        "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg"
       },
       {
         "rank": 3,
@@ -197,23 +244,26 @@
         "slug": "sousou-no-frieren-sub-indo",
         "rawSlug": "sousou-no-frieren-sub-indo",
         "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-gHSraOSa0nBG.jpg",
-        "views": "118,540"
+        "views": "118,540",
+        "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-gHSraOSa0nBG.jpg"
       },
       {
         "rank": 4,
         "title": "Bleach: Sennen Kessen-hen - Kashin-tan",
         "slug": "bleach-sennen-kessen-hen-kashin-tan",
         "rawSlug": "bleach-sennen-kessen-hen-kashin-tan",
-        "poster": "/assets/no-cover.svg",
-        "views": "99,310"
+        "poster": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
+        "views": "99,310",
+        "banner": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg"
       },
       {
         "rank": 5,
         "title": "Kusuriya no Hitorigoto Season 3",
         "slug": "kusuriya-no-hitorigoto-s3",
         "rawSlug": "kusuriya-no-hitorigoto-s3",
-        "poster": "/assets/no-cover.svg",
-        "views": "81,600"
+        "poster": "https://cdn.myanimelist.net/images/anime/1028/160277.jpg",
+        "views": "81,600",
+        "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195516-B5M0cPaQbQXI.jpg"
       }
     ],
     "week": [
@@ -223,39 +273,44 @@
         "slug": "1piece-sub-indo",
         "rawSlug": "1piece-sub-indo",
         "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-        "views": "1,842,190"
+        "views": "1,842,190",
+        "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg"
       },
       {
         "rank": 2,
         "title": "Solo Leveling Season 2",
         "slug": "solo-leveling-s2-sub-indo",
         "rawSlug": "solo-leveling-s2-sub-indo",
-        "poster": "/assets/no-cover.svg",
-        "views": "1,120,450"
+        "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+        "views": "1,120,450",
+        "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg"
       },
       {
         "rank": 3,
         "title": "Tensei shitara Slime Datta Ken Season 4",
         "slug": "slime-s4-sub-indo",
         "rawSlug": "slime-s4-sub-indo",
-        "poster": "/assets/no-cover.svg",
-        "views": "894,300"
+        "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+        "views": "894,300",
+        "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg"
       },
       {
         "rank": 4,
         "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
         "slug": "steel-ball-run-jojo",
         "rawSlug": "steel-ball-run-jojo",
-        "poster": "/assets/no-cover.svg",
-        "views": "765,120"
+        "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+        "views": "765,120",
+        "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg"
       },
       {
         "rank": 5,
         "title": "Kimetsu no Yaiba Movie: Mugenjou-hen",
         "slug": "kimetsu-no-yaiba-movie-mugenjou-hen",
         "rawSlug": "kimetsu-no-yaiba-movie-mugenjou-hen",
-        "poster": "/assets/no-cover.svg",
-        "views": "640,880"
+        "poster": "https://cdn.myanimelist.net/images/anime/1681/148216.jpg",
+        "views": "640,880",
+        "banner": "https://cdn.myanimelist.net/images/anime/1681/148216.jpg"
       }
     ],
     "month": [
@@ -265,23 +320,26 @@
         "slug": "1piece-sub-indo",
         "rawSlug": "1piece-sub-indo",
         "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-        "views": "6,410,920"
+        "views": "6,410,920",
+        "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg"
       },
       {
         "rank": 2,
         "title": "Naruto: Shippuuden",
         "slug": "naruto-shippuuden-sub-indo",
         "rawSlug": "naruto-shippuuden-sub-indo",
-        "poster": "/assets/no-cover.svg",
-        "views": "4,920,115"
+        "poster": "https://cdn.myanimelist.net/images/anime/1565/111305.jpg",
+        "views": "4,920,115",
+        "banner": "https://cdn.myanimelist.net/images/anime/1565/111305.jpg"
       },
       {
         "rank": 3,
         "title": "Solo Leveling Season 2",
         "slug": "solo-leveling-s2-sub-indo",
         "rawSlug": "solo-leveling-s2-sub-indo",
-        "poster": "/assets/no-cover.svg",
-        "views": "4,312,800"
+        "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+        "views": "4,312,800",
+        "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg"
       },
       {
         "rank": 4,
@@ -289,15 +347,17 @@
         "slug": "sousou-no-frieren-sub-indo",
         "rawSlug": "sousou-no-frieren-sub-indo",
         "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-gHSraOSa0nBG.jpg",
-        "views": "3,875,400"
+        "views": "3,875,400",
+        "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-gHSraOSa0nBG.jpg"
       },
       {
         "rank": 5,
         "title": "Shingeki no Kyojin: The Final Season",
         "slug": "shingeki-no-kyojin-final-season",
         "rawSlug": "shingeki-no-kyojin-final-season",
-        "poster": "/assets/no-cover.svg",
-        "views": "3,510,200"
+        "poster": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
+        "views": "3,510,200",
+        "banner": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg"
       }
     ]
   },
@@ -307,7 +367,7 @@
       "slug": "1piece-sub-indo",
       "rawSlug": "1piece-sub-indo",
       "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
       "score": "9.1",
       "status": "Ongoing",
       "label": "Minggu",
@@ -331,8 +391,8 @@
       "title": "Tensei shitara Slime Datta Ken Season 4",
       "slug": "slime-s4-sub-indo",
       "rawSlug": "slime-s4-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
       "score": "8.8",
       "status": "Ongoing",
       "label": "Jumat",
@@ -356,8 +416,8 @@
       "title": "Bleach: Sennen Kessen-hen - Kashin-tan",
       "slug": "bleach-sennen-kessen-hen-kashin-tan",
       "rawSlug": "bleach-sennen-kessen-hen-kashin-tan",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
       "score": "9.0",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -380,8 +440,8 @@
       "title": "Black Clover 2nd Season",
       "slug": "black-clover-s2-sub-indo",
       "rawSlug": "black-clover-s2-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/2/88336l.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195604-lQpCzTziSA17.jpg",
       "score": "8.7",
       "status": "Ongoing",
       "label": "Minggu",
@@ -405,8 +465,8 @@
       "title": "Tokyo Revengers: Santen Sensou-hen",
       "slug": "tokyo-revengers-s4",
       "rawSlug": "tokyo-revengers-s4",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1321/159720.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1321/159720.jpg",
       "score": "8.3",
       "status": "Ongoing",
       "label": "Minggu",
@@ -430,8 +490,8 @@
       "title": "Kusuriya no Hitorigoto Season 3",
       "slug": "kusuriya-no-hitorigoto-s3",
       "rawSlug": "kusuriya-no-hitorigoto-s3",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1028/160277.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195516-B5M0cPaQbQXI.jpg",
       "score": "8.9",
       "status": "Ongoing",
       "label": "Jumat",
@@ -454,8 +514,8 @@
       "title": "Detective Conan",
       "slug": "detective-conan",
       "rawSlug": "detective-conan",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/05/18/series-149020-anilist-235-131016-3aefd890.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/235-MTmiz0uB0fMd.jpg",
       "score": "8.4",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -478,8 +538,8 @@
       "title": "Shin Gekijouban☆Keroro Gunsou: Fukkatsu shite Sokkou Chikyuu Metsubou no Kiki de Arimasu!",
       "slug": "shin-keroro-gunsou",
       "rawSlug": "shin-keroro-gunsou",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx216557-9CXz04CEmXOi.png",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx216557-9CXz04CEmXOi.png",
       "score": "7.9",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -501,8 +561,8 @@
       "title": "Tougen Anki: Nikko・Kegon no Taki-hen",
       "slug": "tougen-anki-s2",
       "rawSlug": "tougen-anki-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204650-nvK5CuG60WGY.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204650-nvK5CuG60WGY.jpg",
       "score": "8.2",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -526,8 +586,8 @@
       "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
       "slug": "steel-ball-run-jojo",
       "rawSlug": "steel-ball-run-jojo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
       "score": "9.2",
       "status": "Ongoing",
       "label": "Jumat",
@@ -554,8 +614,8 @@
       "title": "Bleach: Sennen Kessen-hen - Kashin-tan",
       "slug": "bleach-sennen-kessen-hen-kashin-tan",
       "rawSlug": "bleach-sennen-kessen-hen-kashin-tan",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
       "score": "9.0",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -578,8 +638,8 @@
       "title": "Detective Conan",
       "slug": "detective-conan",
       "rawSlug": "detective-conan",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/05/18/series-149020-anilist-235-131016-3aefd890.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/235-MTmiz0uB0fMd.jpg",
       "score": "8.4",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -602,8 +662,8 @@
       "title": "Shin Gekijouban☆Keroro Gunsou: Fukkatsu shite Sokkou Chikyuu Metsubou no Kiki de Arimasu!",
       "slug": "shin-keroro-gunsou",
       "rawSlug": "shin-keroro-gunsou",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx216557-9CXz04CEmXOi.png",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx216557-9CXz04CEmXOi.png",
       "score": "7.9",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -625,8 +685,8 @@
       "title": "Tougen Anki: Nikko・Kegon no Taki-hen",
       "slug": "tougen-anki-s2",
       "rawSlug": "tougen-anki-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204650-nvK5CuG60WGY.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204650-nvK5CuG60WGY.jpg",
       "score": "8.2",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -650,8 +710,8 @@
       "title": "Yasei no Last Boss ga Arawareta! Season 2",
       "slug": "yasei-no-last-boss-s2",
       "rawSlug": "yasei-no-last-boss-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204389-jCoFCeTthDMy.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204389-jCoFCeTthDMy.jpg",
       "score": "8.1",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -675,8 +735,8 @@
       "title": "Uchi no Otouto-domo ga Sumimasen",
       "slug": "uchi-no-otouto-domo-ga-sumimasen",
       "rawSlug": "uchi-no-otouto-domo-ga-sumimasen",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1474/160261.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1474/160261.jpg",
       "score": "7.8",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -699,8 +759,8 @@
       "title": "Gensou Suikoden",
       "slug": "gensou-suikoden",
       "rawSlug": "gensou-suikoden",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx187316-jucYCojVTjSY.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx187316-jucYCojVTjSY.jpg",
       "score": "8.3",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -725,8 +785,8 @@
       "title": "Shiotaiou no Satou-san ga Ore ni dake Amai",
       "slug": "shiotaiou-no-satou-san",
       "rawSlug": "shiotaiou-no-satou-san",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209502-C81oN8M4Smlo.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209502-C81oN8M4Smlo.jpg",
       "score": "7.9",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -749,7 +809,7 @@
       "slug": "1piece-sub-indo",
       "rawSlug": "1piece-sub-indo",
       "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
       "score": "9.1",
       "status": "Ongoing",
       "label": "Minggu",
@@ -773,8 +833,8 @@
       "title": "Black Clover 2nd Season",
       "slug": "black-clover-s2-sub-indo",
       "rawSlug": "black-clover-s2-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/2/88336l.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195604-lQpCzTziSA17.jpg",
       "score": "8.7",
       "status": "Ongoing",
       "label": "Minggu",
@@ -798,8 +858,8 @@
       "title": "Tokyo Revengers: Santen Sensou-hen",
       "slug": "tokyo-revengers-s4",
       "rawSlug": "tokyo-revengers-s4",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1321/159720.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1321/159720.jpg",
       "score": "8.3",
       "status": "Ongoing",
       "label": "Minggu",
@@ -823,8 +883,8 @@
       "title": "Ao no Hako Season 2",
       "slug": "ao-no-hako-s2",
       "rawSlug": "ao-no-hako-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1990/160267.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1990/160267.jpg",
       "score": "8.6",
       "status": "Ongoing",
       "label": "Minggu",
@@ -847,8 +907,8 @@
       "title": "Aoashi Season 2",
       "slug": "aoashi-s2",
       "rawSlug": "aoashi-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1295/158726.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1295/158726.jpg",
       "score": "8.5",
       "status": "Ongoing",
       "label": "Minggu",
@@ -870,8 +930,8 @@
       "title": "Yozakura-san Chi no Daisakusen Season 2",
       "slug": "yozakura-san-s2",
       "rawSlug": "yozakura-san-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx213657-ORNXVEBCjXaz.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx213657-ORNXVEBCjXaz.jpg",
       "score": "8.0",
       "status": "Ongoing",
       "label": "Minggu",
@@ -894,8 +954,8 @@
       "title": "Tank Chair",
       "slug": "tank-chair",
       "rawSlug": "tank-chair",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209499-S0sWFrCpft85.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209499-S0sWFrCpft85.jpg",
       "score": "8.1",
       "status": "Ongoing",
       "label": "Senin",
@@ -918,8 +978,8 @@
       "title": "Tensei Kizoku, Kantei Skill de Nariagaru Season 3",
       "slug": "tensei-kizoku-kantei-skill-s3",
       "rawSlug": "tensei-kizoku-kantei-skill-s3",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx185756-xPCl0RyQ7fXD.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx185756-xPCl0RyQ7fXD.jpg",
       "score": "8.2",
       "status": "Ongoing",
       "label": "Senin",
@@ -942,8 +1002,8 @@
       "title": "Temppal (Item no Chikara de Saikyou)",
       "slug": "temppal-item-no-chikara",
       "rawSlug": "temppal-item-no-chikara",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx212888-NhyvqPt5aIuJ.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/212888-ZsnNegBCKXQq.jpg",
       "score": "8.0",
       "status": "Ongoing",
       "label": "Senin",
@@ -966,8 +1026,8 @@
       "title": "Tensei shitara Goblin datta ken",
       "slug": "tensei-goblin",
       "rawSlug": "tensei-goblin",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209219-3yhKlRx0LX3p.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209219-3yhKlRx0LX3p.jpg",
       "score": "7.8",
       "status": "Ongoing",
       "label": "Senin",
@@ -990,8 +1050,8 @@
       "title": "Hotaru no Yomeiri",
       "slug": "hotaru-no-yomeiri",
       "rawSlug": "hotaru-no-yomeiri",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx205909-DM0fAzNQulod.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx205909-DM0fAzNQulod.jpg",
       "score": "8.5",
       "status": "Ongoing",
       "label": "Selasa",
@@ -1015,8 +1075,8 @@
       "title": "Shinja Zero no Megami-sama to Hajimeru Isekai Kouryaku",
       "slug": "shinja-zero-isekai",
       "rawSlug": "shinja-zero-isekai",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx205896-ElrV8oVAsuax.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx205896-ElrV8oVAsuax.jpg",
       "score": "7.7",
       "status": "Ongoing",
       "label": "Selasa",
@@ -1041,8 +1101,8 @@
       "title": "Psyren",
       "slug": "psyren",
       "rawSlug": "psyren",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204011-j45RZoqYbdZK.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204011-j45RZoqYbdZK.jpg",
       "score": "8.4",
       "status": "Ongoing",
       "label": "Selasa",
@@ -1067,8 +1127,8 @@
       "title": "Kyouran Reijou Nia Liston",
       "slug": "kyouran-reijou-nia-liston",
       "rawSlug": "kyouran-reijou-nia-liston",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx206949-4HYI3YuP0eLI.png",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx206949-4HYI3YuP0eLI.png",
       "score": "7.9",
       "status": "Ongoing",
       "label": "Selasa",
@@ -1090,8 +1150,8 @@
       "title": "Chitose-kun wa Ramune Bin no Naka Season 2",
       "slug": "chitose-kun-s2",
       "rawSlug": "chitose-kun-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx198727-BL0JTpg0G8tq.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx198727-BL0JTpg0G8tq.jpg",
       "score": "8.1",
       "status": "Ongoing",
       "label": "Rabu",
@@ -1114,8 +1174,8 @@
       "title": "Tantei wa Mou, Shindeiru. Season 2",
       "slug": "tanmoshi-s2",
       "rawSlug": "tanmoshi-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1414/160406.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1414/160406.jpg",
       "score": "7.8",
       "status": "Ongoing",
       "label": "Rabu",
@@ -1138,8 +1198,8 @@
       "title": "Tsuihou sareta Tensei Juukishi wa Game Chishiki de Musou suru",
       "slug": "tsuihou-tensei-juukishi",
       "rawSlug": "tsuihou-tensei-juukishi",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx180136-gtMTCRlOD4OE.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx180136-gtMTCRlOD4OE.jpg",
       "score": "8.0",
       "status": "Ongoing",
       "label": "Rabu",
@@ -1163,8 +1223,8 @@
       "title": "Sekai Saikyou no Majo, Hajimemashita",
       "slug": "sekai-saikyou-no-majo",
       "rawSlug": "sekai-saikyou-no-majo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx211778-0MXK5HqVFBYH.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx211778-0MXK5HqVFBYH.jpg",
       "score": "7.9",
       "status": "Ongoing",
       "label": "Rabu",
@@ -1186,8 +1246,8 @@
       "title": "Sora wa Akai Kawa no Hotori",
       "slug": "sora-wa-akai-kawa-no-hotori",
       "rawSlug": "sora-wa-akai-kawa-no-hotori",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1158/158138l.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1158/158138l.jpg",
       "score": "8.3",
       "status": "Ongoing",
       "label": "Kamis",
@@ -1211,8 +1271,8 @@
       "title": "Tensei shitara Ken Deshita Season 2",
       "slug": "tenken-s2",
       "rawSlug": "tenken-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1539/159559.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1539/159559.jpg",
       "score": "8.2",
       "status": "Ongoing",
       "label": "Kamis",
@@ -1235,8 +1295,8 @@
       "title": "Sasaki to Pii-chan Season 2",
       "slug": "sasaki-to-pii-chan-s2",
       "rawSlug": "sasaki-to-pii-chan-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx176314-lpvca6vjmkeO.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx176314-lpvca6vjmkeO.jpg",
       "score": "7.8",
       "status": "Ongoing",
       "label": "Kamis",
@@ -1260,8 +1320,8 @@
       "title": "Kikansha no Mahou wa Tokubetsu desu Season 2",
       "slug": "kikansha-no-mahou-s2",
       "rawSlug": "kikansha-no-mahou-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx172192-W7P5xEUaxF3y.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx172192-W7P5xEUaxF3y.jpg",
       "score": "8.0",
       "status": "Ongoing",
       "label": "Kamis",
@@ -1285,8 +1345,8 @@
       "title": "Tensei shitara Slime Datta Ken Season 4",
       "slug": "slime-s4-sub-indo",
       "rawSlug": "slime-s4-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
       "score": "8.8",
       "status": "Ongoing",
       "label": "Jumat",
@@ -1310,8 +1370,8 @@
       "title": "Kusuriya no Hitorigoto Season 3",
       "slug": "kusuriya-no-hitorigoto-s3",
       "rawSlug": "kusuriya-no-hitorigoto-s3",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1028/160277.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195516-B5M0cPaQbQXI.jpg",
       "score": "8.9",
       "status": "Ongoing",
       "label": "Jumat",
@@ -1334,8 +1394,8 @@
       "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
       "slug": "steel-ball-run-jojo",
       "rawSlug": "steel-ball-run-jojo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
       "score": "9.2",
       "status": "Ongoing",
       "label": "Jumat",
@@ -1360,8 +1420,8 @@
       "title": "Toaru Anbu no ITEM",
       "slug": "toaru-anbu-no-item",
       "rawSlug": "toaru-anbu-no-item",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx186742-v7yfbefc8fuO.png",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx186742-v7yfbefc8fuO.png",
       "score": "8.4",
       "status": "Ongoing",
       "label": "Jumat",
@@ -1384,8 +1444,8 @@
       "title": "Koori no Jouheki Season 2",
       "slug": "koori-no-jouheki-s2",
       "rawSlug": "koori-no-jouheki-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1859/158835l.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1859/158835l.jpg",
       "score": "8.2",
       "status": "Ongoing",
       "label": "Jumat",
@@ -1408,8 +1468,8 @@
       "title": "Hyouken no Majutsushi ga Sekai wo Suberu Season 2",
       "slug": "hyouken-no-majutsushi-s2",
       "rawSlug": "hyouken-no-majutsushi-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx212503-sXBpRZr96c4e.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx212503-sXBpRZr96c4e.jpg",
       "score": "7.6",
       "status": "Ongoing",
       "label": "Jumat",
@@ -1440,6 +1500,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-mokushiroku-mynoghra-subtitle-indonesia",
+      "banner": "https://otakudesu.blog/wp-content/uploads/2025/07/Isekai-Mokushiroku-Mynoghra.jpg",
       "releaseDay": "Rabu",
       "genres": [
         "isekai",
@@ -1459,6 +1520,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-quart-season-3-sub-indo",
+      "banner": "https://otakudesu.blog/wp-content/uploads/2025/11/152103.jpg",
       "releaseDay": "Rabu",
       "genres": [
         "isekai",
@@ -1473,8 +1535,8 @@
       "title": "Solo Leveling Season 2: Arise from the Shadow",
       "slug": "solo-leveling-s2-sub-indo",
       "rawSlug": "solo-leveling-s2-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
       "score": "9.0",
       "status": "Completed",
       "label": "Tamat",
@@ -1572,8 +1634,8 @@
       "title": "Shingeki no Kyojin: The Final Season",
       "slug": "shingeki-no-kyojin-final-season",
       "rawSlug": "shingeki-no-kyojin-final-season",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
       "score": "9.1",
       "status": "Completed",
       "label": "Tamat",
@@ -1599,8 +1661,8 @@
       "title": "Naruto: Shippuuden",
       "slug": "naruto-shippuuden-sub-indo",
       "rawSlug": "naruto-shippuuden-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1565/111305.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1565/111305.jpg",
       "score": "8.7",
       "status": "Completed",
       "label": "Tamat",
@@ -1623,8 +1685,8 @@
       "title": "Bocchi the Rock!",
       "slug": "bocchi-the-rock-sub-indo",
       "rawSlug": "bocchi-the-rock-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/09/series-41-anilist-130003-000629-db6c7d4c.png",
+      "banner": "https://assets.animekita.org/cover/2026/03/09/series-41-anilist-130003-000629-db6c7d4c.png",
       "score": "8.8",
       "status": "Completed",
       "label": "Tamat",
@@ -1646,8 +1708,8 @@
       "title": "86: Eighty Six",
       "slug": "eighty-six-sub-indo",
       "rawSlug": "eighty-six-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/10/series-109-anilist-131586-115948-4b35a64e.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/03/10/series-109-anilist-131586-115948-4b35a64e.jpg",
       "score": "8.7",
       "status": "Completed",
       "label": "Tamat",
@@ -1697,8 +1759,8 @@
       "title": "Kusuriya no Hitorigoto",
       "slug": "kusuriya-no-hitorigoto-sub-indo",
       "rawSlug": "kusuriya-no-hitorigoto-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/05/18/series-149131-anilist-161645-134759-7a72092f.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/05/18/series-149131-anilist-161645-134759-7a72092f.jpg",
       "score": "8.9",
       "status": "Completed",
       "label": "Tamat",
@@ -1721,8 +1783,8 @@
       "title": "Cyberpunk: Edgerunners",
       "slug": "cyberpunk-edgerunners-sub-indo",
       "rawSlug": "cyberpunk-edgerunners-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/05/06/series-149001-anilist-120377-133034-9bbf8872.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/05/06/series-149001-anilist-120377-133034-9bbf8872.jpg",
       "score": "8.7",
       "status": "Completed",
       "label": "Tamat",
@@ -1746,8 +1808,8 @@
       "title": "Mob Psycho 100 II",
       "slug": "mob-psycho-100-s2-sub-indo",
       "rawSlug": "mob-psycho-100-s2-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/28/series-723-anilist-101338-200832-c2e4e0c8.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/03/28/series-723-anilist-101338-200832-c2e4e0c8.jpg",
       "score": "8.9",
       "status": "Completed",
       "label": "Tamat",
@@ -1769,8 +1831,8 @@
       "title": "Yofukashi no Uta (Call of the Night)",
       "slug": "yofukashi-no-uta-sub-indo",
       "rawSlug": "yofukashi-no-uta-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/12/series-212-anilist-141391-144300-3155a7c1.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/03/12/series-212-anilist-141391-144300-3155a7c1.jpg",
       "score": "8.1",
       "status": "Completed",
       "label": "Tamat",
@@ -1794,8 +1856,8 @@
       "title": "Mieruko-chan",
       "slug": "mieruko-chan-sub-indo",
       "rawSlug": "mieruko-chan-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/12/series-164-anilist-131083-130215-eddc912a.png",
+      "banner": "https://assets.animekita.org/cover/2026/03/12/series-164-anilist-131083-130215-eddc912a.png",
       "score": "7.6",
       "status": "Completed",
       "label": "Tamat",
@@ -1825,6 +1887,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-cheat-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/18/series-451-anilist-101547-114235-37bcafbe.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -1844,6 +1907,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=iseleve-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/08/series-15-anilist-153845-234531-41ab8cd5.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -1863,6 +1927,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-de-mofumofu-nadenade-suru-tame-ni-ganbattemasu",
+      "banner": "https://assets.animekita.org/cover/2026/05/06/series-148974-anilist-152072-100436-7a26ebe8.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -1882,6 +1947,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-zakaya-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/04/05/series-1222-anilist-97873-121606-00c69c74.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -1901,6 +1967,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-the-maou-majutsu-subtitle-indonesia%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/27/series-663-anilist-101004-105310-e2c85ad3.png",
       "genres": [
         "isekai",
         "fantasy",
@@ -1923,6 +1990,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=imsdm-s2-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/15/series-303-anilist-117448-095604-4b18aa32.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -1945,6 +2013,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-meikyuu-sub-indo%2F",
+      "banner": "https://animekita.org/cover/Isekai-Meikyuu-de-Harem-wo-Sub-Indo.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -1965,6 +2034,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-no-seikishi-monogatari",
+      "banner": "https://cdn.myanimelist.net/images/anime/2/20345.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -1985,6 +2055,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-nonbiri-nouka-fixed",
+      "banner": "https://cdn.myanimelist.net/images/anime/1983/132329.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -2004,6 +2075,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isenouka-s2-sub-indo",
+      "banner": "https://assets.animekita.org/cover/2026/04/10/series-153607-anilist-197824-225713-1287ba25.png",
       "genres": [
         "isekai",
         "fantasy",
@@ -2023,6 +2095,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-no-ojisan-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/10/series-110-anilist-135806-120014-b48582c0.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -2042,6 +2115,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=one-turn-kill-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/09/series-94-anilist-146234-111828-b614f3b5.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -2060,6 +2134,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-quart-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/15/series-294-anilist-104454-094633-dab285ad.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -2079,6 +2154,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-quart-season-2-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/29/series-822-anilist-110178-115623-f830ebbe.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -2098,6 +2174,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-shikkaku",
+      "banner": "https://assets.animekita.org/cover/2026/05/19/series-149166-anilist-152137-121439-0dff2aa4.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -2118,6 +2195,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-shoku-subtitle-indonesia%2F",
+      "banner": "https://assets.animekita.org/cover/2026/04/05/series-1177-anilist-97617-114620-421f5d0e.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -2137,6 +2215,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-shoku-season-2-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/25/series-617-anilist-132806-200747-22465f23.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -2150,8 +2229,8 @@
       "title": "Kimetsu no Yaiba Movie: Mugenjou-hen",
       "slug": "kimetsu-no-yaiba-movie-mugenjou-hen",
       "rawSlug": "kimetsu-no-yaiba-movie-mugenjou-hen",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1681/148216.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1681/148216.jpg",
       "score": "9.2",
       "status": "Movie",
       "label": "Movie",
@@ -2175,8 +2254,8 @@
       "title": "Chainsaw Man Movie: Reze-hen",
       "slug": "chainsaw-man-movie-reze-hen",
       "rawSlug": "chainsaw-man-movie-reze-hen",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2025/12/d1c70ef4e29c981a.jpg",
+      "banner": "https://assets.animekita.org/cover/2025/12/d1c70ef4e29c981a.jpg",
       "score": "9.0",
       "status": "Movie",
       "label": "Movie",
@@ -2201,8 +2280,8 @@
       "title": "Haikyuu!! Movie: Gomisuteba no Kessen",
       "slug": "haikyuu-movie-gomisuteba-no-kessen",
       "rawSlug": "haikyuu-movie-gomisuteba-no-kessen",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1665/140360l.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1665/140360l.jpg",
       "score": "8.9",
       "status": "Movie",
       "label": "Movie",
@@ -2226,8 +2305,8 @@
       "title": "Jujutsu Kaisen 0 Movie",
       "slug": "jujutsu-kaisen-0-movie",
       "rawSlug": "jujutsu-kaisen-0-movie",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/04/11/series-123333-anilist-131573-150411-0a3b9666.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/04/11/series-123333-anilist-131573-150411-0a3b9666.jpg",
       "score": "8.6",
       "status": "Movie",
       "label": "Movie",
@@ -2251,8 +2330,8 @@
       "title": "Suzume no Tojimari",
       "slug": "suzume-no-tojimari-sub-indo",
       "rawSlug": "suzume-no-tojimari-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/04/11/series-30363-anilist-142770-142628-227d00ca.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/04/11/series-30363-anilist-142770-142628-227d00ca.jpg",
       "score": "8.5",
       "status": "Movie",
       "label": "Movie",
@@ -2275,8 +2354,8 @@
       "title": "Kimi no Na wa. (Your Name.)",
       "slug": "kimi-no-na-wa-sub-indo",
       "rawSlug": "kimi-no-na-wa-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/17/series-442-anilist-21519-120243-243fb6eb.png",
+      "banner": "https://assets.animekita.org/cover/2026/03/17/series-442-anilist-21519-120243-243fb6eb.png",
       "score": "9.0",
       "status": "Movie",
       "label": "Movie",
@@ -2298,8 +2377,8 @@
       "title": "Spy x Family Code: White",
       "slug": "spy-x-family-code-white",
       "rawSlug": "spy-x-family-code-white",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1426/139388.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1426/139388.jpg",
       "score": "8.4",
       "status": "Movie",
       "label": "Movie",
@@ -2321,8 +2400,8 @@
       "title": "Blue Lock: Episode Nagi",
       "slug": "blue-lock-episode-nagi",
       "rawSlug": "blue-lock-episode-nagi",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1239/139928.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1239/139928.jpg",
       "score": "8.1",
       "status": "Movie",
       "label": "Movie",
@@ -2345,8 +2424,8 @@
       "title": "Overlord Movie 3: Sei Oukoku-hen",
       "slug": "overlord-movie-sei-oukoku-hen",
       "rawSlug": "overlord-movie-sei-oukoku-hen",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1954/144101.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1954/144101.jpg",
       "score": "8.2",
       "status": "Movie",
       "label": "Movie",
@@ -2402,6 +2481,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inazuma-eleven-go-vs-danball-senki-w-movie",
+      "banner": "https://cdn.myanimelist.net/images/anime/3/60753l.jpg",
       "genres": [
         "sports",
         "military",
@@ -2420,6 +2500,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inukami-the-movie-tokumei-reiteki-sousakan-karina-shirou",
+      "banner": "https://cdn.myanimelist.net/images/anime/1/2268l.jpg",
       "genres": [
         "drama"
       ]
@@ -2436,6 +2517,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inuyasha-movie-1-toki-wo-koeru-omoi",
+      "banner": "https://cdn.myanimelist.net/images/anime/1683/94370l.jpg",
       "genres": [
         "drama"
       ]
@@ -2452,6 +2534,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inuyasha-movie-2-kagami-no-naka-no-mugenjou",
+      "banner": "https://cdn.myanimelist.net/images/anime/1162/92219l.jpg",
       "genres": [
         "drama"
       ]
@@ -2468,6 +2551,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inuyasha-movie-3-tenka-hadou-no-ken",
+      "banner": "https://cdn.myanimelist.net/images/anime/1658/95332l.jpg",
       "genres": [
         "drama"
       ]
@@ -2484,6 +2568,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inuyasha-movie-4-guren-no-houraijima",
+      "banner": "https://cdn.myanimelist.net/images/anime/1216/94369l.jpg",
       "genres": [
         "drama"
       ]
@@ -2500,6 +2585,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=iris-the-movie-full-energy",
+      "banner": "https://cdn.myanimelist.net/images/anime/1661/141440l.jpg",
       "genres": [
         "drama"
       ]
@@ -2535,8 +2621,8 @@
       "title": "Solo Leveling Season 2: Arise from the Shadow",
       "slug": "solo-leveling-s2-sub-indo",
       "rawSlug": "solo-leveling-s2-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
       "score": "9.0",
       "status": "Completed",
       "label": "Tamat",
@@ -2559,7 +2645,7 @@
       "slug": "1piece-sub-indo",
       "rawSlug": "1piece-sub-indo",
       "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
       "score": "9.1",
       "status": "Ongoing",
       "label": "Minggu",
@@ -2583,8 +2669,8 @@
       "title": "Tensei shitara Slime Datta Ken Season 4",
       "slug": "slime-s4-sub-indo",
       "rawSlug": "slime-s4-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
       "score": "8.8",
       "status": "Ongoing",
       "label": "Jumat",
@@ -2608,8 +2694,8 @@
       "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
       "slug": "steel-ball-run-jojo",
       "rawSlug": "steel-ball-run-jojo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
       "score": "9.2",
       "status": "Ongoing",
       "label": "Jumat",
@@ -2658,8 +2744,8 @@
       "title": "Shingeki no Kyojin: The Final Season",
       "slug": "shingeki-no-kyojin-final-season",
       "rawSlug": "shingeki-no-kyojin-final-season",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
       "score": "9.1",
       "status": "Completed",
       "label": "Tamat",
@@ -2685,8 +2771,8 @@
       "title": "Kusuriya no Hitorigoto",
       "slug": "kusuriya-no-hitorigoto-sub-indo",
       "rawSlug": "kusuriya-no-hitorigoto-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/05/18/series-149131-anilist-161645-134759-7a72092f.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/05/18/series-149131-anilist-161645-134759-7a72092f.jpg",
       "score": "8.9",
       "status": "Completed",
       "label": "Tamat",
@@ -2709,8 +2795,8 @@
       "title": "Bocchi the Rock!",
       "slug": "bocchi-the-rock-sub-indo",
       "rawSlug": "bocchi-the-rock-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/09/series-41-anilist-130003-000629-db6c7d4c.png",
+      "banner": "https://assets.animekita.org/cover/2026/03/09/series-41-anilist-130003-000629-db6c7d4c.png",
       "score": "8.8",
       "status": "Completed",
       "label": "Tamat",
@@ -2732,8 +2818,8 @@
       "title": "Kimetsu no Yaiba Movie: Mugenjou-hen",
       "slug": "kimetsu-no-yaiba-movie-mugenjou-hen",
       "rawSlug": "kimetsu-no-yaiba-movie-mugenjou-hen",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1681/148216.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1681/148216.jpg",
       "score": "9.2",
       "status": "Movie",
       "label": "Movie",
@@ -2759,8 +2845,8 @@
       "title": "Kimetsu no Yaiba Movie: Mugenjou-hen",
       "slug": "kimetsu-no-yaiba-movie-mugenjou-hen",
       "rawSlug": "kimetsu-no-yaiba-movie-mugenjou-hen",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1681/148216.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1681/148216.jpg",
       "score": "9.2",
       "status": "Movie",
       "label": "Movie",
@@ -2784,8 +2870,8 @@
       "title": "Chainsaw Man Movie: Reze-hen",
       "slug": "chainsaw-man-movie-reze-hen",
       "rawSlug": "chainsaw-man-movie-reze-hen",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2025/12/d1c70ef4e29c981a.jpg",
+      "banner": "https://assets.animekita.org/cover/2025/12/d1c70ef4e29c981a.jpg",
       "score": "9.0",
       "status": "Movie",
       "label": "Movie",
@@ -2810,8 +2896,8 @@
       "title": "Haikyuu!! Movie: Gomisuteba no Kessen",
       "slug": "haikyuu-movie-gomisuteba-no-kessen",
       "rawSlug": "haikyuu-movie-gomisuteba-no-kessen",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1665/140360l.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1665/140360l.jpg",
       "score": "8.9",
       "status": "Movie",
       "label": "Movie",
@@ -2835,8 +2921,8 @@
       "title": "Jujutsu Kaisen 0 Movie",
       "slug": "jujutsu-kaisen-0-movie",
       "rawSlug": "jujutsu-kaisen-0-movie",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/04/11/series-123333-anilist-131573-150411-0a3b9666.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/04/11/series-123333-anilist-131573-150411-0a3b9666.jpg",
       "score": "8.6",
       "status": "Movie",
       "label": "Movie",
@@ -2860,8 +2946,8 @@
       "title": "Suzume no Tojimari",
       "slug": "suzume-no-tojimari-sub-indo",
       "rawSlug": "suzume-no-tojimari-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/04/11/series-30363-anilist-142770-142628-227d00ca.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/04/11/series-30363-anilist-142770-142628-227d00ca.jpg",
       "score": "8.5",
       "status": "Movie",
       "label": "Movie",
@@ -2884,8 +2970,8 @@
       "title": "Kimi no Na wa. (Your Name.)",
       "slug": "kimi-no-na-wa-sub-indo",
       "rawSlug": "kimi-no-na-wa-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/17/series-442-anilist-21519-120243-243fb6eb.png",
+      "banner": "https://assets.animekita.org/cover/2026/03/17/series-442-anilist-21519-120243-243fb6eb.png",
       "score": "9.0",
       "status": "Movie",
       "label": "Movie",
@@ -2907,8 +2993,8 @@
       "title": "Solo Leveling Season 2: Arise from the Shadow",
       "slug": "solo-leveling-s2-sub-indo",
       "rawSlug": "solo-leveling-s2-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
       "score": "9.0",
       "status": "Completed",
       "label": "Tamat",
@@ -3006,8 +3092,8 @@
       "title": "Shingeki no Kyojin: The Final Season",
       "slug": "shingeki-no-kyojin-final-season",
       "rawSlug": "shingeki-no-kyojin-final-season",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
       "score": "9.1",
       "status": "Completed",
       "label": "Tamat",
@@ -3033,8 +3119,8 @@
       "title": "Naruto: Shippuuden",
       "slug": "naruto-shippuuden-sub-indo",
       "rawSlug": "naruto-shippuuden-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1565/111305.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1565/111305.jpg",
       "score": "8.7",
       "status": "Completed",
       "label": "Tamat",
@@ -3206,8 +3292,8 @@
           "title": "Bleach: Sennen Kessen-hen - Kashin-tan",
           "slug": "bleach-sennen-kessen-hen-kashin-tan",
           "rawSlug": "bleach-sennen-kessen-hen-kashin-tan",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
           "score": "9.0",
           "status": "Ongoing",
           "label": "Sabtu",
@@ -3230,8 +3316,8 @@
           "title": "Detective Conan",
           "slug": "detective-conan",
           "rawSlug": "detective-conan",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://assets.animekita.org/cover/2026/05/18/series-149020-anilist-235-131016-3aefd890.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/235-MTmiz0uB0fMd.jpg",
           "score": "8.4",
           "status": "Ongoing",
           "label": "Sabtu",
@@ -3254,8 +3340,8 @@
           "title": "Shin Gekijouban☆Keroro Gunsou: Fukkatsu shite Sokkou Chikyuu Metsubou no Kiki de Arimasu!",
           "slug": "shin-keroro-gunsou",
           "rawSlug": "shin-keroro-gunsou",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx216557-9CXz04CEmXOi.png",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx216557-9CXz04CEmXOi.png",
           "score": "7.9",
           "status": "Ongoing",
           "label": "Sabtu",
@@ -3277,8 +3363,8 @@
           "title": "Tougen Anki: Nikko・Kegon no Taki-hen",
           "slug": "tougen-anki-s2",
           "rawSlug": "tougen-anki-s2",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204650-nvK5CuG60WGY.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204650-nvK5CuG60WGY.jpg",
           "score": "8.2",
           "status": "Ongoing",
           "label": "Sabtu",
@@ -3302,8 +3388,8 @@
           "title": "Yasei no Last Boss ga Arawareta! Season 2",
           "slug": "yasei-no-last-boss-s2",
           "rawSlug": "yasei-no-last-boss-s2",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204389-jCoFCeTthDMy.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204389-jCoFCeTthDMy.jpg",
           "score": "8.1",
           "status": "Ongoing",
           "label": "Sabtu",
@@ -3327,8 +3413,8 @@
           "title": "Uchi no Otouto-domo ga Sumimasen",
           "slug": "uchi-no-otouto-domo-ga-sumimasen",
           "rawSlug": "uchi-no-otouto-domo-ga-sumimasen",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1474/160261.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1474/160261.jpg",
           "score": "7.8",
           "status": "Ongoing",
           "label": "Sabtu",
@@ -3351,8 +3437,8 @@
           "title": "Gensou Suikoden",
           "slug": "gensou-suikoden",
           "rawSlug": "gensou-suikoden",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx187316-jucYCojVTjSY.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx187316-jucYCojVTjSY.jpg",
           "score": "8.3",
           "status": "Ongoing",
           "label": "Sabtu",
@@ -3377,8 +3463,8 @@
           "title": "Shiotaiou no Satou-san ga Ore ni dake Amai",
           "slug": "shiotaiou-no-satou-san",
           "rawSlug": "shiotaiou-no-satou-san",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209502-C81oN8M4Smlo.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209502-C81oN8M4Smlo.jpg",
           "score": "7.9",
           "status": "Ongoing",
           "label": "Sabtu",
@@ -3408,7 +3494,7 @@
           "slug": "1piece-sub-indo",
           "rawSlug": "1piece-sub-indo",
           "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
           "score": "9.1",
           "status": "Ongoing",
           "label": "Minggu",
@@ -3432,8 +3518,8 @@
           "title": "Black Clover 2nd Season",
           "slug": "black-clover-s2-sub-indo",
           "rawSlug": "black-clover-s2-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/2/88336l.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195604-lQpCzTziSA17.jpg",
           "score": "8.7",
           "status": "Ongoing",
           "label": "Minggu",
@@ -3457,8 +3543,8 @@
           "title": "Tokyo Revengers: Santen Sensou-hen",
           "slug": "tokyo-revengers-s4",
           "rawSlug": "tokyo-revengers-s4",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1321/159720.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1321/159720.jpg",
           "score": "8.3",
           "status": "Ongoing",
           "label": "Minggu",
@@ -3482,8 +3568,8 @@
           "title": "Ao no Hako Season 2",
           "slug": "ao-no-hako-s2",
           "rawSlug": "ao-no-hako-s2",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1990/160267.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1990/160267.jpg",
           "score": "8.6",
           "status": "Ongoing",
           "label": "Minggu",
@@ -3506,8 +3592,8 @@
           "title": "Aoashi Season 2",
           "slug": "aoashi-s2",
           "rawSlug": "aoashi-s2",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1295/158726.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1295/158726.jpg",
           "score": "8.5",
           "status": "Ongoing",
           "label": "Minggu",
@@ -3529,8 +3615,8 @@
           "title": "Yozakura-san Chi no Daisakusen Season 2",
           "slug": "yozakura-san-s2",
           "rawSlug": "yozakura-san-s2",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx213657-ORNXVEBCjXaz.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx213657-ORNXVEBCjXaz.jpg",
           "score": "8.0",
           "status": "Ongoing",
           "label": "Minggu",
@@ -3560,8 +3646,8 @@
           "title": "Tank Chair",
           "slug": "tank-chair",
           "rawSlug": "tank-chair",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209499-S0sWFrCpft85.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209499-S0sWFrCpft85.jpg",
           "score": "8.1",
           "status": "Ongoing",
           "label": "Senin",
@@ -3584,8 +3670,8 @@
           "title": "Tensei Kizoku, Kantei Skill de Nariagaru Season 3",
           "slug": "tensei-kizoku-kantei-skill-s3",
           "rawSlug": "tensei-kizoku-kantei-skill-s3",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx185756-xPCl0RyQ7fXD.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx185756-xPCl0RyQ7fXD.jpg",
           "score": "8.2",
           "status": "Ongoing",
           "label": "Senin",
@@ -3608,8 +3694,8 @@
           "title": "Temppal (Item no Chikara de Saikyou)",
           "slug": "temppal-item-no-chikara",
           "rawSlug": "temppal-item-no-chikara",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx212888-NhyvqPt5aIuJ.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/212888-ZsnNegBCKXQq.jpg",
           "score": "8.0",
           "status": "Ongoing",
           "label": "Senin",
@@ -3632,8 +3718,8 @@
           "title": "Tensei shitara Goblin datta ken",
           "slug": "tensei-goblin",
           "rawSlug": "tensei-goblin",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209219-3yhKlRx0LX3p.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209219-3yhKlRx0LX3p.jpg",
           "score": "7.8",
           "status": "Ongoing",
           "label": "Senin",
@@ -3663,8 +3749,8 @@
           "title": "Hotaru no Yomeiri",
           "slug": "hotaru-no-yomeiri",
           "rawSlug": "hotaru-no-yomeiri",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx205909-DM0fAzNQulod.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx205909-DM0fAzNQulod.jpg",
           "score": "8.5",
           "status": "Ongoing",
           "label": "Selasa",
@@ -3688,8 +3774,8 @@
           "title": "Shinja Zero no Megami-sama to Hajimeru Isekai Kouryaku",
           "slug": "shinja-zero-isekai",
           "rawSlug": "shinja-zero-isekai",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx205896-ElrV8oVAsuax.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx205896-ElrV8oVAsuax.jpg",
           "score": "7.7",
           "status": "Ongoing",
           "label": "Selasa",
@@ -3714,8 +3800,8 @@
           "title": "Psyren",
           "slug": "psyren",
           "rawSlug": "psyren",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204011-j45RZoqYbdZK.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204011-j45RZoqYbdZK.jpg",
           "score": "8.4",
           "status": "Ongoing",
           "label": "Selasa",
@@ -3740,8 +3826,8 @@
           "title": "Kyouran Reijou Nia Liston",
           "slug": "kyouran-reijou-nia-liston",
           "rawSlug": "kyouran-reijou-nia-liston",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx206949-4HYI3YuP0eLI.png",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx206949-4HYI3YuP0eLI.png",
           "score": "7.9",
           "status": "Ongoing",
           "label": "Selasa",
@@ -3770,8 +3856,8 @@
           "title": "Chitose-kun wa Ramune Bin no Naka Season 2",
           "slug": "chitose-kun-s2",
           "rawSlug": "chitose-kun-s2",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx198727-BL0JTpg0G8tq.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx198727-BL0JTpg0G8tq.jpg",
           "score": "8.1",
           "status": "Ongoing",
           "label": "Rabu",
@@ -3794,8 +3880,8 @@
           "title": "Tantei wa Mou, Shindeiru. Season 2",
           "slug": "tanmoshi-s2",
           "rawSlug": "tanmoshi-s2",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1414/160406.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1414/160406.jpg",
           "score": "7.8",
           "status": "Ongoing",
           "label": "Rabu",
@@ -3818,8 +3904,8 @@
           "title": "Tsuihou sareta Tensei Juukishi wa Game Chishiki de Musou suru",
           "slug": "tsuihou-tensei-juukishi",
           "rawSlug": "tsuihou-tensei-juukishi",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx180136-gtMTCRlOD4OE.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx180136-gtMTCRlOD4OE.jpg",
           "score": "8.0",
           "status": "Ongoing",
           "label": "Rabu",
@@ -3843,8 +3929,8 @@
           "title": "Sekai Saikyou no Majo, Hajimemashita",
           "slug": "sekai-saikyou-no-majo",
           "rawSlug": "sekai-saikyou-no-majo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx211778-0MXK5HqVFBYH.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx211778-0MXK5HqVFBYH.jpg",
           "score": "7.9",
           "status": "Ongoing",
           "label": "Rabu",
@@ -3873,8 +3959,8 @@
           "title": "Sora wa Akai Kawa no Hotori",
           "slug": "sora-wa-akai-kawa-no-hotori",
           "rawSlug": "sora-wa-akai-kawa-no-hotori",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1158/158138l.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1158/158138l.jpg",
           "score": "8.3",
           "status": "Ongoing",
           "label": "Kamis",
@@ -3898,8 +3984,8 @@
           "title": "Tensei shitara Ken Deshita Season 2",
           "slug": "tenken-s2",
           "rawSlug": "tenken-s2",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1539/159559.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1539/159559.jpg",
           "score": "8.2",
           "status": "Ongoing",
           "label": "Kamis",
@@ -3922,8 +4008,8 @@
           "title": "Sasaki to Pii-chan Season 2",
           "slug": "sasaki-to-pii-chan-s2",
           "rawSlug": "sasaki-to-pii-chan-s2",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx176314-lpvca6vjmkeO.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx176314-lpvca6vjmkeO.jpg",
           "score": "7.8",
           "status": "Ongoing",
           "label": "Kamis",
@@ -3947,8 +4033,8 @@
           "title": "Kikansha no Mahou wa Tokubetsu desu Season 2",
           "slug": "kikansha-no-mahou-s2",
           "rawSlug": "kikansha-no-mahou-s2",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx172192-W7P5xEUaxF3y.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx172192-W7P5xEUaxF3y.jpg",
           "score": "8.0",
           "status": "Ongoing",
           "label": "Kamis",
@@ -3979,8 +4065,8 @@
           "title": "Tensei shitara Slime Datta Ken Season 4",
           "slug": "slime-s4-sub-indo",
           "rawSlug": "slime-s4-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
           "score": "8.8",
           "status": "Ongoing",
           "label": "Jumat",
@@ -4004,8 +4090,8 @@
           "title": "Kusuriya no Hitorigoto Season 3",
           "slug": "kusuriya-no-hitorigoto-s3",
           "rawSlug": "kusuriya-no-hitorigoto-s3",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1028/160277.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195516-B5M0cPaQbQXI.jpg",
           "score": "8.9",
           "status": "Ongoing",
           "label": "Jumat",
@@ -4028,8 +4114,8 @@
           "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
           "slug": "steel-ball-run-jojo",
           "rawSlug": "steel-ball-run-jojo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
           "score": "9.2",
           "status": "Ongoing",
           "label": "Jumat",
@@ -4054,8 +4140,8 @@
           "title": "Toaru Anbu no ITEM",
           "slug": "toaru-anbu-no-item",
           "rawSlug": "toaru-anbu-no-item",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx186742-v7yfbefc8fuO.png",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx186742-v7yfbefc8fuO.png",
           "score": "8.4",
           "status": "Ongoing",
           "label": "Jumat",
@@ -4078,8 +4164,8 @@
           "title": "Koori no Jouheki Season 2",
           "slug": "koori-no-jouheki-s2",
           "rawSlug": "koori-no-jouheki-s2",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1859/158835l.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1859/158835l.jpg",
           "score": "8.2",
           "status": "Ongoing",
           "label": "Jumat",
@@ -4102,8 +4188,8 @@
           "title": "Hyouken no Majutsushi ga Sekai wo Suberu Season 2",
           "slug": "hyouken-no-majutsushi-s2",
           "rawSlug": "hyouken-no-majutsushi-s2",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx212503-sXBpRZr96c4e.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx212503-sXBpRZr96c4e.jpg",
           "score": "7.6",
           "status": "Ongoing",
           "label": "Jumat",
@@ -4130,15 +4216,9 @@
       "title": "One Piece",
       "slug": "1piece-sub-indo",
       "rawSlug": "1piece-sub-indo",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
       "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-      "score": "9.1",
-      "status": "Ongoing",
-      "label": "Minggu",
-      "releaseDay": "Minggu",
-      "episode": "Ep 1180",
-      "episodeId": "al-150441-1180",
-      "views": "306,964",
+      "synopsis": "Petualangan epik Monkey D. Luffy dan kru Bajak Laut Topi Jerami mengarungi Grand Line mencari harta karun legendaris One Piece untuk menjadi Raja Bajak Laut.",
       "genres": [
         "action",
         "adventure",
@@ -4146,7 +4226,13 @@
         "fantasy",
         "shounen"
       ],
-      "synopsis": "Petualangan epik Monkey D. Luffy dan kru Bajak Laut Topi Jerami mengarungi Grand Line mencari harta karun legendaris One Piece untuk menjadi Raja Bajak Laut.",
+      "status": "Ongoing",
+      "score": "9.1",
+      "episode": "Ep 1180",
+      "episodeId": "al-150441-1180",
+      "label": "Minggu",
+      "releaseDay": "Minggu",
+      "views": "306,964",
       "year": "1999",
       "type": "TV",
       "sourceUrl": "https://ylnime.com/index.php?series=1piece-sub-indo"
@@ -4155,15 +4241,9 @@
       "title": "Tensei shitara Slime Datta Ken Season 4",
       "slug": "slime-s4-sub-indo",
       "rawSlug": "slime-s4-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
-      "score": "8.8",
-      "status": "Ongoing",
-      "label": "Jumat",
-      "releaseDay": "Jumat",
-      "episode": "Ep 21",
-      "episodeId": "al-153297-21",
-      "views": "128,450",
+      "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+      "synopsis": "Rimuru Tempest memperluas aliansi diplomatik dan teknologi Jura Tempest sambil menghadapi manuver rahasia klan Rozzo.",
       "genres": [
         "action",
         "adventure",
@@ -4171,7 +4251,13 @@
         "fantasy",
         "isekai"
       ],
-      "synopsis": "Rimuru Tempest memperluas aliansi diplomatik dan teknologi Jura Tempest sambil menghadapi manuver rahasia klan Rozzo.",
+      "status": "Ongoing",
+      "score": "8.8",
+      "episode": "Ep 21",
+      "episodeId": "al-153297-21",
+      "label": "Jumat",
+      "releaseDay": "Jumat",
+      "views": "128,450",
       "year": "2026",
       "type": "TV",
       "sourceUrl": "https://ylnime.com/index.php?series=slime-s4-sub-indo"
@@ -4180,22 +4266,22 @@
       "title": "Bleach: Sennen Kessen-hen - Kashin-tan",
       "slug": "bleach-sennen-kessen-hen-kashin-tan",
       "rawSlug": "bleach-sennen-kessen-hen-kashin-tan",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
-      "score": "9.0",
-      "status": "Ongoing",
-      "label": "Sabtu",
-      "releaseDay": "Sabtu",
-      "episode": "Ep 9",
-      "episodeId": "al-154222-9",
-      "views": "94,210",
+      "banner": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
+      "synopsis": "Cour penutup Thousand-Year Blood War yang mempertemukan Ichigo Kurosaki dan para Kapten melawan kekuatan tertinggi Yhwach.",
       "genres": [
         "action",
         "adventure",
         "supernatural",
         "shounen"
       ],
-      "synopsis": "Cour penutup Thousand-Year Blood War yang mempertemukan Ichigo Kurosaki dan para Kapten melawan kekuatan tertinggi Yhwach.",
+      "status": "Ongoing",
+      "score": "9.0",
+      "episode": "Ep 9",
+      "episodeId": "al-154222-9",
+      "label": "Sabtu",
+      "releaseDay": "Sabtu",
+      "views": "94,210",
       "year": "2026",
       "type": "TV",
       "sourceUrl": "https://ylnime.com/index.php?series=bleach-sennen-kessen-hen-kashin-tan"
@@ -4204,23 +4290,24 @@
       "title": "Black Clover 2nd Season",
       "slug": "black-clover-s2-sub-indo",
       "rawSlug": "black-clover-s2-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
-      "score": "8.7",
-      "status": "Ongoing",
-      "label": "Minggu",
-      "releaseDay": "Minggu",
-      "episode": "Ep 3",
-      "episodeId": "al-154261-3",
-      "views": "88,120",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195604-lQpCzTziSA17.jpg",
+      "poster": "https://cdn.myanimelist.net/images/anime/2/88336l.jpg",
+      "synopsis": "Asta dan Yuno kembali berlomba menuju takhta Kaisar Sihir dalam pertempuran besar melawan ancaman Kerajaan Spade.",
       "genres": [
         "action",
         "comedy",
         "fantasy",
         "magic",
-        "shounen"
+        "shounen",
+        "adventure"
       ],
-      "synopsis": "Asta dan Yuno kembali berlomba menuju takhta Kaisar Sihir dalam pertempuran besar melawan ancaman Kerajaan Spade.",
+      "status": "Ongoing",
+      "score": "8.7",
+      "episode": "Ep 3",
+      "episodeId": "al-154261-3",
+      "label": "Minggu",
+      "releaseDay": "Minggu",
+      "views": "88,120",
       "year": "2026",
       "type": "TV",
       "sourceUrl": "https://ylnime.com/index.php?series=black-clover-s2-sub-indo"
@@ -4229,8 +4316,8 @@
       "title": "Tokyo Revengers: Santen Sensou-hen",
       "slug": "tokyo-revengers-s4",
       "rawSlug": "tokyo-revengers-s4",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1321/159720.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1321/159720.jpg",
       "score": "8.3",
       "status": "Ongoing",
       "label": "Minggu",
@@ -4254,22 +4341,22 @@
       "title": "Kusuriya no Hitorigoto Season 3",
       "slug": "kusuriya-no-hitorigoto-s3",
       "rawSlug": "kusuriya-no-hitorigoto-s3",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
-      "score": "8.9",
-      "status": "Ongoing",
-      "label": "Jumat",
-      "releaseDay": "Jumat",
-      "episode": "Ep 4",
-      "episodeId": "al-154210-4",
-      "views": "72,300",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195516-B5M0cPaQbQXI.jpg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1028/160277.jpg",
+      "synopsis": "Apoteker cerdik Maomao menyelidiki konspirasi baru di provinsi barat dan istana dalam bersama Jinshi.",
       "genres": [
         "drama",
         "mystery",
         "historical",
         "seinen"
       ],
-      "synopsis": "Apoteker cerdik Maomao menyelidiki konspirasi baru di provinsi barat dan istana dalam bersama Jinshi.",
+      "status": "Ongoing",
+      "score": "8.9",
+      "episode": "Ep 4",
+      "episodeId": "al-154210-4",
+      "label": "Jumat",
+      "releaseDay": "Jumat",
+      "views": "72,300",
       "year": "2026",
       "type": "TV",
       "sourceUrl": "https://ylnime.com/index.php?series=kusuriya-no-hitorigoto-s3"
@@ -4278,22 +4365,22 @@
       "title": "Detective Conan",
       "slug": "detective-conan",
       "rawSlug": "detective-conan",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
-      "score": "8.4",
-      "status": "Ongoing",
-      "label": "Sabtu",
-      "releaseDay": "Sabtu",
-      "episode": "Ep 1196",
-      "episodeId": "al-149020-1196",
-      "views": "110,415",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/235-MTmiz0uB0fMd.jpg",
+      "poster": "https://assets.animekita.org/cover/2026/05/18/series-149020-anilist-235-131016-3aefd890.jpg",
+      "synopsis": "Shinichi Kudo yang menyusut menjadi Conan Edogawa terus memecahkan kasus pembunuhan rumit sembari memburu Organisasi Hitam.",
       "genres": [
         "adventure",
         "comedy",
         "mystery",
         "shounen"
       ],
-      "synopsis": "Shinichi Kudo yang menyusut menjadi Conan Edogawa terus memecahkan kasus pembunuhan rumit sembari memburu Organisasi Hitam.",
+      "status": "Ongoing",
+      "score": "8.4",
+      "episode": "Ep 1196",
+      "episodeId": "al-149020-1196",
+      "label": "Sabtu",
+      "releaseDay": "Sabtu",
+      "views": "110,415",
       "year": "1996",
       "type": "TV",
       "sourceUrl": "https://ylnime.com/index.php?series=detective-conan"
@@ -4302,8 +4389,8 @@
       "title": "Shin Gekijouban☆Keroro Gunsou: Fukkatsu shite Sokkou Chikyuu Metsubou no Kiki de Arimasu!",
       "slug": "shin-keroro-gunsou",
       "rawSlug": "shin-keroro-gunsou",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx216557-9CXz04CEmXOi.png",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx216557-9CXz04CEmXOi.png",
       "score": "7.9",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -4325,8 +4412,8 @@
       "title": "Tougen Anki: Nikko・Kegon no Taki-hen",
       "slug": "tougen-anki-s2",
       "rawSlug": "tougen-anki-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204650-nvK5CuG60WGY.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204650-nvK5CuG60WGY.jpg",
       "score": "8.2",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -4350,8 +4437,8 @@
       "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
       "slug": "steel-ball-run-jojo",
       "rawSlug": "steel-ball-run-jojo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
       "score": "9.2",
       "status": "Ongoing",
       "label": "Jumat",
@@ -4376,8 +4463,8 @@
       "title": "Yasei no Last Boss ga Arawareta! Season 2",
       "slug": "yasei-no-last-boss-s2",
       "rawSlug": "yasei-no-last-boss-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204389-jCoFCeTthDMy.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204389-jCoFCeTthDMy.jpg",
       "score": "8.1",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -4401,8 +4488,8 @@
       "title": "Uchi no Otouto-domo ga Sumimasen",
       "slug": "uchi-no-otouto-domo-ga-sumimasen",
       "rawSlug": "uchi-no-otouto-domo-ga-sumimasen",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1474/160261.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1474/160261.jpg",
       "score": "7.8",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -4425,8 +4512,8 @@
       "title": "Gensou Suikoden",
       "slug": "gensou-suikoden",
       "rawSlug": "gensou-suikoden",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx187316-jucYCojVTjSY.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx187316-jucYCojVTjSY.jpg",
       "score": "8.3",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -4451,8 +4538,8 @@
       "title": "Shiotaiou no Satou-san ga Ore ni dake Amai",
       "slug": "shiotaiou-no-satou-san",
       "rawSlug": "shiotaiou-no-satou-san",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209502-C81oN8M4Smlo.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209502-C81oN8M4Smlo.jpg",
       "score": "7.9",
       "status": "Ongoing",
       "label": "Sabtu",
@@ -4474,8 +4561,8 @@
       "title": "Ao no Hako Season 2",
       "slug": "ao-no-hako-s2",
       "rawSlug": "ao-no-hako-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1990/160267.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1990/160267.jpg",
       "score": "8.6",
       "status": "Ongoing",
       "label": "Minggu",
@@ -4498,8 +4585,8 @@
       "title": "Aoashi Season 2",
       "slug": "aoashi-s2",
       "rawSlug": "aoashi-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1295/158726.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1295/158726.jpg",
       "score": "8.5",
       "status": "Ongoing",
       "label": "Minggu",
@@ -4521,8 +4608,8 @@
       "title": "Yozakura-san Chi no Daisakusen Season 2",
       "slug": "yozakura-san-s2",
       "rawSlug": "yozakura-san-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx213657-ORNXVEBCjXaz.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx213657-ORNXVEBCjXaz.jpg",
       "score": "8.0",
       "status": "Ongoing",
       "label": "Minggu",
@@ -4545,8 +4632,8 @@
       "title": "Tank Chair",
       "slug": "tank-chair",
       "rawSlug": "tank-chair",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209499-S0sWFrCpft85.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209499-S0sWFrCpft85.jpg",
       "score": "8.1",
       "status": "Ongoing",
       "label": "Senin",
@@ -4569,8 +4656,8 @@
       "title": "Tensei Kizoku, Kantei Skill de Nariagaru Season 3",
       "slug": "tensei-kizoku-kantei-skill-s3",
       "rawSlug": "tensei-kizoku-kantei-skill-s3",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx185756-xPCl0RyQ7fXD.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx185756-xPCl0RyQ7fXD.jpg",
       "score": "8.2",
       "status": "Ongoing",
       "label": "Senin",
@@ -4593,8 +4680,8 @@
       "title": "Temppal (Item no Chikara de Saikyou)",
       "slug": "temppal-item-no-chikara",
       "rawSlug": "temppal-item-no-chikara",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx212888-NhyvqPt5aIuJ.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/212888-ZsnNegBCKXQq.jpg",
       "score": "8.0",
       "status": "Ongoing",
       "label": "Senin",
@@ -4617,8 +4704,8 @@
       "title": "Tensei shitara Goblin datta ken",
       "slug": "tensei-goblin",
       "rawSlug": "tensei-goblin",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209219-3yhKlRx0LX3p.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209219-3yhKlRx0LX3p.jpg",
       "score": "7.8",
       "status": "Ongoing",
       "label": "Senin",
@@ -4641,8 +4728,8 @@
       "title": "Hotaru no Yomeiri",
       "slug": "hotaru-no-yomeiri",
       "rawSlug": "hotaru-no-yomeiri",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx205909-DM0fAzNQulod.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx205909-DM0fAzNQulod.jpg",
       "score": "8.5",
       "status": "Ongoing",
       "label": "Selasa",
@@ -4666,8 +4753,8 @@
       "title": "Shinja Zero no Megami-sama to Hajimeru Isekai Kouryaku",
       "slug": "shinja-zero-isekai",
       "rawSlug": "shinja-zero-isekai",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx205896-ElrV8oVAsuax.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx205896-ElrV8oVAsuax.jpg",
       "score": "7.7",
       "status": "Ongoing",
       "label": "Selasa",
@@ -4692,8 +4779,8 @@
       "title": "Psyren",
       "slug": "psyren",
       "rawSlug": "psyren",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204011-j45RZoqYbdZK.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204011-j45RZoqYbdZK.jpg",
       "score": "8.4",
       "status": "Ongoing",
       "label": "Selasa",
@@ -4718,8 +4805,8 @@
       "title": "Kyouran Reijou Nia Liston",
       "slug": "kyouran-reijou-nia-liston",
       "rawSlug": "kyouran-reijou-nia-liston",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx206949-4HYI3YuP0eLI.png",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx206949-4HYI3YuP0eLI.png",
       "score": "7.9",
       "status": "Ongoing",
       "label": "Selasa",
@@ -4741,8 +4828,8 @@
       "title": "Chitose-kun wa Ramune Bin no Naka Season 2",
       "slug": "chitose-kun-s2",
       "rawSlug": "chitose-kun-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx198727-BL0JTpg0G8tq.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx198727-BL0JTpg0G8tq.jpg",
       "score": "8.1",
       "status": "Ongoing",
       "label": "Rabu",
@@ -4765,8 +4852,8 @@
       "title": "Tantei wa Mou, Shindeiru. Season 2",
       "slug": "tanmoshi-s2",
       "rawSlug": "tanmoshi-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1414/160406.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1414/160406.jpg",
       "score": "7.8",
       "status": "Ongoing",
       "label": "Rabu",
@@ -4789,8 +4876,8 @@
       "title": "Tsuihou sareta Tensei Juukishi wa Game Chishiki de Musou suru",
       "slug": "tsuihou-tensei-juukishi",
       "rawSlug": "tsuihou-tensei-juukishi",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx180136-gtMTCRlOD4OE.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx180136-gtMTCRlOD4OE.jpg",
       "score": "8.0",
       "status": "Ongoing",
       "label": "Rabu",
@@ -4814,8 +4901,8 @@
       "title": "Sekai Saikyou no Majo, Hajimemashita",
       "slug": "sekai-saikyou-no-majo",
       "rawSlug": "sekai-saikyou-no-majo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx211778-0MXK5HqVFBYH.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx211778-0MXK5HqVFBYH.jpg",
       "score": "7.9",
       "status": "Ongoing",
       "label": "Rabu",
@@ -4837,8 +4924,8 @@
       "title": "Sora wa Akai Kawa no Hotori",
       "slug": "sora-wa-akai-kawa-no-hotori",
       "rawSlug": "sora-wa-akai-kawa-no-hotori",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1158/158138l.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1158/158138l.jpg",
       "score": "8.3",
       "status": "Ongoing",
       "label": "Kamis",
@@ -4862,8 +4949,8 @@
       "title": "Tensei shitara Ken Deshita Season 2",
       "slug": "tenken-s2",
       "rawSlug": "tenken-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1539/159559.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1539/159559.jpg",
       "score": "8.2",
       "status": "Ongoing",
       "label": "Kamis",
@@ -4886,8 +4973,8 @@
       "title": "Sasaki to Pii-chan Season 2",
       "slug": "sasaki-to-pii-chan-s2",
       "rawSlug": "sasaki-to-pii-chan-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx176314-lpvca6vjmkeO.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx176314-lpvca6vjmkeO.jpg",
       "score": "7.8",
       "status": "Ongoing",
       "label": "Kamis",
@@ -4911,8 +4998,8 @@
       "title": "Kikansha no Mahou wa Tokubetsu desu Season 2",
       "slug": "kikansha-no-mahou-s2",
       "rawSlug": "kikansha-no-mahou-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx172192-W7P5xEUaxF3y.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx172192-W7P5xEUaxF3y.jpg",
       "score": "8.0",
       "status": "Ongoing",
       "label": "Kamis",
@@ -4936,8 +5023,8 @@
       "title": "Toaru Anbu no ITEM",
       "slug": "toaru-anbu-no-item",
       "rawSlug": "toaru-anbu-no-item",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx186742-v7yfbefc8fuO.png",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx186742-v7yfbefc8fuO.png",
       "score": "8.4",
       "status": "Ongoing",
       "label": "Jumat",
@@ -4960,8 +5047,8 @@
       "title": "Koori no Jouheki Season 2",
       "slug": "koori-no-jouheki-s2",
       "rawSlug": "koori-no-jouheki-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1859/158835l.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1859/158835l.jpg",
       "score": "8.2",
       "status": "Ongoing",
       "label": "Jumat",
@@ -4984,8 +5071,8 @@
       "title": "Hyouken no Majutsushi ga Sekai wo Suberu Season 2",
       "slug": "hyouken-no-majutsushi-s2",
       "rawSlug": "hyouken-no-majutsushi-s2",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx212503-sXBpRZr96c4e.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx212503-sXBpRZr96c4e.jpg",
       "score": "7.6",
       "status": "Ongoing",
       "label": "Jumat",
@@ -5016,13 +5103,13 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-mokushiroku-mynoghra-subtitle-indonesia",
+      "banner": "https://otakudesu.blog/wp-content/uploads/2025/07/Isekai-Mokushiroku-Mynoghra.jpg",
       "genres": [
         "isekai",
         "fantasy",
         "adventure"
       ],
-      "releaseDay": "Rabu",
-      "banner": "https://otakudesu.blog/wp-content/uploads/2025/07/Isekai-Mokushiroku-Mynoghra.jpg"
+      "releaseDay": "Rabu"
     },
     {
       "title": "Isekai Quartet Season 3",
@@ -5036,34 +5123,34 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-quart-season-3-sub-indo",
+      "banner": "https://otakudesu.blog/wp-content/uploads/2025/11/152103.jpg",
       "genres": [
         "isekai",
         "fantasy",
         "adventure",
         "comedy"
       ],
-      "releaseDay": "Rabu",
-      "banner": "https://otakudesu.blog/wp-content/uploads/2025/11/152103.jpg"
+      "releaseDay": "Rabu"
     },
     {
       "title": "Solo Leveling Season 2: Arise from the Shadow",
       "slug": "solo-leveling-s2-sub-indo",
       "rawSlug": "solo-leveling-s2-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
-      "score": "9.0",
-      "status": "Completed",
-      "label": "Tamat",
-      "releaseDay": "",
-      "episode": "13 Ep",
-      "episodeId": "al-150340-13",
-      "views": "412,900",
+      "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+      "synopsis": "Sung Jin-Woo menguji batas kekuatan barunya sebagai Shadow Monarch hingga pertempuran bersejarah di Pulau Jeju.",
       "genres": [
         "action",
         "adventure",
         "fantasy"
       ],
-      "synopsis": "Sung Jin-Woo menguji batas kekuatan barunya sebagai Shadow Monarch hingga pertempuran bersejarah di Pulau Jeju.",
+      "status": "Completed",
+      "score": "9.0",
+      "episode": "13 Ep",
+      "episodeId": "al-150340-13",
+      "label": "Tamat",
+      "releaseDay": "",
+      "views": "412,900",
       "year": "2025",
       "type": "TV",
       "sourceUrl": "https://ylnime.com/index.php?series=solo-leveling-s2-sub-indo"
@@ -5148,8 +5235,8 @@
       "title": "Shingeki no Kyojin: The Final Season",
       "slug": "shingeki-no-kyojin-final-season",
       "rawSlug": "shingeki-no-kyojin-final-season",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
       "score": "9.1",
       "status": "Completed",
       "label": "Tamat",
@@ -5175,8 +5262,8 @@
       "title": "Naruto: Shippuuden",
       "slug": "naruto-shippuuden-sub-indo",
       "rawSlug": "naruto-shippuuden-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1565/111305.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1565/111305.jpg",
       "score": "8.7",
       "status": "Completed",
       "label": "Tamat",
@@ -5199,8 +5286,8 @@
       "title": "Bocchi the Rock!",
       "slug": "bocchi-the-rock-sub-indo",
       "rawSlug": "bocchi-the-rock-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/09/series-41-anilist-130003-000629-db6c7d4c.png",
+      "banner": "https://assets.animekita.org/cover/2026/03/09/series-41-anilist-130003-000629-db6c7d4c.png",
       "score": "8.8",
       "status": "Completed",
       "label": "Tamat",
@@ -5222,8 +5309,8 @@
       "title": "86: Eighty Six",
       "slug": "eighty-six-sub-indo",
       "rawSlug": "eighty-six-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/10/series-109-anilist-131586-115948-4b35a64e.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/03/10/series-109-anilist-131586-115948-4b35a64e.jpg",
       "score": "8.7",
       "status": "Completed",
       "label": "Tamat",
@@ -5273,8 +5360,8 @@
       "title": "Kusuriya no Hitorigoto",
       "slug": "kusuriya-no-hitorigoto-sub-indo",
       "rawSlug": "kusuriya-no-hitorigoto-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/05/18/series-149131-anilist-161645-134759-7a72092f.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/05/18/series-149131-anilist-161645-134759-7a72092f.jpg",
       "score": "8.9",
       "status": "Completed",
       "label": "Tamat",
@@ -5297,8 +5384,8 @@
       "title": "Cyberpunk: Edgerunners",
       "slug": "cyberpunk-edgerunners-sub-indo",
       "rawSlug": "cyberpunk-edgerunners-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/05/06/series-149001-anilist-120377-133034-9bbf8872.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/05/06/series-149001-anilist-120377-133034-9bbf8872.jpg",
       "score": "8.7",
       "status": "Completed",
       "label": "Tamat",
@@ -5322,8 +5409,8 @@
       "title": "Mob Psycho 100 II",
       "slug": "mob-psycho-100-s2-sub-indo",
       "rawSlug": "mob-psycho-100-s2-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/28/series-723-anilist-101338-200832-c2e4e0c8.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/03/28/series-723-anilist-101338-200832-c2e4e0c8.jpg",
       "score": "8.9",
       "status": "Completed",
       "label": "Tamat",
@@ -5345,8 +5432,8 @@
       "title": "Yofukashi no Uta (Call of the Night)",
       "slug": "yofukashi-no-uta-sub-indo",
       "rawSlug": "yofukashi-no-uta-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/12/series-212-anilist-141391-144300-3155a7c1.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/03/12/series-212-anilist-141391-144300-3155a7c1.jpg",
       "score": "8.1",
       "status": "Completed",
       "label": "Tamat",
@@ -5370,8 +5457,8 @@
       "title": "Mieruko-chan",
       "slug": "mieruko-chan-sub-indo",
       "rawSlug": "mieruko-chan-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/12/series-164-anilist-131083-130215-eddc912a.png",
+      "banner": "https://assets.animekita.org/cover/2026/03/12/series-164-anilist-131083-130215-eddc912a.png",
       "score": "7.6",
       "status": "Completed",
       "label": "Tamat",
@@ -5393,8 +5480,8 @@
       "title": "Kimetsu no Yaiba Movie: Mugenjou-hen",
       "slug": "kimetsu-no-yaiba-movie-mugenjou-hen",
       "rawSlug": "kimetsu-no-yaiba-movie-mugenjou-hen",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1681/148216.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1681/148216.jpg",
       "score": "9.2",
       "status": "Movie",
       "label": "Movie",
@@ -5418,8 +5505,8 @@
       "title": "Chainsaw Man Movie: Reze-hen",
       "slug": "chainsaw-man-movie-reze-hen",
       "rawSlug": "chainsaw-man-movie-reze-hen",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2025/12/d1c70ef4e29c981a.jpg",
+      "banner": "https://assets.animekita.org/cover/2025/12/d1c70ef4e29c981a.jpg",
       "score": "9.0",
       "status": "Movie",
       "label": "Movie",
@@ -5444,8 +5531,8 @@
       "title": "Haikyuu!! Movie: Gomisuteba no Kessen",
       "slug": "haikyuu-movie-gomisuteba-no-kessen",
       "rawSlug": "haikyuu-movie-gomisuteba-no-kessen",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1665/140360l.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1665/140360l.jpg",
       "score": "8.9",
       "status": "Movie",
       "label": "Movie",
@@ -5469,8 +5556,8 @@
       "title": "Jujutsu Kaisen 0 Movie",
       "slug": "jujutsu-kaisen-0-movie",
       "rawSlug": "jujutsu-kaisen-0-movie",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/04/11/series-123333-anilist-131573-150411-0a3b9666.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/04/11/series-123333-anilist-131573-150411-0a3b9666.jpg",
       "score": "8.6",
       "status": "Movie",
       "label": "Movie",
@@ -5494,8 +5581,8 @@
       "title": "Suzume no Tojimari",
       "slug": "suzume-no-tojimari-sub-indo",
       "rawSlug": "suzume-no-tojimari-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/04/11/series-30363-anilist-142770-142628-227d00ca.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/04/11/series-30363-anilist-142770-142628-227d00ca.jpg",
       "score": "8.5",
       "status": "Movie",
       "label": "Movie",
@@ -5518,8 +5605,8 @@
       "title": "Kimi no Na wa. (Your Name.)",
       "slug": "kimi-no-na-wa-sub-indo",
       "rawSlug": "kimi-no-na-wa-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/03/17/series-442-anilist-21519-120243-243fb6eb.png",
+      "banner": "https://assets.animekita.org/cover/2026/03/17/series-442-anilist-21519-120243-243fb6eb.png",
       "score": "9.0",
       "status": "Movie",
       "label": "Movie",
@@ -5541,8 +5628,8 @@
       "title": "Spy x Family Code: White",
       "slug": "spy-x-family-code-white",
       "rawSlug": "spy-x-family-code-white",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1426/139388.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1426/139388.jpg",
       "score": "8.4",
       "status": "Movie",
       "label": "Movie",
@@ -5564,8 +5651,8 @@
       "title": "Blue Lock: Episode Nagi",
       "slug": "blue-lock-episode-nagi",
       "rawSlug": "blue-lock-episode-nagi",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1239/139928.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1239/139928.jpg",
       "score": "8.1",
       "status": "Movie",
       "label": "Movie",
@@ -5588,8 +5675,8 @@
       "title": "Overlord Movie 3: Sei Oukoku-hen",
       "slug": "overlord-movie-sei-oukoku-hen",
       "rawSlug": "overlord-movie-sei-oukoku-hen",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1954/144101.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1954/144101.jpg",
       "score": "8.2",
       "status": "Movie",
       "label": "Movie",
@@ -5622,6 +5709,7 @@
       "episodeId": "",
       "views": "92,140",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-quartet-movie-another-world",
+      "banner": "https://cdn.myanimelist.net/images/anime/1222/122000.jpg",
       "genres": [
         "comedy",
         "fantasy",
@@ -5629,7 +5717,6 @@
         "adventure"
       ],
       "releaseDay": "",
-      "banner": "https://cdn.myanimelist.net/images/anime/1222/122000.jpg",
       "synopsis": "Para protagonis lintas dunia terlempar melalui wormhole baru ke dunia tandus yang dikuasai golem mekanis raksasa.",
       "year": "2022",
       "type": "Movie"
@@ -5646,14 +5733,14 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-cheat-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/18/series-451-anilist-101547-114235-37bcafbe.jpg",
       "genres": [
         "isekai",
         "fantasy",
         "adventure",
         "magic"
       ],
-      "releaseDay": "",
-      "banner": "https://assets.animekita.org/cover/2026/03/18/series-451-anilist-101547-114235-37bcafbe.jpg"
+      "releaseDay": ""
     },
     {
       "title": "Isekai de Cheat Skill wo Te ni Shita Ore wa",
@@ -5667,14 +5754,14 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=iseleve-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/08/series-15-anilist-153845-234531-41ab8cd5.jpg",
       "genres": [
         "isekai",
         "fantasy",
         "adventure",
         "magic"
       ],
-      "releaseDay": "",
-      "banner": "https://assets.animekita.org/cover/2026/03/08/series-15-anilist-153845-234531-41ab8cd5.jpg"
+      "releaseDay": ""
     },
     {
       "title": "Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu.",
@@ -5688,14 +5775,14 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-de-mofumofu-nadenade-suru-tame-ni-ganbattemasu",
+      "banner": "https://assets.animekita.org/cover/2026/05/06/series-148974-anilist-152072-100436-7a26ebe8.jpg",
       "genres": [
         "isekai",
         "fantasy",
         "adventure",
         "comedy"
       ],
-      "releaseDay": "",
-      "banner": "https://assets.animekita.org/cover/2026/05/06/series-148974-anilist-152072-100436-7a26ebe8.jpg"
+      "releaseDay": ""
     },
     {
       "title": "Isekai Izakaya",
@@ -5709,14 +5796,14 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-zakaya-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/04/05/series-1222-anilist-97873-121606-00c69c74.jpg",
       "genres": [
         "isekai",
         "fantasy",
         "adventure",
         "comedy"
       ],
-      "releaseDay": "",
-      "banner": "https://assets.animekita.org/cover/2026/04/05/series-1222-anilist-97873-121606-00c69c74.jpg"
+      "releaseDay": ""
     },
     {
       "title": "Isekai Maou to Shoukan Shoujo no Dorei Majutsu",
@@ -5730,6 +5817,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-the-maou-majutsu-subtitle-indonesia%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/27/series-663-anilist-101004-105310-e2c85ad3.png",
       "genres": [
         "isekai",
         "fantasy",
@@ -5739,8 +5827,7 @@
         "magic",
         "demons"
       ],
-      "releaseDay": "",
-      "banner": "https://assets.animekita.org/cover/2026/03/27/series-663-anilist-101004-105310-e2c85ad3.png"
+      "releaseDay": ""
     },
     {
       "title": "Isekai Maou to Shoukan Shoujo no Dorei Majutsu Season 2",
@@ -5754,6 +5841,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=imsdm-s2-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/15/series-303-anilist-117448-095604-4b18aa32.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -5763,8 +5851,7 @@
         "magic",
         "demons"
       ],
-      "releaseDay": "",
-      "banner": "https://assets.animekita.org/cover/2026/03/15/series-303-anilist-117448-095604-4b18aa32.jpg"
+      "releaseDay": ""
     },
     {
       "title": "Isekai Meikyuu de Harem wo",
@@ -5778,6 +5865,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-meikyuu-sub-indo%2F",
+      "banner": "https://animekita.org/cover/Isekai-Meikyuu-de-Harem-wo-Sub-Indo.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -5785,8 +5873,7 @@
         "harem",
         "ecchi"
       ],
-      "releaseDay": "",
-      "banner": "https://animekita.org/cover/Isekai-Meikyuu-de-Harem-wo-Sub-Indo.jpg"
+      "releaseDay": ""
     },
     {
       "title": "Isekai no Seikishi Monogatari",
@@ -5800,6 +5887,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-no-seikishi-monogatari",
+      "banner": "https://cdn.myanimelist.net/images/anime/2/20345.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -5807,8 +5895,7 @@
         "harem",
         "ecchi"
       ],
-      "releaseDay": "",
-      "banner": "https://cdn.myanimelist.net/images/anime/2/20345.jpg"
+      "releaseDay": ""
     },
     {
       "title": "Isekai Nonbiri Nouka",
@@ -5822,14 +5909,14 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-nonbiri-nouka-fixed",
+      "banner": "https://cdn.myanimelist.net/images/anime/1983/132329.jpg",
       "genres": [
         "isekai",
         "fantasy",
         "adventure",
         "comedy"
       ],
-      "releaseDay": "",
-      "banner": "https://cdn.myanimelist.net/images/anime/1983/132329.jpg"
+      "releaseDay": ""
     },
     {
       "title": "Isekai Nonbiri Nouka Season 2",
@@ -5843,14 +5930,14 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isenouka-s2-sub-indo",
+      "banner": "https://assets.animekita.org/cover/2026/04/10/series-153607-anilist-197824-225713-1287ba25.png",
       "genres": [
         "isekai",
         "fantasy",
         "adventure",
         "comedy"
       ],
-      "releaseDay": "",
-      "banner": "https://assets.animekita.org/cover/2026/04/10/series-153607-anilist-197824-225713-1287ba25.png"
+      "releaseDay": ""
     },
     {
       "title": "Isekai Ojisan",
@@ -5864,14 +5951,14 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-no-ojisan-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/10/series-110-anilist-135806-120014-b48582c0.jpg",
       "genres": [
         "isekai",
         "fantasy",
         "adventure",
         "comedy"
       ],
-      "releaseDay": "",
-      "banner": "https://assets.animekita.org/cover/2026/03/10/series-110-anilist-135806-120014-b48582c0.jpg"
+      "releaseDay": ""
     },
     {
       "title": "Isekai One Turn Kill Neesan",
@@ -5885,13 +5972,13 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=one-turn-kill-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/09/series-94-anilist-146234-111828-b614f3b5.jpg",
       "genres": [
         "isekai",
         "fantasy",
         "adventure"
       ],
-      "releaseDay": "",
-      "banner": "https://assets.animekita.org/cover/2026/03/09/series-94-anilist-146234-111828-b614f3b5.jpg"
+      "releaseDay": ""
     },
     {
       "title": "Isekai Quartet",
@@ -5905,14 +5992,14 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-quart-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/15/series-294-anilist-104454-094633-dab285ad.jpg",
       "genres": [
         "isekai",
         "fantasy",
         "adventure",
         "comedy"
       ],
-      "releaseDay": "",
-      "banner": "https://assets.animekita.org/cover/2026/03/15/series-294-anilist-104454-094633-dab285ad.jpg"
+      "releaseDay": ""
     },
     {
       "title": "Isekai Quartet Season 2",
@@ -5926,14 +6013,14 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-quart-season-2-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/29/series-822-anilist-110178-115623-f830ebbe.jpg",
       "genres": [
         "isekai",
         "fantasy",
         "adventure",
         "comedy"
       ],
-      "releaseDay": "",
-      "banner": "https://assets.animekita.org/cover/2026/03/29/series-822-anilist-110178-115623-f830ebbe.jpg"
+      "releaseDay": ""
     },
     {
       "title": "Isekai Shikkaku",
@@ -5947,6 +6034,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-shikkaku",
+      "banner": "https://assets.animekita.org/cover/2026/05/19/series-149166-anilist-152137-121439-0dff2aa4.jpg",
       "genres": [
         "isekai",
         "fantasy",
@@ -5954,8 +6042,7 @@
         "psychological",
         "thriller"
       ],
-      "releaseDay": "",
-      "banner": "https://assets.animekita.org/cover/2026/05/19/series-149166-anilist-152137-121439-0dff2aa4.jpg"
+      "releaseDay": ""
     },
     {
       "title": "Isekai Shokudou",
@@ -5969,14 +6056,14 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-shoku-subtitle-indonesia%2F",
+      "banner": "https://assets.animekita.org/cover/2026/04/05/series-1177-anilist-97617-114620-421f5d0e.jpg",
       "genres": [
         "isekai",
         "fantasy",
         "adventure",
         "comedy"
       ],
-      "releaseDay": "",
-      "banner": "https://assets.animekita.org/cover/2026/04/05/series-1177-anilist-97617-114620-421f5d0e.jpg"
+      "releaseDay": ""
     },
     {
       "title": "Isekai Shokudou Season 2",
@@ -5990,14 +6077,14 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-shoku-season-2-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/25/series-617-anilist-132806-200747-22465f23.jpg",
       "genres": [
         "isekai",
         "fantasy",
         "adventure",
         "comedy"
       ],
-      "releaseDay": "",
-      "banner": "https://assets.animekita.org/cover/2026/03/25/series-617-anilist-132806-200747-22465f23.jpg"
+      "releaseDay": ""
     },
     {
       "title": "I Am The Blade",
@@ -6011,6 +6098,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=i-am-the-blade",
+      "banner": "https://assets.animekita.org/cover/2026/02/c0919df47dc106d4.webp",
       "genres": [
         "drama"
       ]
@@ -6027,6 +6115,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=i-am-ying-tai",
+      "banner": "https://assets.animekita.org/cover/2026/02/78bc8203555d8b36.webp",
       "genres": [
         "drama"
       ]
@@ -6043,6 +6132,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=i-byeol-e-pil-yohan",
+      "banner": "https://cdn.myanimelist.net/images/anime/1371/149504l.jpg",
       "genres": [
         "drama"
       ]
@@ -6059,6 +6149,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=i-can-have-infinite-enlightenment",
+      "banner": "https://assets.animekita.org/cover/2026/02/da6314a9bbad6add.webp",
       "genres": [
         "drama"
       ]
@@ -6075,6 +6166,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=i-collect-waste-in-heaven",
+      "banner": "https://assets.animekita.org/cover/2026/02/1669ea73537dadd0.webp",
       "genres": [
         "drama"
       ]
@@ -6091,6 +6183,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=i-have-refined-qi-for-3000-years",
+      "banner": "https://assets.animekita.org/cover/2026/02/8045f23520b36a18.jpg",
       "genres": [
         "drama"
       ]
@@ -6107,6 +6200,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=i-picked-up-an-attribute",
+      "banner": "https://assets.animekita.org/cover/2026/02/30123783be71e2a2.jpg",
       "genres": [
         "drama"
       ]
@@ -6123,6 +6217,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=is-pure",
+      "banner": "https://cdn.myanimelist.net/images/anime/1555/134512l.jpg",
       "genres": [
         "drama"
       ]
@@ -6139,6 +6234,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ibara-no-ou",
+      "banner": "https://cdn.myanimelist.net/images/anime/9/87056l.jpg",
       "genres": [
         "drama"
       ]
@@ -6155,6 +6251,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ibitte-konai-gibo-to-gishi",
+      "banner": "https://cdn.myanimelist.net/images/anime/1912/157082l.jpg",
       "genres": [
         "drama"
       ]
@@ -6171,6 +6268,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ichiban-ushiro-daimaou-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/15/series-310-anilist-7088-100412-ed12ac44.png",
       "genres": [
         "demons"
       ]
@@ -6187,6 +6285,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ichigo-mashiro-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/04/09/series-1408-anilist-488-132836-2dd2e507.png",
       "genres": [
         "drama"
       ]
@@ -6203,6 +6302,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ichijouma-mankitsugurashi-sub-indo",
+      "banner": "https://otakudesu.blog/wp-content/uploads/2026/04/Ichijouma-Mankitsugurashi-Sub.jpg",
       "genres": [
         "drama"
       ]
@@ -6219,6 +6319,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=invade-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/04/06/series-1254-anilist-110350-131349-b4435e76.png",
       "genres": [
         "drama"
       ]
@@ -6235,6 +6336,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=idaman-polsek-season-3-(tokyo-revengers-season-3)",
+      "banner": "https://assets.animekita.org/cover/2026/05/04/series-148932-anilist-163329-212750-90cb7abd.jpg",
       "genres": [
         "drama"
       ]
@@ -6251,6 +6353,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=idaten-jump",
+      "banner": "https://cdn.myanimelist.net/images/anime/1691/133569.jpg",
       "genres": [
         "drama"
       ]
@@ -6267,6 +6370,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=idol-jihen",
+      "banner": "https://cdn.myanimelist.net/images/anime/1137/117403l.jpg",
       "genres": [
         "music"
       ]
@@ -6283,6 +6387,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=idol-memories",
+      "banner": "https://cdn.myanimelist.net/images/anime/6/80935l.jpg",
       "genres": [
         "music"
       ]
@@ -6299,6 +6404,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=idolish7",
+      "banner": "https://cdn.myanimelist.net/images/anime/1390/90828l.jpg",
       "genres": [
         "music"
       ]
@@ -6315,6 +6421,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=idolish7-second-beat",
+      "banner": "https://cdn.myanimelist.net/images/anime/1962/106361l.jpg",
       "genres": [
         "music"
       ]
@@ -6331,6 +6438,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=idolish7-third-beat",
+      "banner": "https://cdn.myanimelist.net/images/anime/1646/115723l.jpg",
       "genres": [
         "music"
       ]
@@ -6347,6 +6455,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=idolish7-vibrato",
+      "banner": "https://cdn.myanimelist.net/images/anime/1131/90676l.jpg",
       "genres": [
         "music"
       ]
@@ -6363,6 +6472,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=idoly-pride",
+      "banner": "https://cdn.myanimelist.net/images/anime/1025/111962l.jpg",
       "genres": [
         "music"
       ]
@@ -6379,6 +6489,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ie-naki-ko-remy",
+      "banner": "https://cdn.myanimelist.net/images/anime/12/26250l.jpg",
       "genres": [
         "drama"
       ]
@@ -6395,6 +6506,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=igano-kabamaru",
+      "banner": "https://cdn.myanimelist.net/images/anime/1526/151643l.jpg",
       "genres": [
         "drama"
       ]
@@ -6411,6 +6523,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ijiranaide-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/24/series-596-anilist-120697-135129-8deba5dd.jpg",
       "genres": [
         "romance"
       ]
@@ -6427,6 +6540,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ijiranaide-s2-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/16/series-391-anilist-140596-075857-a9e95bfe.jpg",
       "genres": [
         "romance"
       ]
@@ -6443,6 +6557,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ikebukuro-gate-park-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/27/series-671-anilist-111324-110106-d91ee228.jpg",
       "genres": [
         "drama"
       ]
@@ -6459,6 +6574,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=iketeru-futari",
+      "banner": "https://cdn.myanimelist.net/images/anime/5/19958l.jpg",
       "genres": [
         "music"
       ]
@@ -6475,6 +6591,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ikkitousen",
+      "banner": "https://cdn.myanimelist.net/images/anime/1097/133583l.jpg",
       "genres": [
         "drama"
       ]
@@ -6491,6 +6608,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ikkitousen-dragon-destiny",
+      "banner": "https://cdn.myanimelist.net/images/anime/6/85202l.jpg",
       "genres": [
         "drama"
       ]
@@ -6507,6 +6625,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ikkitousen-great-guardians",
+      "banner": "https://cdn.myanimelist.net/images/anime/2/22922l.jpg",
       "genres": [
         "drama"
       ]
@@ -6523,6 +6642,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ikkitousen-xtreme-xecutor",
+      "banner": "https://cdn.myanimelist.net/images/anime/2/18209l.jpg",
       "genres": [
         "drama"
       ]
@@ -6539,6 +6659,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ikoku-meiro-no-croisee-the-animation",
+      "banner": "https://cdn.myanimelist.net/images/anime/6/74051l.jpg",
       "genres": [
         "drama"
       ]
@@ -6555,6 +6676,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ikoku-nikki-sub-indo",
+      "banner": "https://cdn.myanimelist.net/images/anime/1791/154233l.jpg",
       "genres": [
         "drama"
       ]
@@ -6571,6 +6693,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ima-soko-ni-iru-boku",
+      "banner": "https://cdn.myanimelist.net/images/anime/1094/109008l.jpg",
       "genres": [
         "drama"
       ]
@@ -6587,6 +6710,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=imawa-no-kuni-no-alice",
+      "banner": "https://cdn.myanimelist.net/images/anime/1004/96669l.jpg",
       "genres": [
         "drama"
       ]
@@ -6603,6 +6727,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=immemorial-love-for-you",
+      "banner": "https://assets.animekita.org/cover/2026/02/0046133a93e35036.jpg",
       "genres": [
         "romance"
       ]
@@ -6619,6 +6744,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=immortal-tomb",
+      "banner": "https://assets.animekita.org/cover/2026/02/c1ad31e13aa05551.jpg",
       "genres": [
         "drama"
       ]
@@ -6635,6 +6761,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=immortality",
+      "banner": "https://assets.animekita.org/cover/2026/02/b69add7389bd4b00.jpg",
       "genres": [
         "drama"
       ]
@@ -6651,6 +6778,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=immortality-season-2",
+      "banner": "https://assets.animekita.org/cover/2026/02/b635ec633f173d09.webp",
       "genres": [
         "drama"
       ]
@@ -6667,6 +6795,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=immortality-season-3",
+      "banner": "https://assets.animekita.org/cover/2026/02/24035016c2ba612f.webp",
       "genres": [
         "drama"
       ]
@@ -6683,6 +6812,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=immortality-season-4",
+      "banner": "https://assets.animekita.org/cover/2026/02/e8243459ad01208e.webp",
       "genres": [
         "drama"
       ]
@@ -6699,6 +6829,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=immortality-season-5",
+      "banner": "https://assets.animekita.org/cover/2026/02/f780c405e000227c.webp",
       "genres": [
         "drama"
       ]
@@ -6715,6 +6846,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=immortals-of-the-godless",
+      "banner": "https://assets.animekita.org/cover/2026/02/0af3d112db61b6e4.png",
       "genres": [
         "drama"
       ]
@@ -6731,6 +6863,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=imouto-sae-ireba-subtitle-indonesia%2F",
+      "banner": "https://assets.animekita.org/cover/2026/04/06/series-1299-anilist-98596-134614-c4b4b996.jpg",
       "genres": [
         "drama"
       ]
@@ -6747,6 +6880,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=imouto-sae-ireba-ii-ona",
+      "banner": "https://cdn.myanimelist.net/images/anime/9/89847l.jpg",
       "genres": [
         "drama"
       ]
@@ -6755,7 +6889,7 @@
       "title": "In Progres-M01",
       "slug": "in-progres-m01",
       "rawSlug": "in-progres-m01",
-      "poster": "https://myanimelist.net/images/anime/1141/142503.jpg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1141/142503.jpg",
       "score": "",
       "status": "Completed",
       "label": "",
@@ -6763,6 +6897,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=in-progres-m01",
+      "banner": "https://cdn.myanimelist.net/images/anime/1141/142503.jpg",
       "genres": [
         "drama"
       ]
@@ -6779,6 +6914,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inari-iroha-subtitle-indonesia%2F",
+      "banner": "https://assets.animekita.org/cover/2026/05/02/series-1258-anilist-20488-202726-815c06b4.jpg",
       "genres": [
         "romance"
       ]
@@ -6795,6 +6931,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inazuma-eleven-go",
+      "banner": "https://cdn.myanimelist.net/images/anime/2/48959.jpg",
       "genres": [
         "sports"
       ]
@@ -6811,6 +6948,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inazuma-eleven-go-vs-danball-senki-w-movie",
+      "banner": "https://cdn.myanimelist.net/images/anime/3/60753l.jpg",
       "genres": [
         "sports",
         "military",
@@ -6829,6 +6967,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inazuma-eleven-go-chrono-stonee",
+      "banner": "https://cdn.myanimelist.net/images/anime/1619/94705.jpg",
       "genres": [
         "sports"
       ]
@@ -6845,6 +6984,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inazuma-eleven-go-galaxy",
+      "banner": "https://cdn.myanimelist.net/images/anime/2/49743l.jpg",
       "genres": [
         "sports"
       ]
@@ -6861,6 +7001,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inazuma-eleven-go-kyuukyoku-no-kizuna-gryphon",
+      "banner": "https://cdn.myanimelist.net/images/anime/1615/146476l.jpg",
       "genres": [
         "sports"
       ]
@@ -6877,6 +7018,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inazuma-eleven-ares-no-tenbin",
+      "banner": "https://cdn.myanimelist.net/images/anime/1460/96891l.jpg",
       "genres": [
         "sports"
       ]
@@ -6893,6 +7035,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inazuma-eleven-chou-jigen-dream-match",
+      "banner": "https://cdn.myanimelist.net/images/anime/3/62875l.jpg",
       "genres": [
         "sports"
       ]
@@ -6909,6 +7052,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inazuma-eleven-orion-no-kokuin",
+      "banner": "https://cdn.myanimelist.net/images/anime/1965/117638l.jpg",
       "genres": [
         "sports"
       ]
@@ -6925,6 +7069,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inazuma-eleven-saikyou-gundan-ogre-shuurai",
+      "banner": "https://cdn.myanimelist.net/images/anime/12/31189l.jpg",
       "genres": [
         "sports"
       ]
@@ -6941,6 +7086,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=incomparable-demon-king",
+      "banner": "https://assets.animekita.org/cover/2026/02/9efe2726493a8b20.jpg",
       "genres": [
         "demons"
       ]
@@ -6957,6 +7103,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inferno-cop",
+      "banner": "https://cdn.myanimelist.net/images/anime/2/47037l.jpg",
       "genres": [
         "drama"
       ]
@@ -6973,6 +7120,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=infinite-drogram-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/23/series-524-anilist-107420-235846-b380e667.jpg",
       "genres": [
         "drama"
       ]
@@ -6989,6 +7137,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=infinite-stats-subtitle-indonesia%2F",
+      "banner": "https://assets.animekita.org/cover/2026/04/02/series-1035-anilist-9041-191853-c568d1c7.jpg",
       "genres": [
         "harem",
         "ecchi",
@@ -7008,6 +7157,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ingress-the-animation",
+      "banner": "https://cdn.myanimelist.net/images/anime/1944/93421l.jpg",
       "genres": [
         "drama"
       ]
@@ -7024,6 +7174,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=initial-d-fifth-stage",
+      "banner": "https://cdn.myanimelist.net/images/anime/1563/119898.jpg",
       "genres": [
         "sports"
       ]
@@ -7040,6 +7191,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=initial-d-final-stage-2-2",
+      "banner": "https://cdn.myanimelist.net/images/anime/1404/101364.jpg",
       "genres": [
         "sports"
       ]
@@ -7056,6 +7208,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=initial-d-first-stage-1-1",
+      "banner": "https://cdn.myanimelist.net/images/anime/1384/127972.jpg",
       "genres": [
         "sports"
       ]
@@ -7072,6 +7225,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=initial-d-fourth-stage-(season-4)",
+      "banner": "https://assets.animekita.org/cover/2026/05/03/series-148912-anilist-18-205859-58801a7a.jpg",
       "genres": [
         "sports"
       ]
@@ -7088,6 +7242,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=initial-d-second-stage-2-2",
+      "banner": "https://cdn.myanimelist.net/images/anime/8/12750.jpg",
       "genres": [
         "sports"
       ]
@@ -7104,6 +7259,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=initial-d-third-stage-2-2",
+      "banner": "https://cdn.myanimelist.net/images/anime/13/40397.jpg",
       "genres": [
         "sports"
       ]
@@ -7120,6 +7276,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inou-wa-battle-nichijou-subtitle-indonesia%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/18/series-477-anilist-20646-115253-48f6fb3b.jpg",
       "genres": [
         "drama"
       ]
@@ -7136,6 +7293,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inu-suki-hirowareta-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/12/series-226-anilist-146346-150300-f0d08cca.png",
       "genres": [
         "drama"
       ]
@@ -7152,6 +7310,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inu-to-hasami-wa-tsukaiyou",
+      "banner": "https://cdn.myanimelist.net/images/anime/13/56313l.jpg",
       "genres": [
         "drama"
       ]
@@ -7168,6 +7327,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inu-to-neko-docchi-mo-katteru-to-mainichi-tanoshii",
+      "banner": "https://cdn.myanimelist.net/images/anime/1332/109356l.jpg",
       "genres": [
         "drama"
       ]
@@ -7184,6 +7344,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inu-x-boku-ss",
+      "banner": "https://assets.animekita.org/cover/2026/03/31/series-927-anilist-11013-104433-dd1e7715.jpg",
       "genres": [
         "drama"
       ]
@@ -7200,6 +7361,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inu-ou",
+      "banner": "https://cdn.myanimelist.net/images/anime/1682/121461l.jpg",
       "genres": [
         "drama"
       ]
@@ -7216,6 +7378,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inugami-san-to-nekoyama-san",
+      "banner": "https://cdn.myanimelist.net/images/anime/4/61921l.jpg",
       "genres": [
         "drama"
       ]
@@ -7232,6 +7395,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inugami-san-to-nekoyama-san-nekoyama-san-to-onsen-ryokou",
+      "banner": "https://cdn.myanimelist.net/images/anime/1016/115623l.jpg",
       "genres": [
         "drama"
       ]
@@ -7248,6 +7412,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inukami",
+      "banner": "https://cdn.myanimelist.net/images/anime/1405/110246l.jpg",
       "genres": [
         "drama"
       ]
@@ -7264,6 +7429,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inukami-the-movie-tokumei-reiteki-sousakan-karina-shirou",
+      "banner": "https://cdn.myanimelist.net/images/anime/1/2268l.jpg",
       "genres": [
         "drama"
       ]
@@ -7280,6 +7446,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inuyasha-2-fix",
+      "banner": "https://cdn.myanimelist.net/images/anime/1589/95329.jpg",
       "genres": [
         "drama"
       ]
@@ -7296,6 +7463,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inuyasha-movie-1-toki-wo-koeru-omoi",
+      "banner": "https://cdn.myanimelist.net/images/anime/1683/94370l.jpg",
       "genres": [
         "drama"
       ]
@@ -7312,6 +7480,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inuyasha-movie-2-kagami-no-naka-no-mugenjou",
+      "banner": "https://cdn.myanimelist.net/images/anime/1162/92219l.jpg",
       "genres": [
         "drama"
       ]
@@ -7328,6 +7497,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inuyasha-movie-3-tenka-hadou-no-ken",
+      "banner": "https://cdn.myanimelist.net/images/anime/1658/95332l.jpg",
       "genres": [
         "drama"
       ]
@@ -7344,6 +7514,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inuyasha-movie-4-guren-no-houraijima",
+      "banner": "https://cdn.myanimelist.net/images/anime/1216/94369l.jpg",
       "genres": [
         "drama"
       ]
@@ -7360,6 +7531,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=inuyashik-subtitle-indonesia%2F",
+      "banner": "https://assets.animekita.org/cover/2026/04/03/series-1060-anilist-97922-192715-5e4e10fc.jpg",
       "genres": [
         "horror",
         "supernatural"
@@ -7377,6 +7549,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ippon-bouchou-mantarou",
+      "banner": "https://cdn.myanimelist.net/images/anime/1501/111468l.jpg",
       "genres": [
         "sports"
       ]
@@ -7393,6 +7566,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=iria-zeiram-the-animation",
+      "banner": "https://cdn.myanimelist.net/images/anime/1193/112905l.jpg",
       "genres": [
         "drama"
       ]
@@ -7409,6 +7583,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=iriya-no-sora-ufo-no-natsu",
+      "banner": "https://cdn.myanimelist.net/images/anime/1108/94990l.jpg",
       "genres": [
         "drama"
       ]
@@ -7425,6 +7600,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=irodorimidori",
+      "banner": "https://cdn.myanimelist.net/images/anime/1635/120395l.jpg",
       "genres": [
         "drama"
       ]
@@ -7441,6 +7617,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=irozuku-sekai-ashita-kara-subtitle-indonesia%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/16/series-378-anilist-101316-075100-e3a1c494.png",
       "genres": [
         "drama"
       ]
@@ -7457,6 +7634,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=irregular-hunter-x-the-day-of-sigma",
+      "banner": "https://cdn.myanimelist.net/images/anime/3/9131l.jpg",
       "genres": [
         "drama"
       ]
@@ -7473,6 +7651,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=infinite-stros-2-subtitle-indonesia%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/25/series-644-anilist-18247-201649-31bdf40e.jpg",
       "genres": [
         "harem",
         "ecchi",
@@ -7492,6 +7671,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isenido-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/08/series-11-anilist-140754-233819-0bf8accc.png",
       "genres": [
         "isekai",
         "fantasy"
@@ -7509,6 +7689,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-suicide-squad",
+      "banner": "https://assets.animekita.org/cover/2026/05/18/series-149136-anilist-166710-135024-791a260d.jpg",
       "genres": [
         "isekai",
         "fantasy"
@@ -7526,6 +7707,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-smartphone-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/27/series-680-anilist-98491-110435-c116ea27.jpg",
       "genres": [
         "isekai",
         "fantasy"
@@ -7543,6 +7725,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-wa-smartphone-to-tomo-ni-season-2",
+      "banner": "https://assets.animekita.org/cover/2026/03/08/series-4-anilist-147571-213718-6f75ee28.png",
       "genres": [
         "isekai",
         "fantasy"
@@ -7560,6 +7743,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-yakkyoku-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/18/series-483-anilist-136707-115835-77ff2708.jpg",
       "genres": [
         "isekai",
         "fantasy"
@@ -7577,6 +7761,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isekai-yururi-kikou-kosodateshinagara-boukensha-shimasu",
+      "banner": "https://assets.animekita.org/cover/2026/05/19/series-149178-anilist-171031-122214-8ae7d426.jpg",
       "genres": [
         "isekai",
         "fantasy"
@@ -7594,6 +7779,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ishura-2",
+      "banner": "https://cdn.myanimelist.net/images/anime/1364/140875.jpg",
       "genres": [
         "drama"
       ]
@@ -7610,6 +7796,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ishura-2nd-season",
+      "banner": "https://cdn.myanimelist.net/images/anime/1699/146979.jpg",
       "genres": [
         "drama"
       ]
@@ -7626,6 +7813,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=landis-subtitle-indonesia%2F",
+      "banner": "https://assets.animekita.org/cover/2026/04/05/series-1161-anilist-21712-113609-febbe955.jpg",
       "genres": [
         "drama"
       ]
@@ -7642,6 +7830,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isshuukan-friends%2F",
+      "banner": "https://assets.animekita.org/cover/2026/03/15/series-296-anilist-20527-094719-786ecf52.png",
       "genres": [
         "drama"
       ]
@@ -7658,6 +7847,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=isca-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/04/03/series-1140-anilist-20746-204709-dedd349e.jpg",
       "genres": [
         "drama"
       ]
@@ -7674,6 +7864,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=its-my-life",
+      "banner": "https://cdn.myanimelist.net/images/anime/1998/105349l.jpg",
       "genres": [
         "drama"
       ]
@@ -7690,6 +7881,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=itazura-majo-to-nemuranai-machi",
+      "banner": "https://cdn.myanimelist.net/images/anime/3/89169l.jpg",
       "genres": [
         "magic",
         "fantasy"
@@ -7707,6 +7899,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=itazura-na-kiss",
+      "banner": "https://cdn.myanimelist.net/images/anime/10/19933l.jpg",
       "genres": [
         "drama"
       ]
@@ -7723,6 +7916,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=itou-junji%3A-collection",
+      "banner": "https://assets.animekita.org/cover/2026/05/03/series-148918-anilist-99940-221245-edfca301.jpg",
       "genres": [
         "horror",
         "supernatural"
@@ -7740,6 +7934,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=itou-junji%3A-maniac",
+      "banner": "https://cdn.myanimelist.net/images/anime/1956/132879l.jpg",
       "genres": [
         "horror",
         "supernatural"
@@ -7757,6 +7952,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=itsudatte-bokura-no-koi-wa-10-cm-datta",
+      "banner": "https://cdn.myanimelist.net/images/anime/1015/123541l.jpg",
       "genres": [
         "romance"
       ]
@@ -7773,6 +7969,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=itsuka-aeru-kimi-ni",
+      "banner": "https://cdn.myanimelist.net/images/anime/1104/112106l.jpg",
       "genres": [
         "drama"
       ]
@@ -7789,6 +7986,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=itsuka-tenma-no-kuro-usagi",
+      "banner": "https://cdn.myanimelist.net/images/anime/5/75197l.jpg",
       "genres": [
         "drama"
       ]
@@ -7805,6 +8003,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=iwa-kakeru-sub-indo%2F",
+      "banner": "https://assets.animekita.org/cover/2026/04/03/series-1123-anilist-117757-203708-d2588ebe.png",
       "genres": [
         "drama"
       ]
@@ -7821,6 +8020,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=iwamoto-suisen-sub-indo",
+      "banner": "https://cdn.myanimelist.net/images/anime/1112/158450l.jpg",
       "genres": [
         "drama"
       ]
@@ -7837,6 +8037,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=ixion-saga-dt",
+      "banner": "https://cdn.myanimelist.net/images/anime/8/42863l.jpg",
       "genres": [
         "drama"
       ]
@@ -7853,6 +8054,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=izure-saikyou-no-renkinjutsushi",
+      "banner": "https://cdn.myanimelist.net/images/anime/1431/146222.jpg",
       "genres": [
         "drama"
       ]
@@ -7869,6 +8071,7 @@
       "episodeId": "",
       "views": "",
       "sourceUrl": "https://ylnime.com/index.php?series=iris-the-movie-full-energy",
+      "banner": "https://cdn.myanimelist.net/images/anime/1661/141440l.jpg",
       "genres": [
         "drama"
       ]
@@ -8133,8 +8336,8 @@
           "title": "Solo Leveling Season 2: Arise from the Shadow",
           "slug": "solo-leveling-s2-sub-indo",
           "rawSlug": "solo-leveling-s2-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
           "score": "9.0",
           "status": "Completed",
           "label": "Tamat",
@@ -8156,8 +8359,8 @@
           "title": "Tensei shitara Slime Datta Ken Season 4",
           "slug": "slime-s4-sub-indo",
           "rawSlug": "slime-s4-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
           "score": "8.8",
           "status": "Ongoing",
           "label": "Jumat",
@@ -8181,8 +8384,8 @@
           "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
           "slug": "steel-ball-run-jojo",
           "rawSlug": "steel-ball-run-jojo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
           "score": "9.2",
           "status": "Ongoing",
           "label": "Jumat",
@@ -8231,8 +8434,8 @@
           "title": "Shingeki no Kyojin: The Final Season",
           "slug": "shingeki-no-kyojin-final-season",
           "rawSlug": "shingeki-no-kyojin-final-season",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
+          "banner": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
           "score": "9.1",
           "status": "Completed",
           "label": "Tamat",
@@ -8261,8 +8464,8 @@
       "title": "Tensei shitara Slime Datta Ken Season 4",
       "slug": "slime-s4-sub-indo",
       "rawSlug": "slime-s4-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
       "score": "8.8",
       "status": "Ongoing",
       "type": "TV",
@@ -8491,8 +8694,8 @@
           "title": "Solo Leveling Season 2: Arise from the Shadow",
           "slug": "solo-leveling-s2-sub-indo",
           "rawSlug": "solo-leveling-s2-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
           "score": "9.0",
           "status": "Completed",
           "label": "Tamat",
@@ -8515,7 +8718,7 @@
           "slug": "1piece-sub-indo",
           "rawSlug": "1piece-sub-indo",
           "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
           "score": "9.1",
           "status": "Ongoing",
           "label": "Minggu",
@@ -8539,8 +8742,8 @@
           "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
           "slug": "steel-ball-run-jojo",
           "rawSlug": "steel-ball-run-jojo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
           "score": "9.2",
           "status": "Ongoing",
           "label": "Jumat",
@@ -8589,8 +8792,8 @@
           "title": "Shingeki no Kyojin: The Final Season",
           "slug": "shingeki-no-kyojin-final-season",
           "rawSlug": "shingeki-no-kyojin-final-season",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
+          "banner": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
           "score": "9.1",
           "status": "Completed",
           "label": "Tamat",
@@ -8619,8 +8822,8 @@
       "title": "Solo Leveling Season 2: Arise from the Shadow",
       "slug": "solo-leveling-s2-sub-indo",
       "rawSlug": "solo-leveling-s2-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
       "score": "9.0",
       "status": "Completed",
       "type": "TV",
@@ -8778,7 +8981,7 @@
           "slug": "1piece-sub-indo",
           "rawSlug": "1piece-sub-indo",
           "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
           "score": "9.1",
           "status": "Ongoing",
           "label": "Minggu",
@@ -8802,8 +9005,8 @@
           "title": "Tensei shitara Slime Datta Ken Season 4",
           "slug": "slime-s4-sub-indo",
           "rawSlug": "slime-s4-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
           "score": "8.8",
           "status": "Ongoing",
           "label": "Jumat",
@@ -8827,8 +9030,8 @@
           "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
           "slug": "steel-ball-run-jojo",
           "rawSlug": "steel-ball-run-jojo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
           "score": "9.2",
           "status": "Ongoing",
           "label": "Jumat",
@@ -8877,8 +9080,8 @@
           "title": "Shingeki no Kyojin: The Final Season",
           "slug": "shingeki-no-kyojin-final-season",
           "rawSlug": "shingeki-no-kyojin-final-season",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
+          "banner": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
           "score": "9.1",
           "status": "Completed",
           "label": "Tamat",
@@ -8907,8 +9110,8 @@
       "title": "Bleach: Sennen Kessen-hen - Kashin-tan",
       "slug": "bleach-sennen-kessen-hen-kashin-tan",
       "rawSlug": "bleach-sennen-kessen-hen-kashin-tan",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
       "score": "9.0",
       "status": "Ongoing",
       "type": "TV",
@@ -9037,8 +9240,8 @@
           "title": "Solo Leveling Season 2: Arise from the Shadow",
           "slug": "solo-leveling-s2-sub-indo",
           "rawSlug": "solo-leveling-s2-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
           "score": "9.0",
           "status": "Completed",
           "label": "Tamat",
@@ -9061,7 +9264,7 @@
           "slug": "1piece-sub-indo",
           "rawSlug": "1piece-sub-indo",
           "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
           "score": "9.1",
           "status": "Ongoing",
           "label": "Minggu",
@@ -9085,8 +9288,8 @@
           "title": "Tensei shitara Slime Datta Ken Season 4",
           "slug": "slime-s4-sub-indo",
           "rawSlug": "slime-s4-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
           "score": "8.8",
           "status": "Ongoing",
           "label": "Jumat",
@@ -9110,8 +9313,8 @@
           "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
           "slug": "steel-ball-run-jojo",
           "rawSlug": "steel-ball-run-jojo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
           "score": "9.2",
           "status": "Ongoing",
           "label": "Jumat",
@@ -9163,8 +9366,8 @@
       "title": "Black Clover 2nd Season",
       "slug": "black-clover-s2-sub-indo",
       "rawSlug": "black-clover-s2-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/2/88336l.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195604-lQpCzTziSA17.jpg",
       "score": "8.7",
       "status": "Ongoing",
       "type": "TV",
@@ -9249,8 +9452,8 @@
           "title": "Solo Leveling Season 2: Arise from the Shadow",
           "slug": "solo-leveling-s2-sub-indo",
           "rawSlug": "solo-leveling-s2-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
           "score": "9.0",
           "status": "Completed",
           "label": "Tamat",
@@ -9273,7 +9476,7 @@
           "slug": "1piece-sub-indo",
           "rawSlug": "1piece-sub-indo",
           "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
           "score": "9.1",
           "status": "Ongoing",
           "label": "Minggu",
@@ -9297,8 +9500,8 @@
           "title": "Tensei shitara Slime Datta Ken Season 4",
           "slug": "slime-s4-sub-indo",
           "rawSlug": "slime-s4-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
           "score": "8.8",
           "status": "Ongoing",
           "label": "Jumat",
@@ -9322,8 +9525,8 @@
           "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
           "slug": "steel-ball-run-jojo",
           "rawSlug": "steel-ball-run-jojo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
           "score": "9.2",
           "status": "Ongoing",
           "label": "Jumat",
@@ -9375,8 +9578,8 @@
       "title": "Tokyo Revengers: Santen Sensou-hen",
       "slug": "tokyo-revengers-s4",
       "rawSlug": "tokyo-revengers-s4",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1321/159720.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1321/159720.jpg",
       "score": "8.3",
       "status": "Ongoing",
       "type": "TV",
@@ -9469,8 +9672,8 @@
           "title": "Solo Leveling Season 2: Arise from the Shadow",
           "slug": "solo-leveling-s2-sub-indo",
           "rawSlug": "solo-leveling-s2-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
           "score": "9.0",
           "status": "Completed",
           "label": "Tamat",
@@ -9493,7 +9696,7 @@
           "slug": "1piece-sub-indo",
           "rawSlug": "1piece-sub-indo",
           "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
           "score": "9.1",
           "status": "Ongoing",
           "label": "Minggu",
@@ -9517,8 +9720,8 @@
           "title": "Tensei shitara Slime Datta Ken Season 4",
           "slug": "slime-s4-sub-indo",
           "rawSlug": "slime-s4-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
           "score": "8.8",
           "status": "Ongoing",
           "label": "Jumat",
@@ -9542,8 +9745,8 @@
           "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
           "slug": "steel-ball-run-jojo",
           "rawSlug": "steel-ball-run-jojo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
           "score": "9.2",
           "status": "Ongoing",
           "label": "Jumat",
@@ -9595,8 +9798,8 @@
       "title": "Shin Gekijouban☆Keroro Gunsou: Fukkatsu shite Sokkou Chikyuu Metsubou no Kiki de Arimasu!",
       "slug": "shin-keroro-gunsou",
       "rawSlug": "shin-keroro-gunsou",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx216557-9CXz04CEmXOi.png",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx216557-9CXz04CEmXOi.png",
       "score": "7.9",
       "status": "Ongoing",
       "type": "TV",
@@ -9681,8 +9884,8 @@
           "title": "Solo Leveling Season 2: Arise from the Shadow",
           "slug": "solo-leveling-s2-sub-indo",
           "rawSlug": "solo-leveling-s2-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
           "score": "9.0",
           "status": "Completed",
           "label": "Tamat",
@@ -9705,7 +9908,7 @@
           "slug": "1piece-sub-indo",
           "rawSlug": "1piece-sub-indo",
           "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
           "score": "9.1",
           "status": "Ongoing",
           "label": "Minggu",
@@ -9729,8 +9932,8 @@
           "title": "Tensei shitara Slime Datta Ken Season 4",
           "slug": "slime-s4-sub-indo",
           "rawSlug": "slime-s4-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
           "score": "8.8",
           "status": "Ongoing",
           "label": "Jumat",
@@ -9754,8 +9957,8 @@
           "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
           "slug": "steel-ball-run-jojo",
           "rawSlug": "steel-ball-run-jojo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
           "score": "9.2",
           "status": "Ongoing",
           "label": "Jumat",
@@ -10068,8 +10271,8 @@
           "title": "Solo Leveling Season 2: Arise from the Shadow",
           "slug": "solo-leveling-s2-sub-indo",
           "rawSlug": "solo-leveling-s2-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
           "score": "9.0",
           "status": "Completed",
           "label": "Tamat",
@@ -10092,7 +10295,7 @@
           "slug": "1piece-sub-indo",
           "rawSlug": "1piece-sub-indo",
           "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
           "score": "9.1",
           "status": "Ongoing",
           "label": "Minggu",
@@ -10116,8 +10319,8 @@
           "title": "Tensei shitara Slime Datta Ken Season 4",
           "slug": "slime-s4-sub-indo",
           "rawSlug": "slime-s4-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
           "score": "8.8",
           "status": "Ongoing",
           "label": "Jumat",
@@ -10141,8 +10344,8 @@
           "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
           "slug": "steel-ball-run-jojo",
           "rawSlug": "steel-ball-run-jojo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
           "score": "9.2",
           "status": "Ongoing",
           "label": "Jumat",
@@ -10191,8 +10394,8 @@
           "title": "Shingeki no Kyojin: The Final Season",
           "slug": "shingeki-no-kyojin-final-season",
           "rawSlug": "shingeki-no-kyojin-final-season",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
+          "banner": "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
           "score": "9.1",
           "status": "Completed",
           "label": "Tamat",
@@ -10355,8 +10558,8 @@
           "title": "Solo Leveling Season 2: Arise from the Shadow",
           "slug": "solo-leveling-s2-sub-indo",
           "rawSlug": "solo-leveling-s2-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
           "score": "9.0",
           "status": "Completed",
           "label": "Tamat",
@@ -10379,7 +10582,7 @@
           "slug": "1piece-sub-indo",
           "rawSlug": "1piece-sub-indo",
           "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
           "score": "9.1",
           "status": "Ongoing",
           "label": "Minggu",
@@ -10403,8 +10606,8 @@
           "title": "Tensei shitara Slime Datta Ken Season 4",
           "slug": "slime-s4-sub-indo",
           "rawSlug": "slime-s4-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
           "score": "8.8",
           "status": "Ongoing",
           "label": "Jumat",
@@ -10428,8 +10631,8 @@
           "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
           "slug": "steel-ball-run-jojo",
           "rawSlug": "steel-ball-run-jojo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
           "score": "9.2",
           "status": "Ongoing",
           "label": "Jumat",
@@ -10481,8 +10684,8 @@
       "title": "Naruto: Shippuuden",
       "slug": "naruto-shippuuden-sub-indo",
       "rawSlug": "naruto-shippuuden-sub-indo",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1565/111305.jpg",
+      "banner": "https://cdn.myanimelist.net/images/anime/1565/111305.jpg",
       "score": "8.7",
       "status": "Completed",
       "type": "TV",
@@ -10707,8 +10910,8 @@
           "title": "Solo Leveling Season 2: Arise from the Shadow",
           "slug": "solo-leveling-s2-sub-indo",
           "rawSlug": "solo-leveling-s2-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
           "score": "9.0",
           "status": "Completed",
           "label": "Tamat",
@@ -10731,7 +10934,7 @@
           "slug": "1piece-sub-indo",
           "rawSlug": "1piece-sub-indo",
           "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
           "score": "9.1",
           "status": "Ongoing",
           "label": "Minggu",
@@ -10755,8 +10958,8 @@
           "title": "Tensei shitara Slime Datta Ken Season 4",
           "slug": "slime-s4-sub-indo",
           "rawSlug": "slime-s4-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
           "score": "8.8",
           "status": "Ongoing",
           "label": "Jumat",
@@ -10780,8 +10983,8 @@
           "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
           "slug": "steel-ball-run-jojo",
           "rawSlug": "steel-ball-run-jojo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
           "score": "9.2",
           "status": "Ongoing",
           "label": "Jumat",
@@ -10833,8 +11036,8 @@
       "title": "Kusuriya no Hitorigoto Season 3",
       "slug": "kusuriya-no-hitorigoto-s3",
       "rawSlug": "kusuriya-no-hitorigoto-s3",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://cdn.myanimelist.net/images/anime/1028/160277.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195516-B5M0cPaQbQXI.jpg",
       "score": "8.9",
       "status": "Ongoing",
       "type": "TV",
@@ -10923,8 +11126,8 @@
           "title": "Solo Leveling Season 2: Arise from the Shadow",
           "slug": "solo-leveling-s2-sub-indo",
           "rawSlug": "solo-leveling-s2-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
           "score": "9.0",
           "status": "Completed",
           "label": "Tamat",
@@ -10947,7 +11150,7 @@
           "slug": "1piece-sub-indo",
           "rawSlug": "1piece-sub-indo",
           "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
           "score": "9.1",
           "status": "Ongoing",
           "label": "Minggu",
@@ -10971,8 +11174,8 @@
           "title": "Tensei shitara Slime Datta Ken Season 4",
           "slug": "slime-s4-sub-indo",
           "rawSlug": "slime-s4-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
           "score": "8.8",
           "status": "Ongoing",
           "label": "Jumat",
@@ -10996,8 +11199,8 @@
           "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
           "slug": "steel-ball-run-jojo",
           "rawSlug": "steel-ball-run-jojo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
           "score": "9.2",
           "status": "Ongoing",
           "label": "Jumat",
@@ -11049,8 +11252,8 @@
       "title": "Detective Conan",
       "slug": "detective-conan",
       "rawSlug": "detective-conan",
-      "poster": "/assets/no-cover.svg",
-      "banner": "/assets/no-cover.svg",
+      "poster": "https://assets.animekita.org/cover/2026/05/18/series-149020-anilist-235-131016-3aefd890.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/235-MTmiz0uB0fMd.jpg",
       "score": "8.4",
       "status": "Ongoing",
       "type": "TV",
@@ -11211,8 +11414,8 @@
           "title": "Solo Leveling Season 2: Arise from the Shadow",
           "slug": "solo-leveling-s2-sub-indo",
           "rawSlug": "solo-leveling-s2-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
           "score": "9.0",
           "status": "Completed",
           "label": "Tamat",
@@ -11235,7 +11438,7 @@
           "slug": "1piece-sub-indo",
           "rawSlug": "1piece-sub-indo",
           "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
           "score": "9.1",
           "status": "Ongoing",
           "label": "Minggu",
@@ -11259,8 +11462,8 @@
           "title": "Tensei shitara Slime Datta Ken Season 4",
           "slug": "slime-s4-sub-indo",
           "rawSlug": "slime-s4-sub-indo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
           "score": "8.8",
           "status": "Ongoing",
           "label": "Jumat",
@@ -11284,8 +11487,8 @@
           "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
           "slug": "steel-ball-run-jojo",
           "rawSlug": "steel-ball-run-jojo",
-          "poster": "/assets/no-cover.svg",
-          "banner": "/assets/no-cover.svg",
+          "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
           "score": "9.2",
           "status": "Ongoing",
           "label": "Jumat",

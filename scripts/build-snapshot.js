@@ -98,6 +98,7 @@ const parsedAzCards = rawAzCards.map((c) => {
   const isMovie = /\bmovie\b|\bfilm\b/i.test(c.title);
   return {
     ...c,
+    banner: c.banner || c.poster,
     status: isMovie ? "Movie" : "Completed",
     episode: isMovie ? "Movie" : "12 Ep",
     genres: inferGenresFromTitle(c.title),
@@ -109,6 +110,7 @@ const parsedSearchCards = rawSearchCards.map((c) => {
   const isOngoing = /ongoing/i.test(c.status) && !isMovie;
   return {
     ...c,
+    banner: c.banner || c.poster,
     status: isMovie ? "Movie" : isOngoing ? "Ongoing" : "Completed",
     episode: isMovie ? "Movie" : isOngoing ? "Ep 5" : "12 Ep",
     releaseDay: isOngoing ? "Rabu" : undefined,
@@ -158,20 +160,6 @@ function card({
 
 const banners = [
   {
-    title: "Tensei shitara Slime Datta Ken Season 4",
-    slug: toSeriesToken("slime-s4-sub-indo"),
-    rawSlug: "slime-s4-sub-indo",
-    banner: "/assets/no-cover.svg",
-    poster: "/assets/no-cover.svg",
-    synopsis:
-      "Rimuru Tempest dan Federasi Jura Tempest menghadapi babak konspirasi baru dari klan Rozzo dan Kekaisaran Timur demi mewujudkan dunia tempat manusia dan monster hidup berdampingan.",
-    genres: ["Action", "Adventure", "Fantasy", "Isekai"],
-    status: "Sedang Tayang",
-    score: "8.8",
-    episode: "Ep 21",
-    episodeId: "al-153297-21",
-  },
-  {
     title: "One Piece",
     slug: toSeriesToken("1piece-sub-indo"),
     rawSlug: "1piece-sub-indo",
@@ -186,11 +174,67 @@ const banners = [
     episodeId: "al-150441-1180",
   },
   {
+    title: "Kusuriya no Hitorigoto Season 3",
+    slug: toSeriesToken("kusuriya-no-hitorigoto-s3"),
+    rawSlug: "kusuriya-no-hitorigoto-s3",
+    banner: "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195516-B5M0cPaQbQXI.jpg",
+    poster: "https://cdn.myanimelist.net/images/anime/1028/160277.jpg",
+    synopsis:
+      "Maomao dan Jinshi kembali terseret dalam intrik racun, wabah misterius, serta rahasia politik baru di balik tembok istana kekaisaran.",
+    genres: ["Drama", "Mystery", "Historical"],
+    status: "Sedang Tayang",
+    score: "8.9",
+    episode: "Ep 4",
+    episodeId: "al-154210-4",
+  },
+  {
+    title: "Black Clover 2nd Season",
+    slug: toSeriesToken("black-clover-s2-sub-indo"),
+    rawSlug: "black-clover-s2-sub-indo",
+    banner: "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195604-lQpCzTziSA17.jpg",
+    poster: "https://cdn.myanimelist.net/images/anime/2/88336l.jpg",
+    synopsis:
+      "Asta dan para Ksatria Sihir Kerajaan Clover melancarkan penyerbuan penentuan ke Kerajaan Spade demi menyelamatkan para kapten skuad.",
+    genres: ["Action", "Adventure", "Comedy", "Fantasy"],
+    status: "Sedang Tayang",
+    score: "8.7",
+    episode: "Ep 3",
+    episodeId: "al-154261-3",
+  },
+  {
+    title: "Detective Conan",
+    slug: toSeriesToken("detective-conan"),
+    rawSlug: "detective-conan",
+    banner: "https://s4.anilist.co/file/anilistcdn/media/anime/banner/235-MTmiz0uB0fMd.jpg",
+    poster: "https://assets.animekita.org/cover/2026/05/18/series-149020-anilist-235-131016-3aefd890.jpg",
+    synopsis:
+      "Shinichi Kudo yang menyusut menjadi Conan Edogawa terus memecahkan teka-teki kasus mustahil sembari melacak jejak Organisasi Hitam.",
+    genres: ["Adventure", "Comedy", "Mystery"],
+    status: "Sedang Tayang",
+    score: "8.4",
+    episode: "Ep 1196",
+    episodeId: "al-149020-1196",
+  },
+  {
+    title: "Tensei shitara Slime Datta Ken Season 4",
+    slug: toSeriesToken("slime-s4-sub-indo"),
+    rawSlug: "slime-s4-sub-indo",
+    banner: "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+    poster: "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+    synopsis:
+      "Rimuru Tempest dan Federasi Jura Tempest menghadapi babak konspirasi baru dari klan Rozzo dan Kekaisaran Timur demi mewujudkan dunia tempat manusia dan monster hidup berdampingan.",
+    genres: ["Action", "Adventure", "Fantasy", "Isekai"],
+    status: "Sedang Tayang",
+    score: "8.8",
+    episode: "Ep 21",
+    episodeId: "al-153297-21",
+  },
+  {
     title: "Solo Leveling Season 2: Arise from the Shadow",
     slug: toSeriesToken("solo-leveling-s2-sub-indo"),
     rawSlug: "solo-leveling-s2-sub-indo",
-    banner: "/assets/no-cover.svg",
-    poster: "/assets/no-cover.svg",
+    banner: "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+    poster: "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
     synopsis:
       "Setelah membangkitkan pasukan bayangan sebagai Shadow Monarch, Sung Jin-Woo menaklukkan Demon Castle dan menghadapi ancaman semut raksasa Pulau Jeju yang mengguncang para Hunter S-Rank.",
     genres: ["Action", "Adventure", "Fantasy"],
@@ -203,8 +247,8 @@ const banners = [
     title: "Bleach: Sennen Kessen-hen - Kashin-tan",
     slug: toSeriesToken("bleach-sennen-kessen-hen-kashin-tan"),
     rawSlug: "bleach-sennen-kessen-hen-kashin-tan",
-    banner: "/assets/no-cover.svg",
-    poster: "/assets/no-cover.svg",
+    banner: "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
+    poster: "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
     synopsis:
       "Pertempuran puncak antara Gotei 13 dan Schutzstaffel Yhwach di Istana Soul King mencapai klimaks berdarah yang menentukan nasib tiga dunia.",
     genres: ["Action", "Adventure", "Supernatural", "Shounen"],
@@ -213,20 +257,6 @@ const banners = [
     episode: "Ep 9",
     episodeId: "al-154222-9",
   },
-  {
-    title: "Kusuriya no Hitorigoto Season 3",
-    slug: toSeriesToken("kusuriya-no-hitorigoto-s3"),
-    rawSlug: "kusuriya-no-hitorigoto-s3",
-    banner: "/assets/no-cover.svg",
-    poster: "/assets/no-cover.svg",
-    synopsis:
-      "Maomao dan Jinshi kembali terseret dalam intrik racun, wabah misterius, serta rahasia politik baru di balik tembok istana kekaisaran.",
-    genres: ["Drama", "Mystery", "Historical"],
-    status: "Sedang Tayang",
-    score: "8.9",
-    episode: "Ep 4",
-    episodeId: "al-154210-4",
-  },
 ];
 
 const latestReleases = [
@@ -234,6 +264,7 @@ const latestReleases = [
     title: "One Piece",
     rawSlug: "1piece-sub-indo",
     poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+    banner: "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
     score: "9.1",
     status: "Ongoing",
     releaseDay: "Minggu",
@@ -248,7 +279,7 @@ const latestReleases = [
   card({
     title: "Tensei shitara Slime Datta Ken Season 4",
     rawSlug: "slime-s4-sub-indo",
-    poster: "/assets/no-cover.svg",
+    poster: "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
     score: "8.8",
     status: "Ongoing",
     releaseDay: "Jumat",
@@ -263,7 +294,7 @@ const latestReleases = [
   card({
     title: "Bleach: Sennen Kessen-hen - Kashin-tan",
     rawSlug: "bleach-sennen-kessen-hen-kashin-tan",
-    poster: "/assets/no-cover.svg",
+    poster: "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg",
     score: "9.0",
     status: "Ongoing",
     releaseDay: "Sabtu",
@@ -278,7 +309,8 @@ const latestReleases = [
   card({
     title: "Black Clover 2nd Season",
     rawSlug: "black-clover-s2-sub-indo",
-    poster: "/assets/no-cover.svg",
+    poster: "https://cdn.myanimelist.net/images/anime/2/88336l.jpg",
+    banner: "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195604-lQpCzTziSA17.jpg",
     score: "8.7",
     status: "Ongoing",
     releaseDay: "Minggu",
@@ -293,7 +325,7 @@ const latestReleases = [
   card({
     title: "Tokyo Revengers: Santen Sensou-hen",
     rawSlug: "tokyo-revengers-s4",
-    poster: "/assets/no-cover.svg",
+    poster: "https://cdn.myanimelist.net/images/anime/1321/159720.jpg",
     score: "8.3",
     status: "Ongoing",
     releaseDay: "Minggu",
@@ -308,7 +340,8 @@ const latestReleases = [
   card({
     title: "Kusuriya no Hitorigoto Season 3",
     rawSlug: "kusuriya-no-hitorigoto-s3",
-    poster: "/assets/no-cover.svg",
+    poster: "https://cdn.myanimelist.net/images/anime/1028/160277.jpg",
+    banner: "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195516-B5M0cPaQbQXI.jpg",
     score: "8.9",
     status: "Ongoing",
     releaseDay: "Jumat",
@@ -323,7 +356,8 @@ const latestReleases = [
   card({
     title: "Detective Conan",
     rawSlug: "detective-conan",
-    poster: "/assets/no-cover.svg",
+    poster: "https://assets.animekita.org/cover/2026/05/18/series-149020-anilist-235-131016-3aefd890.jpg",
+    banner: "https://s4.anilist.co/file/anilistcdn/media/anime/banner/235-MTmiz0uB0fMd.jpg",
     score: "8.4",
     status: "Ongoing",
     releaseDay: "Sabtu",
@@ -338,7 +372,7 @@ const latestReleases = [
   card({
     title: "Shin Gekijouban☆Keroro Gunsou: Fukkatsu shite Sokkou Chikyuu Metsubou no Kiki de Arimasu!",
     rawSlug: "shin-keroro-gunsou",
-    poster: "/assets/no-cover.svg",
+    poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx216557-9CXz04CEmXOi.png",
     score: "7.9",
     status: "Ongoing",
     releaseDay: "Sabtu",
@@ -353,7 +387,7 @@ const latestReleases = [
   card({
     title: "Tougen Anki: Nikko・Kegon no Taki-hen",
     rawSlug: "tougen-anki-s2",
-    poster: "/assets/no-cover.svg",
+    poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204650-nvK5CuG60WGY.jpg",
     score: "8.2",
     status: "Ongoing",
     releaseDay: "Sabtu",
@@ -368,7 +402,7 @@ const latestReleases = [
   card({
     title: "Steel Ball Run: JoJo no Kimyou na Bouken",
     rawSlug: "steel-ball-run-jojo",
-    poster: "/assets/no-cover.svg",
+    poster: "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
     score: "9.2",
     status: "Ongoing",
     releaseDay: "Jumat",
@@ -395,7 +429,7 @@ const schedule = [
       card({
         title: "Yasei no Last Boss ga Arawareta! Season 2",
         rawSlug: "yasei-no-last-boss-s2",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204389-jCoFCeTthDMy.jpg",
         score: "8.1",
         status: "Ongoing",
         releaseDay: "Sabtu",
@@ -407,7 +441,7 @@ const schedule = [
       card({
         title: "Uchi no Otouto-domo ga Sumimasen",
         rawSlug: "uchi-no-otouto-domo-ga-sumimasen",
-        poster: "/assets/no-cover.svg",
+        poster: "https://cdn.myanimelist.net/images/anime/1474/160261.jpg",
         score: "7.8",
         status: "Ongoing",
         releaseDay: "Sabtu",
@@ -419,7 +453,7 @@ const schedule = [
       card({
         title: "Gensou Suikoden",
         rawSlug: "gensou-suikoden",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx187316-jucYCojVTjSY.jpg",
         score: "8.3",
         status: "Ongoing",
         releaseDay: "Sabtu",
@@ -431,7 +465,7 @@ const schedule = [
       card({
         title: "Shiotaiou no Satou-san ga Ore ni dake Amai",
         rawSlug: "shiotaiou-no-satou-san",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209502-C81oN8M4Smlo.jpg",
         score: "7.9",
         status: "Ongoing",
         releaseDay: "Sabtu",
@@ -453,7 +487,7 @@ const schedule = [
       card({
         title: "Ao no Hako Season 2",
         rawSlug: "ao-no-hako-s2",
-        poster: "/assets/no-cover.svg",
+        poster: "https://cdn.myanimelist.net/images/anime/1990/160267.jpg",
         score: "8.6",
         status: "Ongoing",
         releaseDay: "Minggu",
@@ -465,7 +499,7 @@ const schedule = [
       card({
         title: "Aoashi Season 2",
         rawSlug: "aoashi-s2",
-        poster: "/assets/no-cover.svg",
+        poster: "https://cdn.myanimelist.net/images/anime/1295/158726.jpg",
         score: "8.5",
         status: "Ongoing",
         releaseDay: "Minggu",
@@ -477,7 +511,7 @@ const schedule = [
       card({
         title: "Yozakura-san Chi no Daisakusen Season 2",
         rawSlug: "yozakura-san-s2",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx213657-ORNXVEBCjXaz.jpg",
         score: "8.0",
         status: "Ongoing",
         releaseDay: "Minggu",
@@ -496,7 +530,7 @@ const schedule = [
       card({
         title: "Tank Chair",
         rawSlug: "tank-chair",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209499-S0sWFrCpft85.jpg",
         score: "8.1",
         status: "Ongoing",
         releaseDay: "Senin",
@@ -508,7 +542,7 @@ const schedule = [
       card({
         title: "Tensei Kizoku, Kantei Skill de Nariagaru Season 3",
         rawSlug: "tensei-kizoku-kantei-skill-s3",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx185756-xPCl0RyQ7fXD.jpg",
         score: "8.2",
         status: "Ongoing",
         releaseDay: "Senin",
@@ -520,7 +554,8 @@ const schedule = [
       card({
         title: "Temppal (Item no Chikara de Saikyou)",
         rawSlug: "temppal-item-no-chikara",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx212888-NhyvqPt5aIuJ.jpg",
+        banner: "https://s4.anilist.co/file/anilistcdn/media/anime/banner/212888-ZsnNegBCKXQq.jpg",
         score: "8.0",
         status: "Ongoing",
         releaseDay: "Senin",
@@ -532,7 +567,7 @@ const schedule = [
       card({
         title: "Tensei shitara Goblin datta ken",
         rawSlug: "tensei-goblin",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx209219-3yhKlRx0LX3p.jpg",
         score: "7.8",
         status: "Ongoing",
         releaseDay: "Senin",
@@ -551,7 +586,7 @@ const schedule = [
       card({
         title: "Hotaru no Yomeiri",
         rawSlug: "hotaru-no-yomeiri",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx205909-DM0fAzNQulod.jpg",
         score: "8.5",
         status: "Ongoing",
         releaseDay: "Selasa",
@@ -563,7 +598,7 @@ const schedule = [
       card({
         title: "Shinja Zero no Megami-sama to Hajimeru Isekai Kouryaku",
         rawSlug: "shinja-zero-isekai",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx205896-ElrV8oVAsuax.jpg",
         score: "7.7",
         status: "Ongoing",
         releaseDay: "Selasa",
@@ -575,7 +610,7 @@ const schedule = [
       card({
         title: "Psyren",
         rawSlug: "psyren",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204011-j45RZoqYbdZK.jpg",
         score: "8.4",
         status: "Ongoing",
         releaseDay: "Selasa",
@@ -587,7 +622,7 @@ const schedule = [
       card({
         title: "Kyouran Reijou Nia Liston",
         rawSlug: "kyouran-reijou-nia-liston",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx206949-4HYI3YuP0eLI.png",
         score: "7.9",
         status: "Ongoing",
         releaseDay: "Selasa",
@@ -606,7 +641,7 @@ const schedule = [
       card({
         title: "Chitose-kun wa Ramune Bin no Naka Season 2",
         rawSlug: "chitose-kun-s2",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx198727-BL0JTpg0G8tq.jpg",
         score: "8.1",
         status: "Ongoing",
         releaseDay: "Rabu",
@@ -618,7 +653,7 @@ const schedule = [
       card({
         title: "Tantei wa Mou, Shindeiru. Season 2",
         rawSlug: "tanmoshi-s2",
-        poster: "/assets/no-cover.svg",
+        poster: "https://cdn.myanimelist.net/images/anime/1414/160406.jpg",
         score: "7.8",
         status: "Ongoing",
         releaseDay: "Rabu",
@@ -630,7 +665,7 @@ const schedule = [
       card({
         title: "Tsuihou sareta Tensei Juukishi wa Game Chishiki de Musou suru",
         rawSlug: "tsuihou-tensei-juukishi",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx180136-gtMTCRlOD4OE.jpg",
         score: "8.0",
         status: "Ongoing",
         releaseDay: "Rabu",
@@ -642,7 +677,7 @@ const schedule = [
       card({
         title: "Sekai Saikyou no Majo, Hajimemashita",
         rawSlug: "sekai-saikyou-no-majo",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx211778-0MXK5HqVFBYH.jpg",
         score: "7.9",
         status: "Ongoing",
         releaseDay: "Rabu",
@@ -661,7 +696,7 @@ const schedule = [
       card({
         title: "Sora wa Akai Kawa no Hotori",
         rawSlug: "sora-wa-akai-kawa-no-hotori",
-        poster: "/assets/no-cover.svg",
+        poster: "https://cdn.myanimelist.net/images/anime/1158/158138l.jpg",
         score: "8.3",
         status: "Ongoing",
         releaseDay: "Kamis",
@@ -673,7 +708,7 @@ const schedule = [
       card({
         title: "Tensei shitara Ken Deshita Season 2",
         rawSlug: "tenken-s2",
-        poster: "/assets/no-cover.svg",
+        poster: "https://cdn.myanimelist.net/images/anime/1539/159559.jpg",
         score: "8.2",
         status: "Ongoing",
         releaseDay: "Kamis",
@@ -685,7 +720,7 @@ const schedule = [
       card({
         title: "Sasaki to Pii-chan Season 2",
         rawSlug: "sasaki-to-pii-chan-s2",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx176314-lpvca6vjmkeO.jpg",
         score: "7.8",
         status: "Ongoing",
         releaseDay: "Kamis",
@@ -697,7 +732,7 @@ const schedule = [
       card({
         title: "Kikansha no Mahou wa Tokubetsu desu Season 2",
         rawSlug: "kikansha-no-mahou-s2",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx172192-W7P5xEUaxF3y.jpg",
         score: "8.0",
         status: "Ongoing",
         releaseDay: "Kamis",
@@ -719,7 +754,7 @@ const schedule = [
       card({
         title: "Toaru Anbu no ITEM",
         rawSlug: "toaru-anbu-no-item",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx186742-v7yfbefc8fuO.png",
         score: "8.4",
         status: "Ongoing",
         releaseDay: "Jumat",
@@ -731,7 +766,7 @@ const schedule = [
       card({
         title: "Koori no Jouheki Season 2",
         rawSlug: "koori-no-jouheki-s2",
-        poster: "/assets/no-cover.svg",
+        poster: "https://cdn.myanimelist.net/images/anime/1859/158835l.jpg",
         score: "8.2",
         status: "Ongoing",
         releaseDay: "Jumat",
@@ -743,7 +778,7 @@ const schedule = [
       card({
         title: "Hyouken no Majutsushi ga Sekai wo Suberu Season 2",
         rawSlug: "hyouken-no-majutsushi-s2",
-        poster: "/assets/no-cover.svg",
+        poster: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx212503-sXBpRZr96c4e.jpg",
         score: "7.6",
         status: "Ongoing",
         releaseDay: "Jumat",
@@ -760,7 +795,7 @@ const completedCurated = [
   card({
     title: "Solo Leveling Season 2: Arise from the Shadow",
     rawSlug: "solo-leveling-s2-sub-indo",
-    poster: "/assets/no-cover.svg",
+    poster: "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
     score: "9.0",
     status: "Completed",
     label: "Tamat",
@@ -819,7 +854,7 @@ const completedCurated = [
   card({
     title: "Shingeki no Kyojin: The Final Season",
     rawSlug: "shingeki-no-kyojin-final-season",
-    poster: "/assets/no-cover.svg",
+    poster: "https://assets.animekita.org/cover/2026/03/08/series-18-anilist-131681-235222-367cd956.jpg",
     score: "9.1",
     status: "Completed",
     label: "Tamat",
@@ -833,7 +868,7 @@ const completedCurated = [
   card({
     title: "Naruto: Shippuuden",
     rawSlug: "naruto-shippuuden-sub-indo",
-    poster: "/assets/no-cover.svg",
+    poster: "https://cdn.myanimelist.net/images/anime/1565/111305.jpg",
     score: "8.7",
     status: "Completed",
     label: "Tamat",
@@ -848,7 +883,7 @@ const completedCurated = [
   card({
     title: "Bocchi the Rock!",
     rawSlug: "bocchi-the-rock-sub-indo",
-    poster: "/assets/no-cover.svg",
+    poster: "https://assets.animekita.org/cover/2026/03/09/series-41-anilist-130003-000629-db6c7d4c.png",
     score: "8.8",
     status: "Completed",
     label: "Tamat",
@@ -862,7 +897,7 @@ const completedCurated = [
   card({
     title: "86: Eighty Six",
     rawSlug: "eighty-six-sub-indo",
-    poster: "/assets/no-cover.svg",
+    poster: "https://assets.animekita.org/cover/2026/03/10/series-109-anilist-131586-115948-4b35a64e.jpg",
     score: "8.7",
     status: "Completed",
     label: "Tamat",
@@ -890,7 +925,7 @@ const completedCurated = [
   card({
     title: "Kusuriya no Hitorigoto",
     rawSlug: "kusuriya-no-hitorigoto-sub-indo",
-    poster: "/assets/no-cover.svg",
+    poster: "https://assets.animekita.org/cover/2026/05/18/series-149131-anilist-161645-134759-7a72092f.jpg",
     score: "8.9",
     status: "Completed",
     label: "Tamat",
@@ -904,7 +939,7 @@ const completedCurated = [
   card({
     title: "Cyberpunk: Edgerunners",
     rawSlug: "cyberpunk-edgerunners-sub-indo",
-    poster: "/assets/no-cover.svg",
+    poster: "https://assets.animekita.org/cover/2026/05/06/series-149001-anilist-120377-133034-9bbf8872.jpg",
     score: "8.7",
     status: "Completed",
     label: "Tamat",
@@ -918,7 +953,7 @@ const completedCurated = [
   card({
     title: "Mob Psycho 100 II",
     rawSlug: "mob-psycho-100-s2-sub-indo",
-    poster: "/assets/no-cover.svg",
+    poster: "https://assets.animekita.org/cover/2026/03/28/series-723-anilist-101338-200832-c2e4e0c8.jpg",
     score: "8.9",
     status: "Completed",
     label: "Tamat",
@@ -932,7 +967,7 @@ const completedCurated = [
   card({
     title: "Yofukashi no Uta (Call of the Night)",
     rawSlug: "yofukashi-no-uta-sub-indo",
-    poster: "/assets/no-cover.svg",
+    poster: "https://assets.animekita.org/cover/2026/03/12/series-212-anilist-141391-144300-3155a7c1.jpg",
     score: "8.1",
     status: "Completed",
     label: "Tamat",
@@ -946,7 +981,7 @@ const completedCurated = [
   card({
     title: "Mieruko-chan",
     rawSlug: "mieruko-chan-sub-indo",
-    poster: "/assets/no-cover.svg",
+    poster: "https://assets.animekita.org/cover/2026/03/12/series-164-anilist-131083-130215-eddc912a.png",
     score: "7.6",
     status: "Completed",
     label: "Tamat",
@@ -969,7 +1004,7 @@ const moviesCurated = [
   card({
     title: "Kimetsu no Yaiba Movie: Mugenjou-hen",
     rawSlug: "kimetsu-no-yaiba-movie-mugenjou-hen",
-    poster: "/assets/no-cover.svg",
+    poster: "https://cdn.myanimelist.net/images/anime/1681/148216.jpg",
     score: "9.2",
     status: "Movie",
     label: "Movie",
@@ -984,7 +1019,7 @@ const moviesCurated = [
   card({
     title: "Chainsaw Man Movie: Reze-hen",
     rawSlug: "chainsaw-man-movie-reze-hen",
-    poster: "/assets/no-cover.svg",
+    poster: "https://assets.animekita.org/cover/2025/12/d1c70ef4e29c981a.jpg",
     score: "9.0",
     status: "Movie",
     label: "Movie",
@@ -999,7 +1034,7 @@ const moviesCurated = [
   card({
     title: "Haikyuu!! Movie: Gomisuteba no Kessen",
     rawSlug: "haikyuu-movie-gomisuteba-no-kessen",
-    poster: "/assets/no-cover.svg",
+    poster: "https://cdn.myanimelist.net/images/anime/1665/140360l.jpg",
     score: "8.9",
     status: "Movie",
     label: "Movie",
@@ -1014,7 +1049,7 @@ const moviesCurated = [
   card({
     title: "Jujutsu Kaisen 0 Movie",
     rawSlug: "jujutsu-kaisen-0-movie",
-    poster: "/assets/no-cover.svg",
+    poster: "https://assets.animekita.org/cover/2026/04/11/series-123333-anilist-131573-150411-0a3b9666.jpg",
     score: "8.6",
     status: "Movie",
     label: "Movie",
@@ -1029,7 +1064,7 @@ const moviesCurated = [
   card({
     title: "Suzume no Tojimari",
     rawSlug: "suzume-no-tojimari-sub-indo",
-    poster: "/assets/no-cover.svg",
+    poster: "https://assets.animekita.org/cover/2026/04/11/series-30363-anilist-142770-142628-227d00ca.jpg",
     score: "8.5",
     status: "Movie",
     label: "Movie",
@@ -1044,7 +1079,7 @@ const moviesCurated = [
   card({
     title: "Kimi no Na wa. (Your Name.)",
     rawSlug: "kimi-no-na-wa-sub-indo",
-    poster: "/assets/no-cover.svg",
+    poster: "https://assets.animekita.org/cover/2026/03/17/series-442-anilist-21519-120243-243fb6eb.png",
     score: "9.0",
     status: "Movie",
     label: "Movie",
@@ -1059,7 +1094,7 @@ const moviesCurated = [
   card({
     title: "Spy x Family Code: White",
     rawSlug: "spy-x-family-code-white",
-    poster: "/assets/no-cover.svg",
+    poster: "https://cdn.myanimelist.net/images/anime/1426/139388.jpg",
     score: "8.4",
     status: "Movie",
     label: "Movie",
@@ -1074,7 +1109,7 @@ const moviesCurated = [
   card({
     title: "Blue Lock: Episode Nagi",
     rawSlug: "blue-lock-episode-nagi",
-    poster: "/assets/no-cover.svg",
+    poster: "https://cdn.myanimelist.net/images/anime/1239/139928.jpg",
     score: "8.1",
     status: "Movie",
     label: "Movie",
@@ -1089,7 +1124,7 @@ const moviesCurated = [
   card({
     title: "Overlord Movie 3: Sei Oukoku-hen",
     rawSlug: "overlord-movie-sei-oukoku-hen",
-    poster: "/assets/no-cover.svg",
+    poster: "https://cdn.myanimelist.net/images/anime/1954/144101.jpg",
     score: "8.2",
     status: "Movie",
     label: "Movie",
@@ -1445,6 +1480,29 @@ function makeEpisodes(prefix, rawSlug, numbers, dates = {}) {
   });
 }
 
+function isPlaceholderImage(url) {
+  const s = String(url || "").trim();
+  return !s || s === "/assets/no-cover.svg" || s === "/assets/no-banner.svg";
+}
+
+function pickValidImage(...candidates) {
+  for (const candidate of candidates) {
+    if (!isPlaceholderImage(candidate)) {
+      return candidate;
+    }
+  }
+  return "/assets/no-cover.svg";
+}
+
+function pickBestBanner(...candidates) {
+  for (const candidate of candidates) {
+    if (!isPlaceholderImage(candidate) && /\/banner\//i.test(candidate)) {
+      return candidate;
+    }
+  }
+  return pickValidImage(...candidates);
+}
+
 // Katalog gabungan terdeduplikasi — item kurasi diutamakan agar tidak tertimpa metadata kosong A-Z/Search
 const catalogMap = new Map();
 const prioritizedPools = [
@@ -1453,6 +1511,7 @@ const prioritizedPools = [
   completedCurated,
   moviesCurated,
   rekomendasiList,
+  banners,
   parsedSearchCards,
   parsedAzCards,
 ];
@@ -1462,19 +1521,34 @@ for (const pool of prioritizedPools) {
     if (!item?.slug) continue;
     const prev = catalogMap.get(item.slug);
     if (!prev) {
+      const poster = pickValidImage(item.poster, item.banner);
+      const banner = pickBestBanner(item.banner, poster);
       catalogMap.set(item.slug, {
         ...item,
-        genres: [...new Set(item.genres || [])],
+        poster,
+        banner,
+        genres: [...new Set((item.genres || []).map((g) => String(g).toLowerCase()))],
       });
     } else {
-      const mergedGenres = [...new Set([...(prev.genres || []), ...(item.genres || [])])];
+      const mergedGenres = [
+        ...new Set(
+          [...(prev.genres || []), ...(item.genres || [])].map((g) => String(g).toLowerCase())
+        ),
+      ];
+      const poster = pickValidImage(prev.poster, item.poster, prev.banner, item.banner);
+      const banner = pickBestBanner(prev.banner, item.banner, poster);
       catalogMap.set(item.slug, {
         ...item,
         ...prev,
-        poster: prev.poster || item.poster,
-        banner: prev.banner || item.banner || prev.poster,
+        poster,
+        banner,
         score: prev.score || item.score,
-        status: prev.status && prev.status !== "Anime" ? prev.status : item.status,
+        status:
+          prev.status && prev.status !== "Anime" && prev.status !== "Sedang Tayang"
+            ? prev.status
+            : item.status && item.status !== "Sedang Tayang"
+              ? item.status
+              : "Ongoing",
         label: prev.label || item.label,
         releaseDay: prev.releaseDay || item.releaseDay || "",
         episode: prev.episode || item.episode,
@@ -1489,12 +1563,14 @@ for (const pool of prioritizedPools) {
 const fullCatalog = [...catalogMap.values()];
 
 function buildDetailFromCard(baseCard, episodes, extra = {}) {
+  const poster = pickValidImage(extra.poster, baseCard.poster, baseCard.banner);
+  const banner = pickBestBanner(extra.banner, baseCard.banner, poster);
   return {
     title: baseCard.title,
     slug: baseCard.slug,
     rawSlug: baseCard.rawSlug,
-    poster: baseCard.poster,
-    banner: extra.banner || baseCard.banner || baseCard.poster,
+    poster,
+    banner,
     score: baseCard.score || "8.5",
     status: baseCard.status || "Ongoing",
     type: extra.type || baseCard.type || "TV",
@@ -1523,7 +1599,7 @@ const details = {
       Array.from({ length: 24 }, (_, i) => 1180 - i),
       { 1180: "19 Apr 2026", 1179: "12 Apr 2026", 1178: "05 Apr 2026" }
     ),
-    { banner: banners[1].banner, year: "1999" }
+    { year: "1999" }
   ),
   [toSeriesToken("slime-s4-sub-indo")]: buildDetailFromCard(
     latestReleases[1],
@@ -1533,7 +1609,7 @@ const details = {
       Array.from({ length: 21 }, (_, i) => 21 - i),
       { 21: "17 Apr 2026", 20: "10 Apr 2026", 19: "03 Apr 2026" }
     ),
-    { banner: banners[0].banner, year: "2026" }
+    { year: "2026" }
   ),
   [toSeriesToken("solo-leveling-s2-sub-indo")]: buildDetailFromCard(
     completedCurated[0],
@@ -1543,7 +1619,7 @@ const details = {
       Array.from({ length: 13 }, (_, i) => 13 - i),
       { 13: "30 Mar 2025", 1: "05 Jan 2025" }
     ),
-    { banner: banners[2].banner, year: "2025" }
+    { year: "2025" }
   ),
   [toSeriesToken("bleach-sennen-kessen-hen-kashin-tan")]: buildDetailFromCard(
     latestReleases[2],
@@ -1553,7 +1629,7 @@ const details = {
       Array.from({ length: 9 }, (_, i) => 9 - i),
       { 9: "18 Apr 2026" }
     ),
-    { banner: banners[3].banner, year: "2026" }
+    { year: "2026" }
   ),
   [toSeriesToken("black-clover-s2-sub-indo")]: buildDetailFromCard(
     latestReleases[3],
@@ -1603,7 +1679,7 @@ const details = {
   [toSeriesToken("kusuriya-no-hitorigoto-s3")]: buildDetailFromCard(
     latestReleases[5],
     makeEpisodes("al-154210", "kusuriya-no-hitorigoto-s3", [4, 3, 2, 1], { 4: "17 Apr 2026" }),
-    { banner: banners[4].banner, year: "2026" }
+    { year: "2026" }
   ),
   [toSeriesToken("detective-conan")]: buildDetailFromCard(
     latestReleases[6],
@@ -1656,11 +1732,27 @@ const communityFeed = [
   },
 ];
 
+const enrichedTopAnime = Object.fromEntries(
+  Object.entries(topAnime).map(([period, list]) => [
+    period,
+    list.map((entry) => {
+      const cat = catalogMap.get(entry.slug);
+      const poster = pickValidImage(entry.poster, cat?.poster);
+      const banner = pickBestBanner(entry.banner, cat?.banner, poster);
+      return {
+        ...entry,
+        poster,
+        banner,
+      };
+    }),
+  ])
+);
+
 const snapshot = {
   generatedAt: "2026-10-24T00:00:00.000Z",
   source: "https://ylnime.com",
   banners,
-  topAnime,
+  topAnime: enrichedTopAnime,
   latestReleases,
   ongoing: ongoingList,
   completed: completedList,

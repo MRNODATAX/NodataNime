@@ -17,6 +17,8 @@ import {
   parseAnimeDetail,
   parseEpisodeHtml,
   normalizeEpisodeStreams,
+  resolvePosterUrl,
+  extractCssBackgroundUrl,
 } from "../src/parsers/ylnimeParser.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -162,6 +164,78 @@ describe("OBL-02: Real YLnime HTML Fixture Parsers", () => {
     const home = parseHome(homeHtml);
     assert.equal(home.banners.length, 1);
     assert.equal(home.banners[0].slug, "1piece-sub-indo");
+  });
+
+  it("normalizes non-CDN MyAnimeList covers, filters injected ad banners, and extracts lazy-loaded/CSS/og:image banners", () => {
+    // 1. Rewrite non-CDN myanimelist.net/images/... -> https://cdn.myanimelist.net/images/...
+    assert.equal(
+      resolvePosterUrl("http://myanimelist.net/images/anime/1015/138006.jpg"),
+      "https://cdn.myanimelist.net/images/anime/1015/138006.jpg"
+    );
+    assert.equal(
+      resolvePosterUrl("https://www.myanimelist.net/images/anime/1208/94745l.jpg"),
+      "https://cdn.myanimelist.net/images/anime/1208/94745l.jpg"
+    );
+
+    // 2. Tolak banner iklan YLnime (admin/ad_media/bad_*.png)
+    assert.equal(
+      resolvePosterUrl("https://ylnime.com/admin/ad_media/bad_1744001.png"),
+      "/assets/no-cover.svg"
+    );
+
+    // 3. Ekstraksi CSS background-image url(...)
+    assert.equal(
+      extractCssBackgroundUrl(
+        "background: linear-gradient(#000, transparent), url('https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg') center/cover;"
+      ),
+      "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg"
+    );
+
+    // 4. Kartu dengan iklan + gambar lazy-load (data-src) tetap memilih sampul anime asli
+    const adPollutedCardHtml = `
+      <div class="col">
+        <a href="?series=black-clover-s2-sub-indo">
+          <div class="card">
+            <img src="https://ylnime.com/admin/ad_media/bad_99.png" alt="Advertisement" />
+            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-src="https://myanimelist.net/images/anime/1704/154261.jpg" />
+            <span class="badge">Ongoing</span>
+            <h6>Black Clover 2nd Season</h6>
+          </div>
+        </a>
+      </div>`;
+    const parsedCards = parseCards(adPollutedCardHtml);
+    assert.equal(parsedCards.length, 1);
+    assert.equal(
+      parsedCards[0].poster,
+      "https://cdn.myanimelist.net/images/anime/1704/154261.jpg"
+    );
+
+    // 5. Detail anime mengekstrak widescreen banner dari meta og:image sementara poster tetap sampul vertikal
+    const detailWithOgBanner = `
+      <html>
+        <head>
+          <meta property="og:image" content="https://s4.anilist.co/file/anilistcdn/media/anime/banner/195516-B5M0cPaQbQXI.jpg" />
+        </head>
+        <body>
+          <div class="row">
+            <div class="col-md-3"><img class="img-fluid" src="https://myanimelist.net/images/anime/1500/154210.jpg" /></div>
+            <div class="col-md-9">
+              <h1>Kusuriya no Hitorigoto Season 3</h1>
+              <div class="d-flex"><span>Ongoing</span><span>TV</span><span>2026</span></div>
+              <p>Maomao kembali memecahkan intrik istana.</p>
+            </div>
+          </div>
+        </body>
+      </html>`;
+    const parsedDetail = parseAnimeDetail(detailWithOgBanner, "kusuriya-no-hitorigoto-s3");
+    assert.equal(
+      parsedDetail.poster,
+      "https://cdn.myanimelist.net/images/anime/1500/154210.jpg"
+    );
+    assert.equal(
+      parsedDetail.banner,
+      "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195516-B5M0cPaQbQXI.jpg"
+    );
   });
 });
 

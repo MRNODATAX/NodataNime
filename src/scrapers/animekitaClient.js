@@ -69,11 +69,14 @@ class AnimeKitaClient {
       .replace(/^https?:\/\/[^/]+\/?/i, "")
       .replace(/^\?series=/i, "");
     if (!rawSlug) return null;
+    const poster = resolvePosterUrl(item.cover || item.image || "");
+    const banner = resolvePosterUrl(item.banner || item.header || "") || poster;
     return {
       title: String(item.judul || item.title || rawSlug).trim(),
       slug: toSeriesToken(rawSlug),
       rawSlug,
-      poster: resolvePosterUrl(item.cover || item.image || ""),
+      poster,
+      banner: banner === "/assets/no-cover.svg" ? poster : banner,
       score: String(item.rating || item.score || ""),
       status: item.status || item.type || "Anime",
       label: item.lastch || item.hari || "",
