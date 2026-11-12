@@ -456,4 +456,73 @@ describe("OBL-04..10: NodataNime REST API, Data Integrity, Community, PWA & Secu
     assert.match(stylesCss, /\.nd-fhd-tag\s*\{/);
     assert.doesNotMatch(stylesCss, /grid-template-columns:\s*1fr\s*;/);
   });
+
+  it("resolves missing anime banners & covers across Hero, Detail, Schedule, Catalog, ISP-blocked hosts, and Cinema Dual-Layer UI (v7.2)", async () => {
+    const snap = JSON.parse(
+      fs.readFileSync(path.join(rootDir, "data/ylnime-snapshot.json"), "utf8")
+    );
+    const stylesCss = fs.readFileSync(path.join(rootDir, "public/css/styles.css"), "utf8");
+    const clientJs = fs.readFileSync(path.join(rootDir, "public/js/app.js"), "utf8");
+    const noBannerSvg = fs.readFileSync(
+      path.join(rootDir, "public/assets/no-banner.svg"),
+      "utf8"
+    );
+
+    // 1. Seluruh 195 item katalog, 7 banner hero, 12 detail, dan 7 hari jadwal memiliki poster & banner valid (0 no-cover.svg / non-CDN MAL)
+    assert.ok(snap.banners.length >= 7);
+    assert.ok(snap.catalog.length >= 195);
+    const assertCleanArtwork = (items, label) => {
+      for (const item of items) {
+        assert.ok(
+          item.poster && !item.poster.includes("no-cover.svg"),
+          `${label} "${item.title}" tidak boleh memiliki poster kosong/no-cover.svg`
+        );
+        assert.ok(
+          item.banner && !item.banner.includes("no-cover.svg"),
+          `${label} "${item.title}" tidak boleh memiliki banner kosong/no-cover.svg`
+        );
+        assert.doesNotMatch(
+          item.poster,
+          /:\/\/(?:www\.)?myanimelist\.net\/images\//i,
+          `${label} "${item.title}" wajib memakai cdn.myanimelist.net`
+        );
+      }
+    };
+    assertCleanArtwork(snap.banners, "Banner");
+    assertCleanArtwork(snap.catalog, "Catalog");
+    assertCleanArtwork(Object.values(snap.details), "Detail");
+    for (const dayGroup of snap.schedule) {
+      assertCleanArtwork(dayGroup.animeList, `Jadwal ${dayGroup.day}`);
+    }
+
+    // 2. Endpoint /api/anime/home mengutamakan widescreen banner sejati (/banner/) di urutan awal Hero
+    const homeRes = await fetch(`${baseUrl}/api/anime/home`);
+    assert.equal(homeRes.status, 200);
+    const homeBody = await homeRes.json();
+    assert.match(homeBody.data.banners[0].banner, /\/banner\//i);
+    assertCleanArtwork(homeBody.data.banners, "API Home Banner");
+    assertCleanArtwork(homeBody.data.latestReleases, "API Latest");
+    assertCleanArtwork(homeBody.data.ongoing, "API Ongoing");
+
+    // 3. Host sampul yang diblokir ISP Indonesia (otakudesu.blog / root animekita.org) otomatis diproksi via /api/anime/image-proxy
+    const searchRes = await fetch(`${baseUrl}/api/anime/search?q=Mynoghra`);
+    assert.equal(searchRes.status, 200);
+    const searchBody = await searchRes.json();
+    assert.ok(searchBody.data.items.length >= 1);
+    assert.match(
+      searchBody.data.items[0].poster,
+      /^\/api\/anime\/image-proxy\?url=/
+    );
+
+    // 4. Verifikasi Dual-Layer Hero Mode, Detail Banner Strip, no-banner.svg, & Multi-Stage Fallback di frontend
+    assert.match(noBannerSvg, /<svg\b/);
+    assert.match(clientJs, /function hasDistinctWidescreenBanner\(/);
+    assert.match(clientJs, /function buildTitledArtworkDataUri\(/);
+    assert.match(clientJs, /class="nd-hero-poster-showcase"/);
+    assert.match(clientJs, /class="nd-detail-banner-strip"/);
+    assert.match(stylesCss, /\.nd-hero-bg\.is-ambient-cover\s*\{/);
+    assert.match(stylesCss, /\.nd-hero-poster-showcase\s*\{/);
+    assert.match(stylesCss, /\.nd-detail-banner-strip\s*\{/);
+    assert.doesNotMatch(stylesCss, /grid-template-columns:\s*1fr\s*;/);
+  });
 });

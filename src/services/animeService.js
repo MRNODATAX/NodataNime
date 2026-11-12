@@ -3,6 +3,7 @@ import { ylnimeClient } from "../scrapers/ylnimeClient.js";
 import { animeKitaClient } from "../scrapers/animekitaClient.js";
 import { snapshotStore } from "./snapshotStore.js";
 import { communityStore } from "./communityStore.js";
+import { artworkResolver } from "./artworkResolver.js";
 import {
   fromEpisodeToken,
   fromSeriesToken,
@@ -49,14 +50,14 @@ function buildDetailFromCachedCard(card) {
  */
 export class AnimeService {
   async getHome() {
-    return appCache.remember("home:v3", async () => {
+    return appCache.remember("home:v4", async () => {
       try {
         const [liveHome, communityFeed] = await Promise.all([
           ylnimeClient.scrapeHome(),
           ylnimeClient.scrapeCommunityFeed().catch(() => snapshotStore.getCommunityFeed()),
         ]);
         const snap = snapshotStore.getHome();
-        return {
+        const rawHome = {
           dataSource: "live-ylnime",
           banners: (liveHome.banners.length ? liveHome.banners : snap.banners).slice(0, 8),
           topAnime: liveHome.topAnime.today.length ? liveHome.topAnime : snap.topAnime,
@@ -68,11 +69,13 @@ export class AnimeService {
           genres: snap.genres,
           communityFeed,
         };
+        return artworkResolver.enrichHomePayload(rawHome);
       } catch {
-        return {
+        const snapHome = {
           dataSource: "verified-snapshot",
           ...snapshotStore.getHome(),
         };
+        return artworkResolver.enrichHomePayload(snapHome);
       }
     });
   }
@@ -84,16 +87,24 @@ export class AnimeService {
     return appCache.remember(`list:${cleanType}:${p}`, async () => {
       try {
         const live = await ylnimeClient.scrapeList(cleanType, p);
-        return { dataSource: "live-ylnime", type: cleanType, ...live };
+        const items = await artworkResolver.enrichCardList(live.items || [], {
+          allowRemoteLookup: true,
+          maxRemoteLookups: 4,
+        });
+        return { dataSource: "live-ylnime", type: cleanType, ...live, items };
       } catch {
         if (cleanType === "baru") {
           try {
             const upstream = await animeKitaClient.fetchLatest(p);
             if (upstream.length > 0) {
+              const items = await artworkResolver.enrichCardList(upstream, {
+                allowRemoteLookup: true,
+                maxRemoteLookups: 4,
+              });
               return {
                 dataSource: "upstream-animekita",
                 type: cleanType,
-                items: upstream,
+                items,
                 pagination: {
                   currentPage: p,
                   prevPage: p > 1 ? p - 1 : null,
@@ -108,10 +119,12 @@ export class AnimeService {
             // Lanjut ke Tier 3 Snapshot
           }
         }
+        const snapList = snapshotStore.getList(cleanType, p);
         return {
           dataSource: "verified-snapshot",
           type: cleanType,
-          ...snapshotStore.getList(cleanType, p),
+          ...snapList,
+          items: (snapList.items || []).map((c) => artworkResolver.enrichCardSync(c)),
         };
       }
     });
@@ -127,10 +140,15 @@ export class AnimeService {
         const pageSize = 24;
         const totalPages = Math.max(1, Math.ceil(live.items.length / pageSize));
         const safePage = Math.min(p, totalPages);
+        const pageItems = live.items.slice((safePage - 1) * pageSize, safePage * pageSize);
+        const items = await artworkResolver.enrichCardList(pageItems, {
+          allowRemoteLookup: true,
+          maxRemoteLookups: 4,
+        });
         return {
           dataSource: "live-ylnime",
           letter: live.letter,
-          items: live.items.slice((safePage - 1) * pageSize, safePage * pageSize),
+          items,
           pagination: {
             currentPage: safePage,
             prevPage: safePage > 1 ? p - 1 : null,
@@ -142,9 +160,11 @@ export class AnimeService {
           },
         };
       } catch {
+        const snapAz = snapshotStore.getAz(initial, p);
         return {
           dataSource: "verified-snapshot",
-          ...snapshotStore.getAz(initial, p),
+          ...snapAz,
+          items: (snapAz.items || []).map((c) => artworkResolver.enrichCardSync(c)),
         };
       }
     });
@@ -168,11 +188,17 @@ export class AnimeService {
     return appCache.remember(`genre:${g}:${p}`, async () => {
       try {
         const live = await ylnimeClient.scrapeByGenre(g, p);
-        return { dataSource: "live-ylnime", ...live };
+        const items = await artworkResolver.enrichCardList(live.items || [], {
+          allowRemoteLookup: true,
+          maxRemoteLookups: 4,
+        });
+        return { dataSource: "live-ylnime", ...live, items };
       } catch {
+        const snapGenre = snapshotStore.getByGenre(g, p);
         return {
           dataSource: "verified-snapshot",
-          ...snapshotStore.getByGenre(g, p),
+          ...snapGenre,
+          items: (snapGenre.items || []).map((c) => artworkResolver.enrichCardSync(c)),
         };
       }
     });
@@ -182,9 +208,12 @@ export class AnimeService {
     return appCache.remember("schedule:weekly", async () => {
       try {
         const days = await ylnimeClient.scrapeSchedule();
-        return { dataSource: "live-ylnime", days };
+        return { dataSource: "live-ylnime", days: artworkResolver.enrichScheduleDays(days) };
       } catch {
-        return { dataSource: "verified-snapshot", days: snapshotStore.getSchedule() };
+        return {
+          dataSource: "verified-snapshot",
+          days: artworkResolver.enrichScheduleDays(snapshotStore.getSchedule()),
+        };
       }
     });
   }
@@ -197,21 +226,33 @@ export class AnimeService {
       try {
         const liveItems = await ylnimeClient.scrapeSearch(q);
         if (liveItems.length > 0) {
-          rememberSearchCards(liveItems);
-          return { dataSource: "live-ylnime", query: q, items: liveItems };
+          const items = await artworkResolver.enrichCardList(liveItems, {
+            allowRemoteLookup: true,
+            maxRemoteLookups: 4,
+          });
+          rememberSearchCards(items);
+          return { dataSource: "live-ylnime", query: q, items };
         }
         const upstreamOnEmpty = await animeKitaClient.fetchSearch(q).catch(() => []);
         if (upstreamOnEmpty.length > 0) {
-          rememberSearchCards(upstreamOnEmpty);
-          return { dataSource: "upstream-animekita", query: q, items: upstreamOnEmpty };
+          const items = await artworkResolver.enrichCardList(upstreamOnEmpty, {
+            allowRemoteLookup: true,
+            maxRemoteLookups: 4,
+          });
+          rememberSearchCards(items);
+          return { dataSource: "upstream-animekita", query: q, items };
         }
         return { dataSource: "live-ylnime", query: q, items: [] };
       } catch {
         try {
           const upstreamItems = await animeKitaClient.fetchSearch(q);
           if (upstreamItems.length > 0) {
-            rememberSearchCards(upstreamItems);
-            return { dataSource: "upstream-animekita", query: q, items: upstreamItems };
+            const items = await artworkResolver.enrichCardList(upstreamItems, {
+              allowRemoteLookup: true,
+              maxRemoteLookups: 4,
+            });
+            rememberSearchCards(items);
+            return { dataSource: "upstream-animekita", query: q, items };
           }
         } catch {
           // Lanjut ke Tier 3 Snapshot
@@ -219,7 +260,7 @@ export class AnimeService {
         return {
           dataSource: "verified-snapshot",
           query: q,
-          items: snapshotStore.search(q),
+          items: snapshotStore.search(q).map((c) => artworkResolver.enrichCardSync(c)),
         };
       }
     });
@@ -234,20 +275,23 @@ export class AnimeService {
 
     try {
       const liveDetail = await ylnimeClient.scrapeDetail(clean);
-      const payload = { dataSource: "live-ylnime", ...liveDetail };
+      const enriched = await artworkResolver.enrichDetail(liveDetail, { allowRemoteLookup: true });
+      const payload = { dataSource: "live-ylnime", ...enriched };
       appCache.set(`detail:${clean}`, payload);
       return payload;
     } catch {
       const fallback = snapshotStore.getDetail(clean);
       if (fallback) {
-        const payload = { dataSource: "verified-snapshot", ...fallback };
+        const enriched = await artworkResolver.enrichDetail(fallback, { allowRemoteLookup: false });
+        const payload = { dataSource: "verified-snapshot", ...enriched };
         appCache.set(`detail:${clean}`, payload);
         return payload;
       }
       const canonicalToken = toSeriesToken(fromSeriesToken(clean));
       const cardFallback = buildDetailFromCachedCard(searchCardCache.get(canonicalToken));
       if (cardFallback) {
-        return { dataSource: "search-card-cache", ...cardFallback };
+        const enriched = await artworkResolver.enrichDetail(cardFallback, { allowRemoteLookup: true });
+        return { dataSource: "search-card-cache", ...enriched };
       }
       return null;
     }
@@ -276,20 +320,34 @@ export class AnimeService {
           }),
           seriesSlug ? this.getDetail(seriesSlug).catch(() => null) : Promise.resolve(null),
         ]);
+        const snapArtwork = artworkResolver.lookupSnapshotArtwork({
+          slug: seriesSlug,
+          title: liveEp?.animeTitle || detail?.title,
+        });
         return {
           dataSource: "live-ylnime",
           ...liveEp,
-          poster: detail?.poster || "/assets/no-cover.svg",
+          poster: detail?.poster || snapArtwork?.poster || "/assets/no-cover.svg",
+          banner: detail?.banner || snapArtwork?.banner || detail?.poster || "/assets/no-cover.svg",
           episodes: detail?.episodes || [],
         };
       } catch {
+        const snapEp = snapshotStore.getEpisode({
+          seriesSlug,
+          episodeId,
+          epNumber: epNum,
+        });
+        const enrichedArtwork = artworkResolver.enrichCardSync({
+          slug: seriesSlug,
+          title: snapEp.animeTitle,
+          poster: snapEp.poster,
+          banner: snapEp.banner,
+        });
         return {
           dataSource: "verified-snapshot",
-          ...snapshotStore.getEpisode({
-            seriesSlug,
-            episodeId,
-            epNumber: epNum,
-          }),
+          ...snapEp,
+          poster: enrichedArtwork.poster,
+          banner: enrichedArtwork.banner,
         };
       }
     });

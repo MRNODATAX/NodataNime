@@ -267,13 +267,136 @@ const notifPanel = document.getElementById("notifPanel");
 const notifBtn = document.getElementById("notifBtn");
 
 const FALLBACK_POSTER_SRC = "/assets/no-cover.svg";
+const FALLBACK_BANNER_SRC = "/assets/no-banner.svg";
+
+const PROXYABLE_CLIENT_IMAGE_HOSTS = [
+  "myanimelist.net",
+  "anilist.co",
+  "animekita.org",
+  "otakudesu.blog",
+  "otakudesu.cloud",
+  "otakudesu.io",
+  "pinimg.com",
+  "wp.com",
+  "ylnime.com",
+];
+
+function hasDistinctWidescreenBanner(bannerUrl = "", posterUrl = "") {
+  const b = String(bannerUrl || "").trim();
+  const p = String(posterUrl || "").trim();
+  if (!b || b === FALLBACK_POSTER_SRC || b === FALLBACK_BANNER_SRC) return false;
+  if (/\/banner\//i.test(b)) return true;
+  return Boolean(p && b !== p);
+}
+
+function canRetryViaImageProxy(rawSrc = "") {
+  const s = String(rawSrc || "").trim();
+  if (!s || s.startsWith("/") || s.startsWith("data:") || s.startsWith("blob:")) {
+    return false;
+  }
+  try {
+    const parsed = new URL(s);
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return false;
+    const host = parsed.hostname.toLowerCase();
+    return PROXYABLE_CLIENT_IMAGE_HOSTS.some(
+      (suffix) => host === suffix || host.endsWith(`.${suffix}`)
+    );
+  } catch {
+    return false;
+  }
+}
+
+function buildTitledArtworkDataUri(rawTitle = "", isBanner = false) {
+  const cleanTitle = String(rawTitle || "")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!cleanTitle) {
+    return isBanner ? FALLBACK_BANNER_SRC : FALLBACK_POSTER_SRC;
+  }
+
+  const words = cleanTitle.split(" ").filter(Boolean);
+  const initials = words
+    .slice(0, 2)
+    .map((w) => w.charAt(0).toUpperCase())
+    .join("")
+    .replace(/[^A-Z0-9]/g, "") || "ND";
+
+  const wrapLines = (text, maxChars, maxLines) => {
+    const out = [];
+    let current = "";
+    for (const word of text.split(" ")) {
+      const next = current ? `${current} ${word}` : word;
+      if (next.length <= maxChars || !current) {
+        current = next.slice(0, maxChars + 4);
+      } else {
+        out.push(current);
+        current = word.slice(0, maxChars + 4);
+        if (out.length >= maxLines - 1) break;
+      }
+    }
+    if (current && out.length < maxLines) out.push(current);
+    return out;
+  };
+
+  if (isBanner) {
+    const lines = wrapLines(cleanTitle, 38, 2);
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 440"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#070a14"/><stop offset="55%" stop-color="#131b31"/><stop offset="100%" stop-color="#090c16"/></linearGradient><radialGradient id="r" cx="76%" cy="40%" r="46%"><stop offset="0%" stop-color="#ff2a4b" stop-opacity="0.3"/><stop offset="100%" stop-color="#070a14" stop-opacity="0"/></radialGradient></defs><rect width="1280" height="440" fill="url(#g)"/><rect width="1280" height="440" fill="url(#r)"/><g transform="translate(970,220)"><circle r="66" fill="#0d1426" stroke="#ff2a4b" stroke-opacity="0.45" stroke-width="2"/><text y="11" text-anchor="middle" fill="#f8fafc" font-family="Plus Jakarta Sans,sans-serif" font-size="34" font-weight="800">${esc(initials)}</text></g></svg>`;
+    void lines;
+    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  }
+
+  const lines = wrapLines(cleanTitle, 17, 3);
+  const lineNodes = lines
+    .map(
+      (line, idx) =>
+        `<text x="150" y="${262 + idx * 24}" text-anchor="middle" fill="#e2e8f0" font-family="Plus Jakarta Sans,sans-serif" font-size="16" font-weight="700">${esc(line)}</text>`
+    )
+    .join("");
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 420"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0b1020"/><stop offset="55%" stop-color="#151e36"/><stop offset="100%" stop-color="#090d18"/></linearGradient><radialGradient id="r" cx="50%" cy="34%" r="52%"><stop offset="0%" stop-color="#ff2a4b" stop-opacity="0.26"/><stop offset="100%" stop-color="#090d18" stop-opacity="0"/></radialGradient></defs><rect width="300" height="420" fill="url(#g)"/><rect width="300" height="420" fill="url(#r)"/><circle cx="150" cy="156" r="46" fill="#0f172a" stroke="#ff2a4b" stroke-opacity="0.5" stroke-width="2"/><text x="150" y="166" text-anchor="middle" fill="#ffffff" font-family="Plus Jakarta Sans,sans-serif" font-size="28" font-weight="800">${esc(initials)}</text>${lineNodes}<text x="150" y="384" text-anchor="middle" fill="#64748b" font-family="Plus Jakarta Sans,sans-serif" font-size="11" font-weight="700" letter-spacing="1.4">NODATANIME</text></svg>`;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
 
 function applySafePosterFallback(imgEl) {
   if (!(imgEl instanceof HTMLImageElement)) return;
   if (imgEl.id === "qrisDynamicImg" || imgEl.id === "qrisPosterImg") return;
+
+  const currentStage = Number.parseInt(imgEl.dataset.fallbackStage || "0", 10) || 0;
+  const currentAttrSrc = imgEl.getAttribute("src") || "";
+  const isBanner = imgEl.dataset.fallbackKind === "banner";
+
+  // Tahap 1: Coba URL cadangan eksplisit (mis. sampul vertikal ketika banner widescreen gagal)
+  if (currentStage < 1) {
+    const candidateFallback = safeUrl(imgEl.dataset.fallbackSrc || "", "");
+    if (
+      candidateFallback &&
+      candidateFallback !== currentAttrSrc &&
+      candidateFallback !== FALLBACK_POSTER_SRC &&
+      candidateFallback !== FALLBACK_BANNER_SRC
+    ) {
+      imgEl.dataset.fallbackStage = "1";
+      if (imgEl.classList.contains("nd-hero-bg") || imgEl.classList.contains("nd-detail-banner-img")) {
+        imgEl.classList.remove("is-widescreen-banner");
+        imgEl.classList.add("is-ambient-cover");
+      }
+      imgEl.src = candidateFallback;
+      return;
+    }
+  }
+
+  // Tahap 2: Jika host CDN eksternal terblokir ISP lokal, alihkan otomatis lewat /api/anime/image-proxy
+  if (currentStage < 2 && canRetryViaImageProxy(currentAttrSrc)) {
+    imgEl.dataset.fallbackStage = "2";
+    imgEl.src = `/api/anime/image-proxy?url=${encodeURIComponent(currentAttrSrc)}`;
+    return;
+  }
+
+  // Tahap 3: Render sampul/banner SVG bertajuk judul anime (atau aset statis lokal) yang 100% CSP-safe
   if (imgEl.dataset.fallbackApplied === "1") return;
+  imgEl.dataset.fallbackStage = "3";
   imgEl.dataset.fallbackApplied = "1";
-  imgEl.src = FALLBACK_POSTER_SRC;
+  const titleHint = imgEl.dataset.fallbackTitle || imgEl.getAttribute("alt") || "";
+  imgEl.src = buildTitledArtworkDataUri(titleHint, isBanner);
 }
 
 function hydrateBrokenImages(root = document) {
@@ -1470,6 +1593,7 @@ function renderAnimeCard(item, options = {}) {
       <div class="nd-card-poster-wrap">
         <img
           src="${poster}"
+          data-fallback-title="${title}"
           alt="${title}"
           class="nd-card-poster"
           loading="lazy"
@@ -1699,37 +1823,61 @@ function renderHeroSlide(banners, idx) {
   const b = banners[idx] || banners[0];
   if (!b) return "";
   const epShort = compactCardBadge(b.episode || "");
+  const posterSrc = safeUrl(b.poster, FALLBACK_POSTER_SRC);
+  const bannerSrc = safeUrl(b.banner || b.poster, FALLBACK_BANNER_SRC);
+  const isWideBanner = hasDistinctWidescreenBanner(bannerSrc, posterSrc);
+  const showPosterShowcase = !isWideBanner && posterSrc && posterSrc !== FALLBACK_POSTER_SRC;
+
   return `
     <img
-      src="${esc(safeUrl(b.banner || b.poster, "/assets/no-cover.svg"))}"
+      src="${esc(bannerSrc)}"
+      data-fallback-src="${esc(posterSrc)}"
+      data-fallback-kind="banner"
+      data-fallback-title="${esc(b.title)}"
       alt="${esc(b.title)}"
-      class="nd-hero-bg"
+      class="nd-hero-bg ${isWideBanner ? "is-widescreen-banner" : "is-ambient-cover"}"
       referrerpolicy="no-referrer"
     />
     <div class="nd-hero-shade"></div>
-    <div class="nd-hero-content">
-      <div class="nd-hero-badges">
-        <span class="nd-pill-crimson">${esc(b.status || "Sedang Tayang")}</span>
-        ${epShort ? `<span class="nd-pill-glass">${esc(epShort)}</span>` : ""}
-        ${b.score ? `<span class="nd-pill-glass nd-pill-score">${SVG_ICONS.star}<span>${esc(b.score)}</span></span>` : ""}
-        ${(b.genres || []).slice(0, 2).map((g) => `<span class="nd-pill-glass nd-hero-genre-pill">${esc(g)}</span>`).join("")}
+    <div class="nd-hero-inner ${showPosterShowcase ? "has-poster-showcase" : "is-widescreen"}">
+      <div class="nd-hero-content">
+        <div class="nd-hero-badges">
+          <span class="nd-pill-crimson">${esc(b.status || "Sedang Tayang")}</span>
+          ${epShort ? `<span class="nd-pill-glass">${esc(epShort)}</span>` : ""}
+          ${b.score ? `<span class="nd-pill-glass nd-pill-score">${SVG_ICONS.star}<span>${esc(b.score)}</span></span>` : ""}
+          ${(b.genres || []).slice(0, 2).map((g) => `<span class="nd-pill-glass nd-hero-genre-pill">${esc(g)}</span>`).join("")}
+        </div>
+        <h1 class="nd-hero-title">${esc(b.title)}</h1>
+        <p class="nd-hero-synopsis">${esc(b.synopsis || "")}</p>
+        <div class="nd-hero-actions">
+          <button
+            type="button"
+            class="nd-btn nd-btn-primary"
+            data-watch-series="${esc(b.slug)}"
+            data-watch-ep="${esc(b.episodeId || "")}"
+          >
+            ${SVG_ICONS.play}
+            <span>Tonton Sekarang</span>
+          </button>
+          <button type="button" class="nd-btn nd-btn-secondary" data-open-series="${esc(b.slug)}">
+            <span>Detail &amp; Episode</span>
+          </button>
+        </div>
       </div>
-      <h1 class="nd-hero-title">${esc(b.title)}</h1>
-      <p class="nd-hero-synopsis">${esc(b.synopsis || "")}</p>
-      <div class="nd-hero-actions">
-        <button
-          type="button"
-          class="nd-btn nd-btn-primary"
-          data-watch-series="${esc(b.slug)}"
-          data-watch-ep="${esc(b.episodeId || "")}"
-        >
-          ${SVG_ICONS.play}
-          <span>Tonton Sekarang</span>
-        </button>
-        <button type="button" class="nd-btn nd-btn-secondary" data-open-series="${esc(b.slug)}">
-          <span>Detail &amp; Episode</span>
-        </button>
-      </div>
+      ${
+        showPosterShowcase
+          ? `<div class="nd-hero-poster-showcase" data-open-series="${esc(b.slug)}" aria-hidden="true">
+              <img
+                src="${esc(posterSrc)}"
+                data-fallback-title="${esc(b.title)}"
+                alt=""
+                class="nd-hero-poster-card"
+                decoding="async"
+                referrerpolicy="no-referrer"
+              />
+            </div>`
+          : ""
+      }
     </div>
     <div class="nd-hero-dots">
       ${banners
@@ -1751,6 +1899,7 @@ function renderTopRankingItems(topAnime, tabKey) {
         <div class="nd-rank-num">${esc(item.rank || idx + 1)}</div>
         <img
           src="${esc(safeUrl(item.poster, "/assets/no-cover.svg"))}"
+          data-fallback-title="${esc(item.title)}"
           alt="${esc(item.title)}"
           class="nd-rank-poster"
           loading="lazy"
@@ -2260,16 +2409,32 @@ async function renderDetailView(slug) {
         </button>
       </div>
 
-      <section class="nd-detail-hero">
+      <section class="nd-detail-hero ${hasDistinctWidescreenBanner(safeUrl(data.banner || data.poster, FALLBACK_BANNER_SRC), safeUrl(data.poster, FALLBACK_POSTER_SRC)) ? "has-widescreen-banner" : "has-ambient-banner"}">
+        <div class="nd-detail-banner-strip">
+          <img
+            src="${esc(safeUrl(data.banner || data.poster, FALLBACK_BANNER_SRC))}"
+            data-fallback-src="${esc(safeUrl(data.poster, FALLBACK_POSTER_SRC))}"
+            data-fallback-kind="banner"
+            data-fallback-title="${esc(data.title)}"
+            alt=""
+            class="nd-detail-banner-img ${hasDistinctWidescreenBanner(safeUrl(data.banner || data.poster, FALLBACK_BANNER_SRC), safeUrl(data.poster, FALLBACK_POSTER_SRC)) ? "is-widescreen-banner" : "is-ambient-cover"}"
+            referrerpolicy="no-referrer"
+          />
+          <div class="nd-detail-banner-shade"></div>
+        </div>
         <img
-          src="${esc(safeUrl(data.banner || data.poster, "/assets/no-cover.svg"))}"
+          src="${esc(safeUrl(data.banner || data.poster, FALLBACK_BANNER_SRC))}"
+          data-fallback-src="${esc(safeUrl(data.poster, FALLBACK_POSTER_SRC))}"
+          data-fallback-kind="banner"
+          data-fallback-title="${esc(data.title)}"
           alt=""
           class="nd-detail-backdrop"
           referrerpolicy="no-referrer"
         />
         <div class="nd-detail-body">
           <img
-            src="${esc(safeUrl(data.poster, "/assets/no-cover.svg"))}"
+            src="${esc(safeUrl(data.poster, FALLBACK_POSTER_SRC))}"
+            data-fallback-title="${esc(data.title)}"
             alt="${esc(data.title)}"
             class="nd-detail-poster"
             referrerpolicy="no-referrer"
@@ -3454,7 +3619,7 @@ function renderInstantSearchResults(q, items = []) {
           .map(
             (item) => `
             <div class="nd-search-item" role="option" data-open-series="${esc(item.slug)}">
-              <img src="${esc(safeUrl(item.poster, FALLBACK_POSTER_SRC))}" alt="" loading="lazy" referrerpolicy="no-referrer" />
+              <img src="${esc(safeUrl(item.poster, FALLBACK_POSTER_SRC))}" data-fallback-title="${esc(item.title)}" alt="" loading="lazy" referrerpolicy="no-referrer" />
               <div class="nd-search-meta">
                 <div class="nd-search-title">${esc(item.title)}</div>
                 <div class="nd-search-sub">${esc(item.status || "Anime")}${item.episode ? ` • ${esc(item.episode)}` : ""}${item.score ? ` • ★ ${esc(item.score)}` : ""}</div>

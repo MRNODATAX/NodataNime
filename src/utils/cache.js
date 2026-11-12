@@ -3,6 +3,7 @@
  */
 const PINNED_CORE_KEYS = new Set([
   "home:v3",
+  "home:v4",
   "genres:all",
   "schedule:weekly",
   "community:external:v1",

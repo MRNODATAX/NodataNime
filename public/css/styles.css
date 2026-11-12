@@ -1179,21 +1179,42 @@ textarea {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.75) saturate(1.08);
+  object-position: center 26%;
+  filter: brightness(0.76) saturate(1.08);
   transform: scale(1.02);
-  transition: transform 6s ease;
+  transition: transform 6s ease, filter 0.35s ease;
 }
 
-.nd-hero:hover .nd-hero-bg {
+.nd-hero-bg.is-ambient-cover {
+  object-position: center 32%;
+  filter: blur(22px) brightness(0.46) saturate(1.24);
+  transform: scale(1.14);
+}
+
+.nd-hero:hover .nd-hero-bg.is-widescreen-banner {
   transform: scale(1.06);
+}
+
+.nd-hero:hover .nd-hero-bg.is-ambient-cover {
+  transform: scale(1.17);
 }
 
 .nd-hero-shade {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(6, 8, 15, 0.95) 0%, rgba(6, 8, 15, 0.72) 50%, rgba(6, 8, 15, 0.2) 100%),
+    linear-gradient(90deg, rgba(6, 8, 15, 0.95) 0%, rgba(6, 8, 15, 0.72) 52%, rgba(6, 8, 15, 0.24) 100%),
     linear-gradient(0deg, rgba(6, 8, 15, 0.96) 0%, rgba(6, 8, 15, 0.3) 60%, transparent 100%);
+}
+
+.nd-hero-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
 }
 
 .nd-hero-content {
@@ -1201,6 +1222,41 @@ textarea {
   z-index: 2;
   padding: 34px 36px;
   max-width: 680px;
+  min-width: 0;
+}
+
+.nd-hero-poster-showcase {
+  flex-shrink: 0;
+  align-self: center;
+  margin-right: 44px;
+  margin-block: 26px;
+  cursor: pointer;
+}
+
+.nd-hero-poster-card {
+  display: block;
+  width: 186px;
+  aspect-ratio: 3 / 4.2;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 22px 54px rgba(0, 0, 0, 0.76),
+    0 0 0 1px rgba(255, 42, 75, 0.18);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.nd-hero-poster-showcase:hover .nd-hero-poster-card {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow:
+    0 26px 60px rgba(0, 0, 0, 0.84),
+    0 0 24px rgba(255, 42, 75, 0.28);
+}
+
+@media (max-width: 860px) {
+  .nd-hero-poster-showcase {
+    display: none;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1938,21 +1994,60 @@ textarea {
   margin-bottom: 22px;
 }
 
+.nd-detail-banner-strip {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: clamp(148px, 21vw, 232px);
+  overflow: hidden;
+  background: #080b14;
+}
+
+.nd-detail-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 26%;
+  display: block;
+}
+
+.nd-detail-banner-img.is-widescreen-banner {
+  filter: brightness(0.84) saturate(1.1);
+}
+
+.nd-detail-banner-img.is-ambient-cover {
+  object-position: center 30%;
+  filter: blur(18px) brightness(0.56) saturate(1.25);
+  transform: scale(1.14);
+}
+
+.nd-detail-banner-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 11, 20, 0.12) 0%,
+    rgba(13, 17, 27, 0.56) 62%,
+    rgba(13, 17, 27, 0.98) 100%
+  );
+}
+
 .nd-detail-backdrop {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.2;
-  filter: blur(20px) saturate(1.15);
+  opacity: 0.16;
+  filter: blur(24px) saturate(1.15);
   transform: scale(1.1);
 }
 
 .nd-detail-body {
   position: relative;
   z-index: 2;
-  padding: 26px 28px;
+  margin-top: -64px;
+  padding: 0 28px 26px;
   display: grid;
   grid-template-columns: 205px minmax(0, 1fr);
   gap: 26px;
@@ -1960,10 +2055,14 @@ textarea {
 }
 
 @media (max-width: 760px) {
+  .nd-detail-banner-strip {
+    height: 138px;
+  }
   .nd-detail-body {
+    margin-top: -54px;
     grid-template-columns: minmax(0, 1fr);
-    padding: 18px;
-    gap: 18px;
+    padding: 0 18px 20px;
+    gap: 16px;
   }
 }
 

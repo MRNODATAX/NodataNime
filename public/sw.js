@@ -1,4 +1,4 @@
-const CACHE_VERSION = "nodatanime-pwa-v7.1";
+const CACHE_VERSION = "nodatanime-pwa-v7.2";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const API_CACHE = `${CACHE_VERSION}-api`;
 
@@ -6,10 +6,11 @@ const PRECACHE_URLS = [
   "/",
   "/offline.html",
   "/manifest.webmanifest",
-  "/css/styles.css?v=7.1",
-  "/js/app.js?v=7.1",
+  "/css/styles.css?v=7.2",
+  "/js/app.js?v=7.2",
   "/assets/favicon.svg",
   "/assets/no-cover.svg",
+  "/assets/no-banner.svg",
   "/assets/icon-192.png",
   "/assets/icon-512.png",
   "/assets/apple-touch-icon.png",
@@ -64,9 +65,10 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  // Jangan pernah men-cache stream video besar maupun endpoint verifikasi QRIS dinamis (/api/support/*)
+  // Jangan pernah men-cache stream video, proxy gambar biner, maupun endpoint verifikasi QRIS dinamis (/api/support/*)
   if (
     url.pathname.startsWith("/api/anime/stream-proxy") ||
+    url.pathname.startsWith("/api/anime/image-proxy") ||
     url.pathname.startsWith("/api/support/") ||
     url.pathname.endsWith(".mp4")
   ) {

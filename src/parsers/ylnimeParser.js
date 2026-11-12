@@ -71,9 +71,22 @@ export function sanitizeHttpUrl(rawUrl = "") {
   }
 }
 
+const AD_OR_TRACKER_IMAGE_RE =
+  /(?:\/admin\/ad_media\/|histats\.com|profitableratecpmnetwork|\/spacer\.gif|\/blank\.gif|1x1\.gif)/i;
+
+const HTTPS_UPGRADE_HOSTS = new Set([
+  "cdn.myanimelist.net",
+  "s4.anilist.co",
+  "assets.animekita.org",
+  "ylnime.com",
+  "www.ylnime.com",
+  "i.pinimg.com",
+  "upload.wikimedia.org",
+]);
+
 export function resolvePosterUrl(src = "") {
   const raw = String(src || "").trim();
-  if (!raw || raw.endsWith("no-cover.svg")) {
+  if (!raw || raw.endsWith("no-cover.svg") || AD_OR_TRACKER_IMAGE_RE.test(raw)) {
     return "/assets/no-cover.svg";
   }
   if (/^(javascript|data|vbscript|file|blob):/i.test(raw)) {
@@ -85,13 +98,66 @@ export function resolvePosterUrl(src = "") {
     if (resolved.protocol !== "https:" && resolved.protocol !== "http:") {
       return "/assets/no-cover.svg";
     }
-    if (resolved.pathname.endsWith("/assets/no-cover.svg")) {
+    if (
+      resolved.pathname.endsWith("/assets/no-cover.svg") ||
+      resolved.pathname.endsWith("no-cover.svg") ||
+      AD_OR_TRACKER_IMAGE_RE.test(resolved.href)
+    ) {
       return "/assets/no-cover.svg";
+    }
+    // YLnime sering menyajikan URL MyAnimeList tanpa subdomain `cdn.` (mis. https://myanimelist.net/images/anime/...)
+    // yang mengembalikan 404/HTML di browser; arahkan otomatis ke CDN gambar resmi `cdn.myanimelist.net`.
+    const lowerHost = resolved.hostname.toLowerCase();
+    if (
+      (lowerHost === "myanimelist.net" || lowerHost === "www.myanimelist.net") &&
+      resolved.pathname.startsWith("/images/")
+    ) {
+      resolved.hostname = "cdn.myanimelist.net";
+      resolved.protocol = "https:";
+    } else if (resolved.protocol === "http:" && HTTPS_UPGRADE_HOSTS.has(lowerHost)) {
+      resolved.protocol = "https:";
     }
     return resolved.href;
   } catch {
     return "/assets/no-cover.svg";
   }
+}
+
+export function extractCssBackgroundUrl(styleValue = "") {
+  const match = String(styleValue || "").match(/url\(\s*(['"]?)([^'")]+)\1\s*\)/i);
+  return match && match[2] ? match[2].trim() : "";
+}
+
+export function extractBestImageUrl($, imgNode, containerNode = null) {
+  const candidates = [];
+  if (imgNode && imgNode.length) {
+    for (const attr of ["data-src", "data-lazy-src", "data-original", "src"]) {
+      const val = imgNode.attr(attr);
+      if (val) candidates.push(val);
+    }
+    const srcset = imgNode.attr("srcset") || imgNode.attr("data-srcset") || "";
+    if (srcset) {
+      const firstSrc = srcset.split(",")[0]?.trim().split(/\s+/)[0];
+      if (firstSrc) candidates.push(firstSrc);
+    }
+    const imgBg = extractCssBackgroundUrl(imgNode.attr("style"));
+    if (imgBg) candidates.push(imgBg);
+  }
+  if (containerNode && containerNode.length) {
+    const selfBg = extractCssBackgroundUrl(containerNode.attr("style"));
+    if (selfBg) candidates.push(selfBg);
+    containerNode.find("[style*='url(']").each((_, el) => {
+      const bg = extractCssBackgroundUrl($(el).attr("style"));
+      if (bg) candidates.push(bg);
+    });
+  }
+  for (const cand of candidates) {
+    const normalized = resolvePosterUrl(cand);
+    if (normalized && normalized !== "/assets/no-cover.svg") {
+      return normalized;
+    }
+  }
+  return "/assets/no-cover.svg";
 }
 
 function cleanText(value = "") {
@@ -103,14 +169,15 @@ function cleanText(value = "") {
  */
 export function parseCardElement($, cardEl) {
   const card = $(cardEl);
-  const seriesAnchor = card.find('a[href*="series="]').first();
+  const innerAnchor = card.find('a[href*="series="]').first();
+  const seriesAnchor = innerAnchor.length ? innerAnchor : card.closest('a[href*="series="]');
   const rawHref = seriesAnchor.attr("href") || "";
   const rawSlug = extractQueryParam(rawHref, "series");
   if (!rawSlug) return null;
 
   const episodeId = extractQueryParam(rawHref, "episode");
-  const img = card.find("img").first();
-  const rawPoster = img.attr("data-src") || img.attr("src") || "";
+  const img = card.find("img").not('[alt="Advertisement"]').first();
+  const resolvedPoster = extractBestImageUrl($, img, card);
 
   let score = "";
   card.find("span").each((_, sp) => {
@@ -155,7 +222,7 @@ export function parseCardElement($, cardEl) {
     title,
     slug: toSeriesToken(rawSlug),
     rawSlug,
-    poster: resolvePosterUrl(rawPoster),
+    poster: resolvedPoster,
     score: score || "",
     status: status || "Anime",
     label,
@@ -319,10 +386,15 @@ export function parseHome(html) {
     const linkEl = slide.find('a[href*="series="]').first();
     const rawSlug = extractQueryParam(linkEl.attr("href") || "", "series");
     const title = cleanText(slide.find("h2, h1, .carousel-caption h2").first().text());
-    const bannerImg =
-      slide.find("img.banner-img, img").first().attr("src") ||
-      slide.find("img").first().attr("data-src") ||
-      "";
+    const primaryBannerEl = slide.find("img.banner-img, img").not('[alt="Advertisement"]').first();
+    const resolvedBanner = extractBestImageUrl($, primaryBannerEl, slide);
+    const secondaryPosterEl = slide
+      .find("img.poster-img, img.cover-img, img")
+      .not('[alt="Advertisement"]')
+      .eq(1);
+    const resolvedSlidePoster = secondaryPosterEl.length
+      ? extractBestImageUrl($, secondaryPosterEl, null)
+      : resolvedBanner;
     if (!title && !rawSlug) return;
 
     const synopsis = cleanText(slide.find("p").first().text());
@@ -338,8 +410,11 @@ export function parseHome(html) {
       title: title || rawSlug,
       slug: toSeriesToken(rawSlug),
       rawSlug,
-      banner: resolvePosterUrl(bannerImg),
-      poster: resolvePosterUrl(bannerImg),
+      banner: resolvedBanner,
+      poster:
+        resolvedSlidePoster !== "/assets/no-cover.svg"
+          ? resolvedSlidePoster
+          : resolvedBanner,
       synopsis,
       genres,
       status: "Sedang Tayang",
@@ -365,7 +440,7 @@ export function parseHome(html) {
         const slug = toSeriesToken(rawSlug);
         if (items.some((x) => x.slug === slug)) return;
 
-        const img = node.find("img").first();
+        const img = node.find("img").not('[alt="Advertisement"]').first();
         const title =
           cleanText(node.find("h6, .card-title").first().text()) ||
           cleanText(img.attr("alt") === "Cover" ? "" : img.attr("alt"));
@@ -376,7 +451,7 @@ export function parseHome(html) {
           title,
           slug,
           rawSlug,
-          poster: resolvePosterUrl(img.attr("src") || img.attr("data-src") || ""),
+          poster: extractBestImageUrl($, img, node),
           views: viewsMatch ? viewsMatch[1] : "",
         });
       });
@@ -433,8 +508,36 @@ export function parseAnimeDetail(html, requestedSlug = "") {
 
   const [status = "Ongoing", type = "TV", year = "2026"] = metaSpans;
 
-  const posterImg = $("img.img-fluid.rounded, .col-md-3 img, .col-md-4 img").first();
-  const poster = resolvePosterUrl(posterImg.attr("src") || posterImg.attr("data-src") || "");
+  const posterImg = $(
+    "img.img-fluid.rounded, .col-md-3 img, .col-md-4 img, .col-lg-3 img, .anime-poster img, .series-poster img"
+  )
+    .not('[alt="Advertisement"]')
+    .first();
+  const ogImageRaw =
+    $("meta[property='og:image']").attr("content") ||
+    $("meta[name='twitter:image']").attr("content") ||
+    "";
+  const resolvedOgImage = resolvePosterUrl(ogImageRaw);
+  const extractedPoster = extractBestImageUrl($, posterImg, null);
+  const poster =
+    extractedPoster !== "/assets/no-cover.svg" ? extractedPoster : resolvedOgImage;
+
+  const bannerImg = $(
+    "img.banner-img, .series-banner img, .hero-banner img, .anime-banner img"
+  )
+    .not('[alt="Advertisement"]')
+    .first();
+  const extractedBanner = extractBestImageUrl(
+    $,
+    bannerImg,
+    $(".series-banner, .hero-banner, .anime-banner").first()
+  );
+  const banner =
+    extractedBanner !== "/assets/no-cover.svg"
+      ? extractedBanner
+      : resolvedOgImage !== "/assets/no-cover.svg"
+        ? resolvedOgImage
+        : poster;
 
   const scoreRaw = cleanText($("h3.text-success, .match-score").first().text());
   const score = scoreRaw.replace(/\s*match$/i, "").trim() || "8.0";
@@ -506,7 +609,7 @@ export function parseAnimeDetail(html, requestedSlug = "") {
     slug: toSeriesToken(rawSlug),
     rawSlug,
     poster,
-    banner: poster,
+    banner,
     score,
     status,
     type,

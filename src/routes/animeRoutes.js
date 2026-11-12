@@ -5,6 +5,7 @@ import { Router } from "express";
 import { animeService } from "../services/animeService.js";
 import { communityStore } from "../services/communityStore.js";
 import { handleStreamProxy } from "./streamProxy.js";
+import { handleImageProxy } from "./imageProxy.js";
 import { generateVerifiedQrisPayloadAndSvg } from "../utils/qrisSecurity.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -247,6 +248,7 @@ animeRouter.get("/anime", (_req, res) => {
       { method: "GET", path: "/api/anime/detail/:slug", description: "Detail lengkap anime & daftar episode" },
       { method: "GET", path: "/api/anime/episode?series=:slug&episode=:epId", description: "Multi-resolusi & multi-server stream video (yl_ep_json=1)" },
       { method: "GET", path: "/api/anime/stream-proxy?url=:encodedUrl", description: "HTTP 206 Range video proxy dengan Referer otomatis & proteksi SSRF berlapis" },
+      { method: "GET", path: "/api/anime/image-proxy?url=:encodedUrl", description: "Proxy sampul/banner raster anti-blokir ISP dengan proteksi SSRF & MIME ketat" },
       { method: "GET", path: "/api/rea/evidence", description: "Laporan Reverse-Engineering & Obligation Ledger REA" },
     ],
   });
@@ -450,6 +452,7 @@ animeRouter.get("/anime/episode/:token", episodeHandler);
 animeRouter.get("/anime/streams", episodeHandler);
 
 animeRouter.get("/anime/stream-proxy", handleStreamProxy);
+animeRouter.get("/anime/image-proxy", handleImageProxy);
 
 animeRouter.get("/rea/evidence", (_req, res) => {
   let obligationLedger = {};

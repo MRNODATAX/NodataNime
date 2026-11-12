@@ -11,6 +11,11 @@ import {
   fetchWithSafeRedirects,
 } from "../src/routes/streamProxy.js";
 import {
+  isAllowedImageUrl,
+  isSafeRasterImageContentType,
+  fetchImageWithSafeRedirects,
+} from "../src/routes/imageProxy.js";
+import {
   sanitizeHttpUrl,
   resolvePosterUrl,
   normalizeEpisodeStreams,
@@ -289,8 +294,9 @@ describe("Cloudflare Security Audit Skill — Multi-Layer Hardening Suite (Layer
     // Verifikasi Service Worker & vercel.json
     const swCode = fs.readFileSync(path.join(rootDir, "public/sw.js"), "utf8");
     assert.ok(swCode.includes("isAllowedStaticAssetPath"));
-    assert.ok(swCode.includes("nodatanime-pwa-v7.1"));
+    assert.ok(swCode.includes("nodatanime-pwa-v7.2"));
     assert.ok(swCode.includes('/api/support/'));
+    assert.ok(swCode.includes('/api/anime/image-proxy'));
 
     const vercelCfg = JSON.parse(fs.readFileSync(path.join(rootDir, "vercel.json"), "utf8"));
     assert.equal(vercelCfg.framework, "express");
@@ -419,5 +425,44 @@ describe("Cloudflare Security Audit Skill — Multi-Layer Hardening Suite (Layer
     assert.match(appJs, /function buildVerifiedAdminTelegramUrl\(/);
     assert.equal(/on(error|click|load)\s*=/i.test(appJs), false);
     assert.equal(/on(error|click|load)\s*=/i.test(indexHtml), false);
+  });
+
+  it("Layer 10 (Image Proxy SSRF & Raster-Only MIME Hardening): blocks private IPs, rogue redirects, and active SVG/HTML payloads", async () => {
+    // 1. Unit allowlist host gambar hulu & penolakan IP privat / metadata cloud / iklan
+    assert.equal(isAllowedImageUrl("https://cdn.myanimelist.net/images/anime/13/17405.jpg"), true);
+    assert.equal(isAllowedImageUrl("https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg"), true);
+    assert.equal(isAllowedImageUrl("https://otakudesu.blog/wp-content/uploads/2025/07/Mynoghra.jpg"), true);
+    assert.equal(isAllowedImageUrl("http://127.0.0.1:8080/secret.png"), false);
+    assert.equal(isAllowedImageUrl("http://169.254.169.254/latest/meta-data/"), false);
+    assert.equal(isAllowedImageUrl("https://evil.example/cover.jpg"), false);
+    assert.equal(isAllowedImageUrl("https://ylnime.com/admin/ad_media/bad_1.png"), false);
+
+    // 2. Tolak keras image/svg+xml & text/html pada proxy gambar untuk mencegah Stored/Reflected XSS
+    assert.equal(isSafeRasterImageContentType("image/jpeg"), true);
+    assert.equal(isSafeRasterImageContentType("image/webp; charset=binary"), true);
+    assert.equal(isSafeRasterImageContentType("image/svg+xml"), false);
+    assert.equal(isSafeRasterImageContentType("text/html; charset=utf-8"), false);
+
+    // 3. Blokir open-redirect lintas domain dari host allowlist ke metadata internal
+    await assert.rejects(
+      () =>
+        fetchImageWithSafeRedirects("https://otakudesu.blog/wp-content/uploads/a.jpg", {
+          fetchImpl: async () =>
+            new Response(null, {
+              status: 302,
+              headers: { Location: "http://169.254.169.254/latest/meta-data" },
+            }),
+        }),
+      (err) => err.statusCode === 403
+    );
+
+    // 4. Endpoint HTTP /api/anime/image-proxy wajib menolak parameter kosong & domain terlarang
+    const emptyRes = await fetch(`${baseUrl}/api/anime/image-proxy`);
+    assert.equal(emptyRes.status, 400);
+
+    const ssrfRes = await fetch(
+      `${baseUrl}/api/anime/image-proxy?url=${encodeURIComponent("http://127.0.0.1/a.jpg")}`
+    );
+    assert.equal(ssrfRes.status, 403);
   });
 });
