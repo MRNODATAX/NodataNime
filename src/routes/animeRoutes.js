@@ -440,7 +440,9 @@ const episodeHandler = async (req, res, next) => {
       });
     }
 
-    const result = await animeService.getEpisode({ token, series, episode, ep });
+    const refresh = readScalarParam(req.query.refresh, "") === "1";
+
+    const result = await animeService.getEpisode({ token, series, episode, ep, refresh });
     sendOk(res, result);
   } catch (err) {
     next(err);

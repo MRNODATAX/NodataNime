@@ -992,6 +992,21 @@ const completedCurated = [
       "Miko Yotsuya mendadak mampu melihat roh mengerikan di sekitarnya dan harus berpura-pura tidak melihat demi keselamatannya.",
     year: "2021",
   }),
+  card({
+    title: "Maougun Saikyou no Majutsushi wa Ningen datta",
+    rawSlug: "maougun-saikyou-no-majutsushi-wa-ningen-datta",
+    poster: "https://assets.animekita.org/cover/2026/05/18/series-149137-anilist-173584-135114-0092374c.jpg",
+    score: "6.8",
+    status: "Completed",
+    label: "Tamat",
+    episode: "12 Ep",
+    episodeId: "al-149137-12",
+    views: "118,400",
+    genres: ["action", "adventure", "fantasy", "demons"],
+    synopsis:
+      "Ike adalah penyihir terkuat di Pasukan Raja Iblis yang menyembunyikan rahasia terbesar: dirinya sebenarnya adalah manusia yang mendambakan perdamaian antara iblis dan manusia.",
+    year: "2024",
+  }),
 ];
 
 // Hanya masukkan kartu hasil pencarian yang BENAR-BENAR Completed (bukan Ongoing & bukan Movie)
@@ -1690,6 +1705,16 @@ const details = {
       { 1196: "18 Apr 2026" }
     ),
     { year: "1996" }
+  ),
+  [toSeriesToken("maougun-saikyou-no-majutsushi-wa-ningen-datta")]: buildDetailFromCard(
+    completedCurated[completedCurated.length - 1],
+    makeEpisodes(
+      "al-149137",
+      "maougun-saikyou-no-majutsushi-wa-ningen-datta",
+      Array.from({ length: 12 }, (_, i) => 12 - i),
+      { 12: "13 Mei 2026", 5: "13 Mei 2026", 1: "13 Mei 2026" }
+    ),
+    { year: "2024" }
   ),
 };
 

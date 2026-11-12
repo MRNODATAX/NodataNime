@@ -99,7 +99,7 @@ class AnimeKitaClient {
     return list.map((x) => this.mapCard(x)).filter(Boolean);
   }
 
-  async fetchEpisodeStreams(episodeUrlOrId) {
+  async fetchEpisodePayload(episodeUrlOrId) {
     const json = await this.requestJson(
       `series/episode/data.php?url=${encodeURIComponent(episodeUrlOrId)}`,
       {
@@ -110,7 +110,15 @@ class AnimeKitaClient {
       }
     );
     const data = json?.data?.[0] || {};
-    const streamList = Array.isArray(data.stream) ? data.stream : [];
+    return {
+      rawStreams: Array.isArray(data.stream) ? data.stream : [],
+      prevEp: data.prev_ep || data.prev || null,
+      nextEp: data.next_ep || data.next || null,
+    };
+  }
+
+  async fetchEpisodeStreams(episodeUrlOrId) {
+    const { rawStreams: streamList } = await this.fetchEpisodePayload(episodeUrlOrId);
     return streamList
       .map((s, idx) => {
         const cleanLink = sanitizeHttpUrl(s?.link || "");

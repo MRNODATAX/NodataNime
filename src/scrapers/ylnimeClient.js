@@ -23,6 +23,8 @@ class YlnimeClient {
     this.baseUrl = process.env.YLNIME_BASE_URL || YLNIME_BASE_URL;
     this.cookies = new Map();
     this.sessionWarmedAt = 0;
+    this.warmupInFlight = null;
+    this.consecutiveTimeouts = 0;
     this.cooldownUntil = 0;
     this.lastStatus = {
       reachable: null,
@@ -36,6 +38,7 @@ class YlnimeClient {
   }
 
   recordSuccess() {
+    this.consecutiveTimeouts = 0;
     this.cooldownUntil = 0;
     this.lastStatus = {
       reachable: true,
@@ -44,7 +47,7 @@ class YlnimeClient {
     };
   }
 
-  recordFailure(err, cooldownMs = 60_000) {
+  recordFailure(err, cooldownMs = 30_000) {
     this.cooldownUntil = Date.now() + cooldownMs;
     this.lastStatus = {
       reachable: false,
@@ -96,27 +99,43 @@ class YlnimeClient {
     if (this.cookies.has("PHPSESSID") && Date.now() - this.sessionWarmedAt < 10 * 60_000) {
       return true;
     }
-    try {
-      const res = await fetch(`${this.baseUrl}/`, {
-        method: "GET",
-        headers: this.buildHeaders(),
-        signal: AbortSignal.timeout(3500),
-      });
-      this.captureSetCookies(res.headers);
-      if (!res.ok) {
-        this.recordFailure(new Error(`HTTP ${res.status} on warmup`), 30_000);
-        return false;
-      }
-      this.sessionWarmedAt = Date.now();
-      this.recordSuccess();
-      return true;
-    } catch (err) {
-      this.recordFailure(err, 60_000);
-      return false;
+    if (this.warmupInFlight) {
+      return this.warmupInFlight;
     }
+    this.warmupInFlight = (async () => {
+      try {
+        const res = await fetch(`${this.baseUrl}/`, {
+          method: "GET",
+          headers: this.buildHeaders(),
+          signal: AbortSignal.timeout(4500),
+        });
+        this.captureSetCookies(res.headers);
+        if (!res.ok) {
+          this.recordFailure(new Error(`HTTP ${res.status} on warmup`), 20_000);
+          return false;
+        }
+        this.sessionWarmedAt = Date.now();
+        this.recordSuccess();
+        return true;
+      } catch (err) {
+        const msg = String(err?.message || err);
+        if (/fetch failed|ECONNREFUSED|ENOTFOUND/i.test(msg)) {
+          this.recordFailure(err, 30_000);
+        } else {
+          this.consecutiveTimeouts += 1;
+          if (this.consecutiveTimeouts >= 2) {
+            this.recordFailure(err, 15_000);
+          }
+        }
+        return false;
+      } finally {
+        this.warmupInFlight = null;
+      }
+    })();
+    return this.warmupInFlight;
   }
 
-  async fetchText(relativePath, acceptJson = false) {
+  async fetchText(relativePath, acceptJson = false, options = {}) {
     if (this.isCoolingDown()) {
       throw new Error(`YLnime circuit open (${this.lastStatus.lastError || "unreachable"})`);
     }
@@ -127,14 +146,30 @@ class YlnimeClient {
 
     const cleanPath = String(relativePath).replace(/^\//, "");
     const url = `${this.baseUrl}/${cleanPath}`;
+    const timeoutMs = options.timeoutMs || (acceptJson ? 7500 : 5500);
+    const extraHeaders = {
+      ...(acceptJson
+        ? {
+            Accept: "application/json, text/plain, */*",
+            "X-Requested-With": "XMLHttpRequest",
+          }
+        : {}),
+      ...(options.headers || {}),
+    };
+    if (options.omitSessionCookie) {
+      delete extraHeaders.Cookie;
+    }
+
+    const finalHeaders = this.buildHeaders(extraHeaders);
+    if (options.omitSessionCookie) {
+      delete finalHeaders.Cookie;
+    }
 
     try {
       const res = await fetch(url, {
         method: "GET",
-        headers: this.buildHeaders(
-          acceptJson ? { Accept: "application/json, text/plain, */*" } : {}
-        ),
-        signal: AbortSignal.timeout(4500),
+        headers: finalHeaders,
+        signal: AbortSignal.timeout(timeoutMs),
       });
       this.captureSetCookies(res.headers);
       if (!res.ok) {
@@ -144,8 +179,14 @@ class YlnimeClient {
       this.recordSuccess();
       return body;
     } catch (err) {
-      if (/fetch failed|ETIMEDOUT|ECONNREFUSED|ENOTFOUND|AbortError/i.test(String(err?.message || err))) {
-        this.recordFailure(err, 60_000);
+      const msg = String(err?.message || err);
+      if (/fetch failed|ECONNREFUSED|ENOTFOUND/i.test(msg)) {
+        this.recordFailure(err, 30_000);
+      } else if (/ETIMEDOUT|AbortError|TimeoutError/i.test(msg)) {
+        this.consecutiveTimeouts += 1;
+        if (this.consecutiveTimeouts >= 3) {
+          this.recordFailure(err, 15_000);
+        }
       }
       throw err;
     }
@@ -251,14 +292,27 @@ class YlnimeClient {
     return detail;
   }
 
-  async fetchEpisodeJson(episodeId, rawSeriesSlug, reso) {
+  async fetchEpisodeJson(episodeId, rawSeriesSlug, reso, options = {}) {
     const params = new URLSearchParams({
       yl_ep_json: "1",
       episode: episodeId,
-      series: rawSeriesSlug,
-      reso,
     });
-    const text = await this.fetchText(`index.php?${params.toString()}`, true);
+    if (rawSeriesSlug) {
+      params.set("series", rawSeriesSlug);
+    }
+    if (reso) {
+      params.set("reso", reso);
+    }
+    const epReferer = rawSeriesSlug
+      ? `${this.baseUrl}/index.php?series=${encodeURIComponent(rawSeriesSlug)}&episode=${encodeURIComponent(episodeId)}`
+      : `${this.baseUrl}/index.php?episode=${encodeURIComponent(episodeId)}`;
+    const text = await this.fetchText(`index.php?${params.toString()}`, true, {
+      timeoutMs: options.timeoutMs || 8000,
+      omitSessionCookie: Boolean(options.omitSessionCookie),
+      headers: {
+        Referer: epReferer,
+      },
+    });
     return JSON.parse(text);
   }
 
@@ -283,33 +337,56 @@ class YlnimeClient {
       ? `index.php?series=${encodeURIComponent(rawSeries)}&episode=${encodeURIComponent(resolvedEpisodeId)}`
       : `index.php?episode=${encodeURIComponent(resolvedEpisodeId)}`;
 
-    const [epHtml, ...jsonResults] = await Promise.all([
-      this.fetchText(epQuery).catch(() => ""),
-      ...RESOLUTIONS.map((reso) =>
-        this.fetchEpisodeJson(resolvedEpisodeId, rawSeries, reso).catch(() => null)
-      ),
+    // Tahap 1: Ambil HTML episode + probe utama 720p terlebih dahulu untuk mencegah antrean lock PHPSESSID pada 5 request paralel sekaligus
+    const [epHtml, primary720] = await Promise.all([
+      this.fetchText(epQuery, false, { timeoutMs: 7000 }).catch(() => ""),
+      this.fetchEpisodeJson(resolvedEpisodeId, rawSeries, "720p", { timeoutMs: 8500 }).catch(() => null),
     ]);
 
     const parsedHtml = epHtml
       ? parseEpisodeHtml(epHtml, rawSeries, resolvedEpisodeId)
       : {
-          title: `${rawSeries} — ${resolvedEpisodeId}`,
+          title: `${rawSeries || "Anime"} — ${resolvedEpisodeId}`,
           animeTitle: rawSeries,
           seriesSlug: rawSeries,
           animeSlug: toSeriesToken(rawSeries),
           inlineStreams: [],
+          availableResolutions: [],
           prevEp: null,
           nextEp: null,
         };
 
-    // Hanya terima respons JSON di mana `reso_dipakai` sesuai atau respons valid pertama
-    const filteredJsons = jsonResults.filter(
-      (res, idx) => res && res.ok && res.reso_dipakai === RESOLUTIONS[idx]
+    // Tahap 2: Tentukan resolusi lain yang benar-benar ada berdasarkan `reso_ada` dari respons 720p (atau HTML)
+    const advertisedResos = Array.isArray(primary720?.reso_ada) && primary720.reso_ada.length > 0
+      ? primary720.reso_ada.map((r) => String(r).trim())
+      : parsedHtml.availableResolutions?.length > 0
+        ? parsedHtml.availableResolutions
+        : RESOLUTIONS;
+
+    const secondaryTargets = RESOLUTIONS.filter(
+      (r) => r !== "720p" && advertisedResos.includes(r)
     );
+
+    const secondaryResults = await Promise.all(
+      secondaryTargets.map((reso) =>
+        this.fetchEpisodeJson(resolvedEpisodeId, rawSeries, reso, {
+          timeoutMs: 6500,
+        }).catch(() => null)
+      )
+    );
+
+    const allProbes = [
+      ...(primary720 ? [{ reso: "720p", res: primary720 }] : []),
+      ...secondaryTargets.map((reso, idx) => ({ reso, res: secondaryResults[idx] })),
+    ];
+
+    const exactMatches = allProbes
+      .filter(({ reso, res }) => res && res.ok && (!res.reso_dipakai || res.reso_dipakai === reso))
+      .map(({ res }) => res);
     const effectiveJsons =
-      filteredJsons.length > 0
-        ? filteredJsons
-        : jsonResults.filter((res) => res && res.ok);
+      exactMatches.length > 0
+        ? exactMatches
+        : allProbes.filter(({ res }) => res && res.ok).map(({ res }) => res);
 
     const normalized = normalizeEpisodeStreams({
       episodeId: resolvedEpisodeId,

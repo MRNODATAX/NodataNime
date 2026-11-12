@@ -1876,6 +1876,30 @@
       "sourceUrl": "https://ylnime.com/index.php?series=mieruko-chan-sub-indo"
     },
     {
+      "title": "Maougun Saikyou no Majutsushi wa Ningen datta",
+      "slug": "maougun-saikyou-no-majutsushi-wa-ningen-datta",
+      "rawSlug": "maougun-saikyou-no-majutsushi-wa-ningen-datta",
+      "poster": "https://assets.animekita.org/cover/2026/05/18/series-149137-anilist-173584-135114-0092374c.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/05/18/series-149137-anilist-173584-135114-0092374c.jpg",
+      "score": "6.8",
+      "status": "Completed",
+      "label": "Tamat",
+      "releaseDay": "",
+      "episode": "12 Ep",
+      "episodeId": "al-149137-12",
+      "views": "118,400",
+      "genres": [
+        "action",
+        "adventure",
+        "fantasy",
+        "demons"
+      ],
+      "synopsis": "Ike adalah penyihir terkuat di Pasukan Raja Iblis yang menyembunyikan rahasia terbesar: dirinya sebenarnya adalah manusia yang mendambakan perdamaian antara iblis dan manusia.",
+      "year": "2024",
+      "type": "TV",
+      "sourceUrl": "https://ylnime.com/index.php?series=maougun-saikyou-no-majutsushi-wa-ningen-datta"
+    },
+    {
       "title": "Isekai Cheat Magician",
       "slug": "isekai-cheat-sub-indo~",
       "rawSlug": "isekai-cheat-sub-indo/",
@@ -5475,6 +5499,30 @@
       "year": "2021",
       "type": "TV",
       "sourceUrl": "https://ylnime.com/index.php?series=mieruko-chan-sub-indo"
+    },
+    {
+      "title": "Maougun Saikyou no Majutsushi wa Ningen datta",
+      "slug": "maougun-saikyou-no-majutsushi-wa-ningen-datta",
+      "rawSlug": "maougun-saikyou-no-majutsushi-wa-ningen-datta",
+      "poster": "https://assets.animekita.org/cover/2026/05/18/series-149137-anilist-173584-135114-0092374c.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/05/18/series-149137-anilist-173584-135114-0092374c.jpg",
+      "score": "6.8",
+      "status": "Completed",
+      "label": "Tamat",
+      "releaseDay": "",
+      "episode": "12 Ep",
+      "episodeId": "al-149137-12",
+      "views": "118,400",
+      "genres": [
+        "action",
+        "adventure",
+        "fantasy",
+        "demons"
+      ],
+      "synopsis": "Ike adalah penyihir terkuat di Pasukan Raja Iblis yang menyembunyikan rahasia terbesar: dirinya sebenarnya adalah manusia yang mendambakan perdamaian antara iblis dan manusia.",
+      "year": "2024",
+      "type": "TV",
+      "sourceUrl": "https://ylnime.com/index.php?series=maougun-saikyou-no-majutsushi-wa-ningen-datta"
     },
     {
       "title": "Kimetsu no Yaiba Movie: Mugenjou-hen",
@@ -11535,6 +11583,286 @@
         }
       ],
       "sourceUrl": "https://ylnime.com/index.php?series=detective-conan"
+    },
+    "maougun-saikyou-no-majutsushi-wa-ningen-datta": {
+      "title": "Maougun Saikyou no Majutsushi wa Ningen datta",
+      "slug": "maougun-saikyou-no-majutsushi-wa-ningen-datta",
+      "rawSlug": "maougun-saikyou-no-majutsushi-wa-ningen-datta",
+      "poster": "https://assets.animekita.org/cover/2026/05/18/series-149137-anilist-173584-135114-0092374c.jpg",
+      "banner": "https://assets.animekita.org/cover/2026/05/18/series-149137-anilist-173584-135114-0092374c.jpg",
+      "score": "6.8",
+      "status": "Completed",
+      "type": "TV",
+      "year": "2024",
+      "synopsis": "Ike adalah penyihir terkuat di Pasukan Raja Iblis yang menyembunyikan rahasia terbesar: dirinya sebenarnya adalah manusia yang mendambakan perdamaian antara iblis dan manusia.",
+      "totalEpisodes": 12,
+      "genres": [
+        {
+          "genreId": "action",
+          "title": "Action"
+        },
+        {
+          "genreId": "adventure",
+          "title": "Adventure"
+        },
+        {
+          "genreId": "fantasy",
+          "title": "Fantasy"
+        },
+        {
+          "genreId": "demons",
+          "title": "Demons"
+        }
+      ],
+      "episodes": [
+        {
+          "episodeId": "al-149137-12",
+          "token": "al-149137-12__maougun-saikyou-no-majutsushi-wa-ningen-datta",
+          "number": 12,
+          "title": "Episode 12",
+          "date": "13 Mei 2026",
+          "hasVerifiedStream": false
+        },
+        {
+          "episodeId": "al-149137-11",
+          "token": "al-149137-11__maougun-saikyou-no-majutsushi-wa-ningen-datta",
+          "number": 11,
+          "title": "Episode 11",
+          "date": "2026",
+          "hasVerifiedStream": false
+        },
+        {
+          "episodeId": "al-149137-10",
+          "token": "al-149137-10__maougun-saikyou-no-majutsushi-wa-ningen-datta",
+          "number": 10,
+          "title": "Episode 10",
+          "date": "2026",
+          "hasVerifiedStream": false
+        },
+        {
+          "episodeId": "al-149137-9",
+          "token": "al-149137-9__maougun-saikyou-no-majutsushi-wa-ningen-datta",
+          "number": 9,
+          "title": "Episode 9",
+          "date": "2026",
+          "hasVerifiedStream": false
+        },
+        {
+          "episodeId": "al-149137-8",
+          "token": "al-149137-8__maougun-saikyou-no-majutsushi-wa-ningen-datta",
+          "number": 8,
+          "title": "Episode 8",
+          "date": "2026",
+          "hasVerifiedStream": false
+        },
+        {
+          "episodeId": "al-149137-7",
+          "token": "al-149137-7__maougun-saikyou-no-majutsushi-wa-ningen-datta",
+          "number": 7,
+          "title": "Episode 7",
+          "date": "2026",
+          "hasVerifiedStream": false
+        },
+        {
+          "episodeId": "al-149137-6",
+          "token": "al-149137-6__maougun-saikyou-no-majutsushi-wa-ningen-datta",
+          "number": 6,
+          "title": "Episode 6",
+          "date": "2026",
+          "hasVerifiedStream": false
+        },
+        {
+          "episodeId": "al-149137-5",
+          "token": "al-149137-5__maougun-saikyou-no-majutsushi-wa-ningen-datta",
+          "number": 5,
+          "title": "Episode 5",
+          "date": "13 Mei 2026",
+          "hasVerifiedStream": false
+        },
+        {
+          "episodeId": "al-149137-4",
+          "token": "al-149137-4__maougun-saikyou-no-majutsushi-wa-ningen-datta",
+          "number": 4,
+          "title": "Episode 4",
+          "date": "2026",
+          "hasVerifiedStream": false
+        },
+        {
+          "episodeId": "al-149137-3",
+          "token": "al-149137-3__maougun-saikyou-no-majutsushi-wa-ningen-datta",
+          "number": 3,
+          "title": "Episode 3",
+          "date": "2026",
+          "hasVerifiedStream": false
+        },
+        {
+          "episodeId": "al-149137-2",
+          "token": "al-149137-2__maougun-saikyou-no-majutsushi-wa-ningen-datta",
+          "number": 2,
+          "title": "Episode 2",
+          "date": "2026",
+          "hasVerifiedStream": false
+        },
+        {
+          "episodeId": "al-149137-1",
+          "token": "al-149137-1__maougun-saikyou-no-majutsushi-wa-ningen-datta",
+          "number": 1,
+          "title": "Episode 1",
+          "date": "13 Mei 2026",
+          "hasVerifiedStream": false
+        }
+      ],
+      "recommendations": [
+        {
+          "title": "Sousou no Frieren",
+          "slug": "sousou-no-frieren-sub-indo",
+          "rawSlug": "sousou-no-frieren-sub-indo",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-gHSraOSa0nBG.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-gHSraOSa0nBG.jpg",
+          "score": "9.3",
+          "status": "Completed",
+          "label": "Tamat",
+          "releaseDay": "",
+          "episode": "28 Ep",
+          "episodeId": "al-14897128",
+          "views": "385,120",
+          "genres": [
+            "adventure",
+            "drama",
+            "fantasy",
+            "magic",
+            "shounen"
+          ],
+          "synopsis": "Penyihir elf Frieren menapaki perjalanan baru bersama Fern dan Stark menuju Aureole untuk memahami arti kebersamaan manusia.",
+          "year": "2023",
+          "type": "TV",
+          "sourceUrl": "https://ylnime.com/index.php?series=sousou-no-frieren-sub-indo"
+        },
+        {
+          "title": "Solo Leveling Season 2: Arise from the Shadow",
+          "slug": "solo-leveling-s2-sub-indo",
+          "rawSlug": "solo-leveling-s2-sub-indo",
+          "poster": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1448/147351.jpg",
+          "score": "9.0",
+          "status": "Completed",
+          "label": "Tamat",
+          "releaseDay": "",
+          "episode": "13 Ep",
+          "episodeId": "al-150340-13",
+          "views": "412,900",
+          "genres": [
+            "action",
+            "adventure",
+            "fantasy"
+          ],
+          "synopsis": "Sung Jin-Woo menguji batas kekuatan barunya sebagai Shadow Monarch hingga pertempuran bersejarah di Pulau Jeju.",
+          "year": "2025",
+          "type": "TV",
+          "sourceUrl": "https://ylnime.com/index.php?series=solo-leveling-s2-sub-indo"
+        },
+        {
+          "title": "One Piece",
+          "slug": "1piece-sub-indo",
+          "rawSlug": "1piece-sub-indo",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
+          "score": "9.1",
+          "status": "Ongoing",
+          "label": "Minggu",
+          "releaseDay": "Minggu",
+          "episode": "Ep 1180",
+          "episodeId": "al-150441-1180",
+          "views": "306,964",
+          "genres": [
+            "action",
+            "adventure",
+            "comedy",
+            "fantasy",
+            "shounen"
+          ],
+          "synopsis": "Petualangan epik Monkey D. Luffy dan kru Bajak Laut Topi Jerami mengarungi Grand Line mencari harta karun legendaris One Piece untuk menjadi Raja Bajak Laut.",
+          "year": "1999",
+          "type": "TV",
+          "sourceUrl": "https://ylnime.com/index.php?series=1piece-sub-indo"
+        },
+        {
+          "title": "Tensei shitara Slime Datta Ken Season 4",
+          "slug": "slime-s4-sub-indo",
+          "rawSlug": "slime-s4-sub-indo",
+          "poster": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "score": "8.8",
+          "status": "Ongoing",
+          "label": "Jumat",
+          "releaseDay": "Jumat",
+          "episode": "Ep 21",
+          "episodeId": "al-153297-21",
+          "views": "128,450",
+          "genres": [
+            "action",
+            "adventure",
+            "comedy",
+            "fantasy",
+            "isekai"
+          ],
+          "synopsis": "Rimuru Tempest memperluas aliansi diplomatik dan teknologi Jura Tempest sambil menghadapi manuver rahasia klan Rozzo.",
+          "year": "2026",
+          "type": "TV",
+          "sourceUrl": "https://ylnime.com/index.php?series=slime-s4-sub-indo"
+        },
+        {
+          "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
+          "slug": "steel-ball-run-jojo",
+          "rawSlug": "steel-ball-run-jojo",
+          "poster": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "banner": "https://cdn.myanimelist.net/images/anime/1065/158884.jpg",
+          "score": "9.2",
+          "status": "Ongoing",
+          "label": "Jumat",
+          "releaseDay": "Jumat",
+          "episode": "Ep 6",
+          "episodeId": "al-154180-6",
+          "views": "152,800",
+          "genres": [
+            "action",
+            "adventure",
+            "mystery",
+            "supernatural",
+            "historical",
+            "seinen"
+          ],
+          "synopsis": "Johnny Joestar dan Gyro Zeppeli melintasi benua Amerika abad ke-19 dalam pacuan kuda paling berbahaya dengan taruhan 50 juta dolar.",
+          "year": "2026",
+          "type": "TV",
+          "sourceUrl": "https://ylnime.com/index.php?series=steel-ball-run-jojo"
+        },
+        {
+          "title": "Jujutsu Kaisen 2nd Season",
+          "slug": "jujutsu-kaisen-s2-sub-indo",
+          "rawSlug": "jujutsu-kaisen-s2-sub-indo",
+          "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx145064-5fa4ZBbW4dqA.jpg",
+          "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx145064-5fa4ZBbW4dqA.jpg",
+          "score": "8.9",
+          "status": "Completed",
+          "label": "Tamat",
+          "releaseDay": "",
+          "episode": "23 Ep",
+          "episodeId": "",
+          "views": "354,200",
+          "genres": [
+            "action",
+            "fantasy",
+            "supernatural",
+            "shounen"
+          ],
+          "synopsis": "Masa lalu Satoru Gojo dan Suguru Geto membuka jalan menuju Insiden Shibuya yang mengguncang dunia penyihir jujutsu.",
+          "year": "2023",
+          "type": "TV",
+          "sourceUrl": "https://ylnime.com/index.php?series=jujutsu-kaisen-s2-sub-indo"
+        }
+      ],
+      "sourceUrl": "https://ylnime.com/index.php?series=maougun-saikyou-no-majutsushi-wa-ningen-datta"
     }
   },
   "episodeStreams": {
